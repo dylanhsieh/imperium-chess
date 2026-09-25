@@ -1,0 +1,26 @@
+{
+  "name": "imperium-chess",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5188",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 5188",
+    "test": "node tests/playtest.mjs",
+    "verify:visual": "node tests/verify-visual.mjs",
+    "inspect:canvas": "node tests/inspect-threejs-canvas.mjs"
+  },
+  "dependencies": {
+    "chess.js": "^1.4.0",
+    "three": "^0.180.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/three": "^0.180.0",
+    "pngjs": "^7.0.0",
+    "puppeteer-core": "25.12.0",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.7"
+  }
+}

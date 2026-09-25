@@ -1,0 +1,741 @@
+[
+  {
+    "frame": 0,
+    "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+    "selected": null,
+    "legal": [],
+    "fears": [
+      "g4"
+    ],
+    "relief": [
+      "d6",
+      "b4"
+    ],
+    "animating": true,
+    "history": [
+      "Rxg4"
+    ],
+    "turn": "b",
+    "gameOver": false,
+    "cinematic": true,
+    "reduced": false,
+    "muted": false,
+    "pieces": 6,
+    "diagnostics": {
+      "frame": 413,
+      "fps": 61,
+      "game": {
+        "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+        "turn": "b",
+        "moves": 1,
+        "selected": null,
+        "legal": [],
+        "fear": [
+          "g4"
+        ],
+        "animating": true,
+        "actionProgress": 0.1034888888878955,
+        "gameOver": false
+      },
+      "renderer": {
+        "calls": 220,
+        "triangles": 80996,
+        "geometries": 385,
+        "textures": 39
+      },
+      "render": {
+        "calls": 220,
+        "triangles": 80996
+      },
+      "memory": {
+        "geometries": 385,
+        "textures": 39
+      },
+      "quality": {
+        "dpr": 1,
+        "shadowMapSize": 2048,
+        "shadowLights": 1,
+        "postPasses": 0
+      },
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+    }
+  },
+  {
+    "frame": 1,
+    "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+    "selected": null,
+    "legal": [],
+    "fears": [
+      "g4"
+    ],
+    "relief": [
+      "d6",
+      "b4"
+    ],
+    "animating": true,
+    "history": [
+      "Rxg4"
+    ],
+    "turn": "b",
+    "gameOver": false,
+    "cinematic": true,
+    "reduced": false,
+    "muted": false,
+    "pieces": 6,
+    "diagnostics": {
+      "frame": 436,
+      "fps": 60,
+      "game": {
+        "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+        "turn": "b",
+        "moves": 1,
+        "selected": null,
+        "legal": [],
+        "fear": [
+          "g4"
+        ],
+        "animating": true,
+        "actionProgress": 0.18875555555522444,
+        "gameOver": false
+      },
+      "renderer": {
+        "calls": 160,
+        "triangles": 72807,
+        "geometries": 384,
+        "textures": 39
+      },
+      "render": {
+        "calls": 160,
+        "triangles": 72807
+      },
+      "memory": {
+        "geometries": 384,
+        "textures": 39
+      },
+      "quality": {
+        "dpr": 1,
+        "shadowMapSize": 2048,
+        "shadowLights": 1,
+        "postPasses": 0
+      },
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+    }
+  },
+  {
+    "frame": 2,
+    "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+    "selected": null,
+    "legal": [],
+    "fears": [
+      "g4"
+    ],
+    "relief": [
+      "d6",
+      "b4"
+    ],
+    "animating": true,
+    "history": [
+      "Rxg4"
+    ],
+    "turn": "b",
+    "gameOver": false,
+    "cinematic": true,
+    "reduced": false,
+    "muted": false,
+    "pieces": 6,
+    "diagnostics": {
+      "frame": 460,
+      "fps": 60,
+      "game": {
+        "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+        "turn": "b",
+        "moves": 1,
+        "selected": null,
+        "legal": [],
+        "fear": [
+          "g4"
+        ],
+        "animating": true,
+        "actionProgress": 0.2776444444441134,
+        "gameOver": false
+      },
+      "renderer": {
+        "calls": 161,
+        "triangles": 72819,
+        "geometries": 385,
+        "textures": 39
+      },
+      "render": {
+        "calls": 161,
+        "triangles": 72819
+      },
+      "memory": {
+        "geometries": 385,
+        "textures": 39
+      },
+      "quality": {
+        "dpr": 1,
+        "shadowMapSize": 2048,
+        "shadowLights": 1,
+        "postPasses": 0
+      },
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+    }
+  },
+  {
+    "frame": 3,
+    "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+    "selected": null,
+    "legal": [],
+    "fears": [
+      "g4"
+    ],
+    "relief": [],
+    "animating": true,
+    "history": [
+      "Rxg4"
+    ],
+    "turn": "b",
+    "gameOver": false,
+    "cinematic": true,
+    "reduced": false,
+    "muted": false,
+    "pieces": 6,
+    "diagnostics": {
+      "frame": 482,
+      "fps": 60,
+      "game": {
+        "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+        "turn": "b",
+        "moves": 1,
+        "selected": null,
+        "legal": [],
+        "fear": [
+          "g4"
+        ],
+        "animating": true,
+        "actionProgress": 0.35911111111111127,
+        "gameOver": false
+      },
+      "renderer": {
+        "calls": 86,
+        "triangles": 74175,
+        "geometries": 385,
+        "textures": 39
+      },
+      "render": {
+        "calls": 86,
+        "triangles": 74175
+      },
+      "memory": {
+        "geometries": 385,
+        "textures": 39
+      },
+      "quality": {
+        "dpr": 1,
+        "shadowMapSize": 2048,
+        "shadowLights": 1,
+        "postPasses": 0
+      },
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+    }
+  },
+  {
+    "frame": 4,
+    "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+    "selected": null,
+    "legal": [],
+    "fears": [
+      "g4"
+    ],
+    "relief": [],
+    "animating": true,
+    "history": [
+      "Rxg4"
+    ],
+    "turn": "b",
+    "gameOver": false,
+    "cinematic": true,
+    "reduced": false,
+    "muted": false,
+    "pieces": 6,
+    "diagnostics": {
+      "frame": 506,
+      "fps": 61,
+      "game": {
+        "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+        "turn": "b",
+        "moves": 1,
+        "selected": null,
+        "legal": [],
+        "fear": [
+          "g4"
+        ],
+        "animating": true,
+        "actionProgress": 0.44797777777744696,
+        "gameOver": false
+      },
+      "renderer": {
+        "calls": 116,
+        "triangles": 80718,
+        "geometries": 385,
+        "textures": 39
+      },
+      "render": {
+        "calls": 116,
+        "triangles": 80718
+      },
+      "memory": {
+        "geometries": 385,
+        "textures": 39
+      },
+      "quality": {
+        "dpr": 1,
+        "shadowMapSize": 2048,
+        "shadowLights": 1,
+        "postPasses": 0
+      },
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+    }
+  },
+  {
+    "frame": 5,
+    "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+    "selected": null,
+    "legal": [],
+    "fears": [
+      "g4"
+    ],
+    "relief": [],
+    "animating": true,
+    "history": [
+      "Rxg4"
+    ],
+    "turn": "b",
+    "gameOver": false,
+    "cinematic": true,
+    "reduced": false,
+    "muted": false,
+    "pieces": 6,
+    "diagnostics": {
+      "frame": 529,
+      "fps": 60,
+      "game": {
+        "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+        "turn": "b",
+        "moves": 1,
+        "selected": null,
+        "legal": [],
+        "fear": [
+          "g4"
+        ],
+        "animating": true,
+        "actionProgress": 0.5331777777771161,
+        "gameOver": false
+      },
+      "renderer": {
+        "calls": 116,
+        "triangles": 80718,
+        "geometries": 385,
+        "textures": 39
+      },
+      "render": {
+        "calls": 116,
+        "triangles": 80718
+      },
+      "memory": {
+        "geometries": 385,
+        "textures": 39
+      },
+      "quality": {
+        "dpr": 1,
+        "shadowMapSize": 2048,
+        "shadowLights": 1,
+        "postPasses": 0
+      },
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+    }
+  },
+  {
+    "frame": 6,
+    "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+    "selected": null,
+    "legal": [],
+    "fears": [
+      "g4"
+    ],
+    "relief": [],
+    "animating": true,
+    "history": [
+      "Rxg4"
+    ],
+    "turn": "b",
+    "gameOver": false,
+    "cinematic": true,
+    "reduced": false,
+    "muted": false,
+    "pieces": 6,
+    "diagnostics": {
+      "frame": 552,
+      "fps": 60,
+      "game": {
+        "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+        "turn": "b",
+        "moves": 1,
+        "selected": null,
+        "legal": [],
+        "fear": [
+          "g4"
+        ],
+        "animating": true,
+        "actionProgress": 0.6183777777767853,
+        "gameOver": false
+      },
+      "renderer": {
+        "calls": 114,
+        "triangles": 80704,
+        "geometries": 385,
+        "textures": 39
+      },
+      "render": {
+        "calls": 114,
+        "triangles": 80704
+      },
+      "memory": {
+        "geometries": 385,
+        "textures": 39
+      },
+      "quality": {
+        "dpr": 1,
+        "shadowMapSize": 2048,
+        "shadowLights": 1,
+        "postPasses": 0
+      },
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+    }
+  },
+  {
+    "frame": 7,
+    "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+    "selected": null,
+    "legal": [],
+    "fears": [],
+    "relief": [],
+    "animating": true,
+    "history": [
+      "Rxg4"
+    ],
+    "turn": "b",
+    "gameOver": false,
+    "cinematic": true,
+    "reduced": false,
+    "muted": false,
+    "pieces": 6,
+    "diagnostics": {
+      "frame": 573,
+      "fps": 14,
+      "game": {
+        "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+        "turn": "b",
+        "moves": 1,
+        "selected": null,
+        "legal": [],
+        "fear": [],
+        "animating": true,
+        "actionProgress": 0.6909333333333332,
+        "gameOver": false
+      },
+      "renderer": {
+        "calls": 114,
+        "triangles": 80778,
+        "geometries": 386,
+        "textures": 39
+      },
+      "render": {
+        "calls": 114,
+        "triangles": 80778
+      },
+      "memory": {
+        "geometries": 386,
+        "textures": 39
+      },
+      "quality": {
+        "dpr": 1,
+        "shadowMapSize": 2048,
+        "shadowLights": 1,
+        "postPasses": 0
+      },
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+    }
+  },
+  {
+    "frame": 8,
+    "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+    "selected": null,
+    "legal": [],
+    "fears": [],
+    "relief": [],
+    "animating": true,
+    "history": [
+      "Rxg4"
+    ],
+    "turn": "b",
+    "gameOver": false,
+    "cinematic": true,
+    "reduced": false,
+    "muted": false,
+    "pieces": 6,
+    "diagnostics": {
+      "frame": 597,
+      "fps": 60,
+      "game": {
+        "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+        "turn": "b",
+        "moves": 1,
+        "selected": null,
+        "legal": [],
+        "fear": [],
+        "animating": true,
+        "actionProgress": 0.7479213333334194,
+        "gameOver": false
+      },
+      "renderer": {
+        "calls": 76,
+        "triangles": 72884,
+        "geometries": 386,
+        "textures": 39
+      },
+      "render": {
+        "calls": 76,
+        "triangles": 72884
+      },
+      "memory": {
+        "geometries": 386,
+        "textures": 39
+      },
+      "quality": {
+        "dpr": 1,
+        "shadowMapSize": 2048,
+        "shadowLights": 1,
+        "postPasses": 0
+      },
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+    }
+  },
+  {
+    "frame": 9,
+    "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+    "selected": null,
+    "legal": [],
+    "fears": [],
+    "relief": [],
+    "animating": true,
+    "history": [
+      "Rxg4"
+    ],
+    "turn": "b",
+    "gameOver": false,
+    "cinematic": true,
+    "reduced": false,
+    "muted": false,
+    "pieces": 6,
+    "diagnostics": {
+      "frame": 619,
+      "fps": 61,
+      "game": {
+        "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+        "turn": "b",
+        "moves": 1,
+        "selected": null,
+        "legal": [],
+        "fear": [],
+        "animating": true,
+        "actionProgress": 0.8293435555553108,
+        "gameOver": false
+      },
+      "renderer": {
+        "calls": 77,
+        "triangles": 72832,
+        "geometries": 385,
+        "textures": 39
+      },
+      "render": {
+        "calls": 77,
+        "triangles": 72832
+      },
+      "memory": {
+        "geometries": 385,
+        "textures": 39
+      },
+      "quality": {
+        "dpr": 1,
+        "shadowMapSize": 2048,
+        "shadowLights": 1,
+        "postPasses": 0
+      },
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+    }
+  },
+  {
+    "frame": 10,
+    "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+    "selected": null,
+    "legal": [],
+    "fears": [],
+    "relief": [],
+    "animating": true,
+    "history": [
+      "Rxg4"
+    ],
+    "turn": "b",
+    "gameOver": false,
+    "cinematic": true,
+    "reduced": false,
+    "muted": false,
+    "pieces": 6,
+    "diagnostics": {
+      "frame": 640,
+      "fps": 60,
+      "game": {
+        "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+        "turn": "b",
+        "moves": 1,
+        "selected": null,
+        "legal": [],
+        "fear": [],
+        "animating": true,
+        "actionProgress": 0.9071657777781955,
+        "gameOver": false
+      },
+      "renderer": {
+        "calls": 81,
+        "triangles": 72996,
+        "geometries": 385,
+        "textures": 39
+      },
+      "render": {
+        "calls": 81,
+        "triangles": 72996
+      },
+      "memory": {
+        "geometries": 385,
+        "textures": 39
+      },
+      "quality": {
+        "dpr": 1,
+        "shadowMapSize": 2048,
+        "shadowLights": 1,
+        "postPasses": 0
+      },
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+    }
+  },
+  {
+    "frame": 11,
+    "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+    "selected": null,
+    "legal": [],
+    "fears": [],
+    "relief": [],
+    "animating": true,
+    "history": [
+      "Rxg4"
+    ],
+    "turn": "b",
+    "gameOver": false,
+    "cinematic": true,
+    "reduced": false,
+    "muted": false,
+    "pieces": 6,
+    "diagnostics": {
+      "frame": 662,
+      "fps": 60,
+      "game": {
+        "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+        "turn": "b",
+        "moves": 1,
+        "selected": null,
+        "legal": [],
+        "fear": [],
+        "animating": true,
+        "actionProgress": 0.9886546666660914,
+        "gameOver": false
+      },
+      "renderer": {
+        "calls": 100,
+        "triangles": 73402,
+        "geometries": 385,
+        "textures": 39
+      },
+      "render": {
+        "calls": 100,
+        "triangles": 73402
+      },
+      "memory": {
+        "geometries": 385,
+        "textures": 39
+      },
+      "quality": {
+        "dpr": 1,
+        "shadowMapSize": 2048,
+        "shadowLights": 1,
+        "postPasses": 0
+      },
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+    }
+  },
+  {
+    "frame": 12,
+    "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+    "selected": null,
+    "legal": [],
+    "fears": [],
+    "relief": [],
+    "animating": false,
+    "history": [
+      "Rxg4"
+    ],
+    "turn": "b",
+    "gameOver": false,
+    "cinematic": true,
+    "reduced": false,
+    "muted": false,
+    "pieces": 5,
+    "diagnostics": {
+      "frame": 684,
+      "fps": 60,
+      "game": {
+        "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+        "turn": "b",
+        "moves": 1,
+        "selected": null,
+        "legal": [],
+        "fear": [],
+        "animating": false,
+        "actionProgress": 0,
+        "gameOver": false
+      },
+      "renderer": {
+        "calls": 86,
+        "triangles": 73914,
+        "geometries": 387,
+        "textures": 39
+      },
+      "render": {
+        "calls": 86,
+        "triangles": 73914
+      },
+      "memory": {
+        "geometries": 387,
+        "textures": 39
+      },
+      "quality": {
+        "dpr": 1,
+        "shadowMapSize": 2048,
+        "shadowLights": 1,
+        "postPasses": 0
+      },
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+    }
+  }
+]

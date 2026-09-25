@@ -1,0 +1,94 @@
+{
+  "results": [
+    "Distinct blue move and red attack tiles / route colors; cancellation clears route and relieves enemies",
+    "En passant distinguishes destination d6 from victim d5",
+    "8 real-input captures: 3 sword roles, staff, lance, ram, opposite-facing queen, en passant; timed windup/swing/contact/followthrough/recovery screenshots"
+  ],
+  "errors": [],
+  "external": [],
+  "contacts": [
+    {
+      "name": "pawn",
+      "contactError": 1.047382306668854e-15
+    },
+    {
+      "name": "queen",
+      "contactError": 2.4949159465319756e-15
+    },
+    {
+      "name": "king",
+      "contactError": 1.1957467920563635e-15
+    },
+    {
+      "name": "bishop",
+      "contactError": 2.220446049250313e-15
+    },
+    {
+      "name": "knight",
+      "contactError": 9.930136612989092e-16
+    },
+    {
+      "name": "rook",
+      "contactError": null
+    },
+    {
+      "name": "black-queen",
+      "contactError": 2.391493584112727e-15
+    },
+    {
+      "name": "en-passant",
+      "contactError": 1.3368855554576669e-15
+    }
+  ],
+  "diagnostics": {
+    "frame": 21,
+    "fps": 161,
+    "game": {
+      "fen": "4k3/8/3n4/8/1b1R2p1/8/8/7K w - - 0 1",
+      "turn": "w",
+      "moves": 0,
+      "selected": "d4",
+      "legal": [
+        "d5",
+        "d6",
+        "e4",
+        "f4",
+        "g4",
+        "d3",
+        "d2",
+        "d1",
+        "c4",
+        "b4"
+      ],
+      "fear": [
+        "d6",
+        "g4",
+        "b4"
+      ],
+      "animating": false,
+      "actionProgress": 0,
+      "gameOver": false
+    },
+    "renderer": {
+      "calls": 397,
+      "triangles": 81968,
+      "geometries": 354,
+      "textures": 38
+    },
+    "render": {
+      "calls": 397,
+      "triangles": 81968
+    },
+    "memory": {
+      "geometries": 354,
+      "textures": 38
+    },
+    "quality": {
+      "dpr": 1,
+      "shadowMapSize": 2048,
+      "shadowLights": 1,
+      "postPasses": 0
+    },
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "sixPieceCinematics": [
+    "rook",
+    "knight",
+    "bishop",
+    "queen",
+    "pawn",
+    "king"
+  ],
+  "touchMove": "e2-e4",
+  "firstTouchAudio": "running",
+  "offlineMove": "Rxg4",
+  "externalRequests": [],
+  "errors": []
+}

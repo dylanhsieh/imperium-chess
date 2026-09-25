@@ -1,0 +1,113 @@
+{
+  "generator": "macOS /usr/bin/say + /usr/bin/afconvert + Python standard library",
+  "generatedAt": "2026-09-25T11:21:09.849534+00:00",
+  "networkServices": [],
+  "playbackDuringGeneration": false,
+  "format": "mono 22050 Hz PCM16 WAV",
+  "processing": "silence trim; joint pitch/speed shaping; 80 Hz high-pass; 5.5 kHz low-pass; mild tanh saturation; deterministic breath layer; fades; peak normalized to 0.86",
+  "runtime": "preloaded after user gesture; master mute/volume and temple reverb; immediate synthesized fallback when unavailable; no delayed playback",
+  "clips": [
+    {
+      "file": "male-attack-ha.wav",
+      "event": "attack",
+      "text": "哈！",
+      "localVoice": "Eddy (Chinese (Taiwan))",
+      "speechRateWordsPerMinute": 225,
+      "requestedPitchSpeedRatio": 0.89,
+      "durationSeconds": 0.3083,
+      "peak": 0.86,
+      "rms": 0.1719,
+      "sha256": "af73cf37837750c0a24fea69d8dcd25acd0ef92274e010eb9f26ad4a71e6a536",
+      "trimStartSeconds": 0.0,
+      "trimEndSeconds": 0.2744,
+      "effectivePitchSpeedRatio": 0.89
+    },
+    {
+      "file": "male-attack-he.wav",
+      "event": "attack",
+      "text": "喝！",
+      "localVoice": "Reed (Chinese (Taiwan))",
+      "speechRateWordsPerMinute": 235,
+      "requestedPitchSpeedRatio": 0.92,
+      "durationSeconds": 0.2028,
+      "peak": 0.86,
+      "rms": 0.2476,
+      "sha256": "9ff756eb554a746617e01885c381da5f54c98be07a8e7232dd18f61ea92e2c33",
+      "trimStartSeconds": 0.0479,
+      "trimEndSeconds": 0.2345,
+      "effectivePitchSpeedRatio": 0.92
+    },
+    {
+      "file": "female-attack-ha.wav",
+      "event": "attack",
+      "text": "哈！",
+      "localVoice": "Meijia (Chinese (Taiwan))",
+      "speechRateWordsPerMinute": 230,
+      "requestedPitchSpeedRatio": 1.02,
+      "durationSeconds": 0.2808,
+      "peak": 0.86,
+      "rms": 0.2051,
+      "sha256": "16c8cfc0fe4bfe81d6d80d6e94a9bdb230b4e75e486dce1b92b831270df95624",
+      "trimStartSeconds": 0.008,
+      "trimEndSeconds": 0.2944,
+      "effectivePitchSpeedRatio": 1.02
+    },
+    {
+      "file": "female-attack-he.wav",
+      "event": "attack",
+      "text": "喝！",
+      "localVoice": "Meijia (Chinese (Taiwan))",
+      "speechRateWordsPerMinute": 240,
+      "requestedPitchSpeedRatio": 1.05,
+      "durationSeconds": 0.2917,
+      "peak": 0.86,
+      "rms": 0.2396,
+      "sha256": "35f5bfeb5eb940eb9cfe409865f654f90f6ca47e1cf0a16899bac5ff7a354dd6",
+      "trimStartSeconds": 0.008,
+      "trimEndSeconds": 0.3143,
+      "effectivePitchSpeedRatio": 1.05
+    },
+    {
+      "file": "male-defeat.wav",
+      "event": "defeat",
+      "text": "呃啊！",
+      "localVoice": "Eddy (Chinese (Taiwan))",
+      "speechRateWordsPerMinute": 190,
+      "requestedPitchSpeedRatio": 0.86,
+      "durationSeconds": 0.3539,
+      "peak": 0.86,
+      "rms": 0.1954,
+      "sha256": "94f2a8ae0af1ddae2023af605c517577842ad6c2d41679fd525c163b504f91d0",
+      "trimStartSeconds": 0.0,
+      "trimEndSeconds": 0.3044,
+      "effectivePitchSpeedRatio": 0.86
+    },
+    {
+      "file": "female-defeat.wav",
+      "event": "defeat",
+      "text": "呃啊！",
+      "localVoice": "Meijia (Chinese (Taiwan))",
+      "speechRateWordsPerMinute": 190,
+      "requestedPitchSpeedRatio": 0.98,
+      "durationSeconds": 0.4429,
+      "peak": 0.86,
+      "rms": 0.2742,
+      "sha256": "c5a0bf3f5751bbe2c0ab1341e5d2ab7b0aa992141fd287ffd6b7471cdfdeb168",
+      "trimStartSeconds": 0.0,
+      "trimEndSeconds": 0.4341,
+      "effectivePitchSpeedRatio": 0.98
+    }
+  ],
+  "audition": {
+    "file": "artifacts/weapon-revision/voice-audition.wav",
+    "order": [
+      "male-attack-ha",
+      "male-attack-he",
+      "female-attack-ha",
+      "female-attack-he",
+      "male-defeat",
+      "female-defeat"
+    ],
+    "silenceBetweenSeconds": 0.38
+  }
+}

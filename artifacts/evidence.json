@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "runId": "release-check",
+  "captures": [
+    {
+      "mode": "desktop",
+      "state": "active-play",
+      "report": "artifacts/release-check/desktop-active-play.json"
+    },
+    {
+      "mode": "desktop",
+      "state": "threat-preview",
+      "report": "artifacts/release-check/desktop-threat-preview.json"
+    },
+    {
+      "mode": "desktop",
+      "state": "checkmate",
+      "report": "artifacts/release-check/desktop-checkmate.json"
+    },
+    {
+      "mode": "mobile",
+      "state": "active-play",
+      "report": "artifacts/release-check/mobile-active-play.json"
+    }
+  ],
+  "artifacts": [
+    "artifacts/release-check/motion.json",
+    "artifacts/release-check/attack-00.png",
+    "artifacts/release-check/attack-05.png",
+    "artifacts/release-check/attack-10.png",
+    "artifacts/release-check/playtest.json",
+    "artifacts/final-pass/six-piece-motion.json",
+    "artifacts/final-pass/motion-touch.json",
+    "artifacts/final-pass/knight-motion.png",
+    "artifacts/final-pass/bishop-impact.png",
+    "artifacts/final-pass/pawn-impact.png",
+    "artifacts/weapon-revision/checks.json",
+    "artifacts/weapon-revision/weapon-motion.json",
+    "artifacts/weapon-revision/voices.json",
+    "artifacts/weapon-revision/queen-windup.png",
+    "artifacts/weapon-revision/queen-swing.png",
+    "artifacts/weapon-revision/queen-followthrough.png",
+    "artifacts/weapon-revision/red-attack-route.png",
+    "artifacts/weapon-revision/blue-movement-route.png",
+    "artifacts/weapon-revision/mobile-ranges.png",
+    "artifacts/weapon-revision/voice-audition.wav"
+  ]
+}

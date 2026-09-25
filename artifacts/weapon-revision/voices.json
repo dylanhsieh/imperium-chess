@@ -1,0 +1,66 @@
+{
+  "queen": {
+    "attack": {
+      "loaded": 6,
+      "played": 1,
+      "last": "attack:q:female-attack-ha"
+    },
+    "defeat": {
+      "loaded": 6,
+      "played": 2,
+      "last": "defeat:p:male-defeat"
+    }
+  },
+  "pawn": {
+    "attack": {
+      "loaded": 6,
+      "played": 3,
+      "last": "attack:p:male-attack-he"
+    },
+    "defeat": {
+      "loaded": 6,
+      "played": 4,
+      "last": "defeat:p:male-defeat"
+    }
+  },
+  "muted": {
+    "attack": {
+      "loaded": 6,
+      "played": 4,
+      "last": "defeat:p:male-defeat"
+    },
+    "defeat": {
+      "loaded": 6,
+      "played": 4,
+      "last": "defeat:p:male-defeat"
+    }
+  },
+  "files": [
+    {
+      "url": "http://127.0.0.1:5188/audio/male-attack-ha.wav",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5188/audio/male-attack-he.wav",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5188/audio/female-attack-ha.wav",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5188/audio/female-attack-he.wav",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5188/audio/male-defeat.wav",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5188/audio/female-defeat.wav",
+      "status": 200
+    }
+  ],
+  "errors": [],
+  "offlinePlayback": true
+}

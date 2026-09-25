@@ -1,0 +1,26 @@
+export const icons={
+  sound:'<path d="M4 9v6h4l5 4V5L8 9H4zM17 8c3 2 3 6 0 8M19 5c5 4 5 10 0 14"/>',
+  muted:'<path d="M4 9v6h4l5 4V5L8 9H4zM17 9l5 6m0-6-5 6"/>',
+  settings:'<path d="M5 3v18m7-18v18m7-18v18M2 8h6m1 8h6m1-10h6"/>',
+  help:'<circle cx="12" cy="12" r="9"/><path d="M9 9c0-4 7-4 6 0-1 2-3 1-3 5m0 2v2"/>',
+  undo:'<path d="M9 5L4 10l5 5M4 10h9a6 6 0 0 1 6 6v3"/>',
+  flip:'<path d="M4 9a8 8 0 0 1 14-4l2 3M20 3v5h-5M20 15a8 8 0 0 1-14 4l-2-3M4 21v-5h5"/>',
+  camera:'<path d="M3 7h4l2-3h6l2 3h4v13H3z"/><circle cx="12" cy="13" r="4"/>',
+  film:'<rect x="3" y="4" width="18" height="16" rx="1"/><path d="M7 4v16m10-16v16M3 9h4m-4 6h4M17 9h4m-4 6h4"/>',
+  play:'<path d="M8 4l12 8-12 8z"/>',
+};
+export const svg=(name:keyof typeof icons)=>`<svg viewBox="0 0 24 24" aria-hidden="true">${icons[name]}</svg>`;
+export const pieceNames:Record<string,{name:string,title:string,english:string,symbol:string,rule:string,verb:string}>={
+  p:{name:'兵',title:'鐵衛步兵',english:'LEGIONARY',symbol:'♟',rule:'向前一格，斜前方吃子。初次行動可前進兩格，抵達底線可升變。',verb:'鐵衛進軍'},
+  r:{name:'車',title:'重裝戰車',english:'WAR CHARIOT',symbol:'♜',rule:'沿橫向或縱向直線移動，格數不限。重輪衝鋒，突破敵陣。',verb:'戰車衝鋒'},
+  n:{name:'馬',title:'蒼穹騎士',english:'CAVALRY',symbol:'♞',rule:'走「日」字形：一個方向兩格，再垂直一格。唯一可越過其他棋子的兵種。',verb:'鐵騎飛躍'},
+  b:{name:'象',title:'聖殿祭司',english:'HIEROPHANT',symbol:'♝',rule:'沿斜線移動，格數不限。每位祭司始終留在同色格上。',verb:'聖光裁決'},
+  q:{name:'后',title:'戰爭女皇',english:'SOVEREIGN',symbol:'♛',rule:'橫、直、斜線皆可移動，格數不限。統御戰場的最強戰力。',verb:'女皇降臨'},
+  k:{name:'王',title:'帝國君王',english:'IMPERATOR',symbol:'♚',rule:'任意方向一格，不能走入敵方攻擊範圍。保護君王，直到最後。',verb:'王者征伐'},
+};
+export function createUI(){document.querySelector('#app')!.innerHTML=`
+  <header class="topbar"><div class="brand"><svg class="sigil" viewBox="0 0 40 48" fill="none"><path d="M5 10l7 8 8-14 8 14 7-8-4 23H9zM10 38h20M14 43h12" stroke="currentColor" stroke-width="1.5"/><path d="M20 17v12M14 23h12" stroke="currentColor"/></svg><div><h1>IMPERIUM</h1><small>王權戰棋 · VOXEL CHRONICLES</small></div></div><div class="top-center"><i></i> THE ART OF WAR <i></i></div><div class="top-actions"><button class="icon-button" id="sound" title="音效開關" aria-label="音效開關" aria-pressed="true">${svg('sound')}</button><button class="icon-button" id="settings" title="設定" aria-label="設定">${svg('settings')}</button><button class="icon-button" id="help" title="玩法說明" aria-label="玩法說明">${svg('help')}</button><button class="new-game" id="new-game">新的戰役 ＋</button></div></header>
+  <main id="stage"><div class="stage-vignette"></div><div class="stage-heading"><div class="eyebrow">LOCAL TWO-PLAYER · 本機雙人</div><h2>每一步，皆是史詩。</h2><p>兩支軍團。一座戰場。唯一的王。</p></div><div class="scene-tag">THE IMPERIAL SANCTUM</div><div class="view-tools"><button id="undo" title="悔棋 U">${svg('undo')}悔棋</button><button id="flip" title="翻轉視角 F">${svg('flip')}換邊</button><button id="reset-camera" title="重設視角 R">${svg('camera')}全景</button><button id="cinema" class="active" aria-pressed="true">${svg('film')}電影運鏡</button></div><div class="hint">拖曳旋轉<span>／</span>滾輪縮放</div><div id="route-label" class="route-label" hidden></div><div id="toast" class="toast" role="status"></div><div class="cinema-bar top"></div><div class="cinema-bar bottom"><strong id="action-name"></strong><small id="action-detail"></small></div><button class="skip-button" id="skip">略過動畫 · SPACE</button><div class="impact-flash" id="flash"></div></main>
+  <aside class="sidebar"><section class="turn-block"><div class="section-label">戰局進行中 <b id="round-number">ROUND 01</b></div><h2 class="turn-title"><i class="turn-indicator"></i><span id="turn-title">曜金帝國</span></h2><div class="turn-description" id="turn-description">白方先行，選擇一名戰士。</div></section><section class="players"><div class="player white active" id="player-w"><div class="crest">♔</div><div class="player-name">曜金帝國<small>THE AURELIAN LEGION</small></div><div class="captured" id="captured-w"><small>已俘獲</small>—</div></div><div class="player black" id="player-b"><div class="crest">♚</div><div class="player-name">黑曜軍團<small>THE OBSIDIAN ORDER</small></div><div class="captured" id="captured-b"><small>已俘獲</small>—</div></div></section><section class="history"><div class="section-label">戰役紀錄 <span id="move-count">00 MOVES</span></div><div class="history-list" id="history"><div class="history-empty"><em>⚔</em>戰旗已升起<br>你的第一步，將書寫歷史。</div></div></section><section class="unit-info" id="unit-info"><div class="unit-heading"><span class="unit-symbol">♜</span><div><div class="unit-title">你的軍團，聽候號令。</div><div class="unit-subtitle">SELECT YOUR WARRIOR</div></div></div><p class="unit-description">點選己方棋子查看合法走位。<br>再點選亮起的格子，展開行動。</p></section></aside>
+  <footer class="footer"><span>EST. MMXXVI <b>／ IMPERIUM</b></span><div class="legend"><span><i class="gold"></i>已選取</span><span class="move-count">◇ 藍格・移動</span><span class="attack-count">⚔ 紅格・攻擊</span></div><span class="local-note">LOCAL DUEL · ALL ASSETS CRAFTED LOCALLY</span></footer>
+  <div id="modal" class="modal-backdrop" hidden></div><div id="loading" class="loading"><div><h2>IMPERIUM</h2><p>正在集結軍團</p><span></span></div></div>`;}

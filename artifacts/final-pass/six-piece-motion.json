@@ -1,0 +1,266 @@
+[
+  {
+    "type": "rook",
+    "phase": "locomotion",
+    "state": {
+      "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+      "selected": null,
+      "legal": [],
+      "fears": [
+        "g4"
+      ],
+      "relief": [],
+      "animating": true,
+      "history": [
+        "Rxg4"
+      ],
+      "turn": "b",
+      "gameOver": false,
+      "cinematic": true,
+      "reduced": false,
+      "muted": false,
+      "pieces": 6
+    }
+  },
+  {
+    "type": "rook",
+    "phase": "impact",
+    "state": {
+      "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
+      "selected": null,
+      "legal": [],
+      "fears": [],
+      "relief": [],
+      "animating": true,
+      "history": [
+        "Rxg4"
+      ],
+      "turn": "b",
+      "gameOver": false,
+      "cinematic": true,
+      "reduced": false,
+      "muted": false,
+      "pieces": 6
+    }
+  },
+  {
+    "type": "knight",
+    "phase": "locomotion",
+    "state": {
+      "fen": "k7/8/8/5N2/8/8/8/7K b - - 0 1",
+      "selected": null,
+      "legal": [],
+      "fears": [
+        "f5"
+      ],
+      "relief": [],
+      "animating": true,
+      "history": [
+        "Nxf5"
+      ],
+      "turn": "b",
+      "gameOver": true,
+      "cinematic": true,
+      "reduced": false,
+      "muted": false,
+      "pieces": 4
+    }
+  },
+  {
+    "type": "knight",
+    "phase": "impact",
+    "state": {
+      "fen": "k7/8/8/5N2/8/8/8/7K b - - 0 1",
+      "selected": null,
+      "legal": [],
+      "fears": [],
+      "relief": [],
+      "animating": true,
+      "history": [
+        "Nxf5"
+      ],
+      "turn": "b",
+      "gameOver": true,
+      "cinematic": true,
+      "reduced": false,
+      "muted": false,
+      "pieces": 4
+    }
+  },
+  {
+    "type": "bishop",
+    "phase": "locomotion",
+    "state": {
+      "fen": "k7/8/5B2/8/8/8/8/7K b - - 0 1",
+      "selected": null,
+      "legal": [],
+      "fears": [
+        "f6"
+      ],
+      "relief": [],
+      "animating": true,
+      "history": [
+        "Bxf6"
+      ],
+      "turn": "b",
+      "gameOver": true,
+      "cinematic": true,
+      "reduced": false,
+      "muted": false,
+      "pieces": 4
+    }
+  },
+  {
+    "type": "bishop",
+    "phase": "impact",
+    "state": {
+      "fen": "k7/8/5B2/8/8/8/8/7K b - - 0 1",
+      "selected": null,
+      "legal": [],
+      "fears": [],
+      "relief": [],
+      "animating": true,
+      "history": [
+        "Bxf6"
+      ],
+      "turn": "b",
+      "gameOver": true,
+      "cinematic": true,
+      "reduced": false,
+      "muted": false,
+      "pieces": 4
+    }
+  },
+  {
+    "type": "queen",
+    "phase": "locomotion",
+    "state": {
+      "fen": "k7/8/8/8/6Q1/8/8/7K b - - 0 1",
+      "selected": null,
+      "legal": [],
+      "fears": [
+        "g4"
+      ],
+      "relief": [],
+      "animating": true,
+      "history": [
+        "Qxg4"
+      ],
+      "turn": "b",
+      "gameOver": false,
+      "cinematic": true,
+      "reduced": false,
+      "muted": false,
+      "pieces": 4
+    }
+  },
+  {
+    "type": "queen",
+    "phase": "impact",
+    "state": {
+      "fen": "k7/8/8/8/6Q1/8/8/7K b - - 0 1",
+      "selected": null,
+      "legal": [],
+      "fears": [],
+      "relief": [],
+      "animating": true,
+      "history": [
+        "Qxg4"
+      ],
+      "turn": "b",
+      "gameOver": false,
+      "cinematic": true,
+      "reduced": false,
+      "muted": false,
+      "pieces": 4
+    }
+  },
+  {
+    "type": "pawn",
+    "phase": "locomotion",
+    "state": {
+      "fen": "k7/8/8/3P4/8/8/8/7K b - - 0 1",
+      "selected": null,
+      "legal": [],
+      "fears": [
+        "d5"
+      ],
+      "relief": [],
+      "animating": true,
+      "history": [
+        "exd5"
+      ],
+      "turn": "b",
+      "gameOver": false,
+      "cinematic": true,
+      "reduced": false,
+      "muted": false,
+      "pieces": 4
+    }
+  },
+  {
+    "type": "pawn",
+    "phase": "impact",
+    "state": {
+      "fen": "k7/8/8/3P4/8/8/8/7K b - - 0 1",
+      "selected": null,
+      "legal": [],
+      "fears": [],
+      "relief": [],
+      "animating": true,
+      "history": [
+        "exd5"
+      ],
+      "turn": "b",
+      "gameOver": false,
+      "cinematic": true,
+      "reduced": false,
+      "muted": false,
+      "pieces": 4
+    }
+  },
+  {
+    "type": "king",
+    "phase": "locomotion",
+    "state": {
+      "fen": "k7/8/8/8/4K3/8/8/8 b - - 0 1",
+      "selected": null,
+      "legal": [],
+      "fears": [
+        "e4"
+      ],
+      "relief": [],
+      "animating": true,
+      "history": [
+        "Kxe4"
+      ],
+      "turn": "b",
+      "gameOver": true,
+      "cinematic": true,
+      "reduced": false,
+      "muted": false,
+      "pieces": 3
+    }
+  },
+  {
+    "type": "king",
+    "phase": "impact",
+    "state": {
+      "fen": "k7/8/8/8/4K3/8/8/8 b - - 0 1",
+      "selected": null,
+      "legal": [],
+      "fears": [],
+      "relief": [],
+      "animating": true,
+      "history": [
+        "Kxe4"
+      ],
+      "turn": "b",
+      "gameOver": true,
+      "cinematic": true,
+      "reduced": false,
+      "muted": false,
+      "pieces": 3
+    }
+  }
+]
