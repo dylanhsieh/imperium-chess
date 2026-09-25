@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {finishMaterial} from './surface-shading';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 
 /** Locally sculpted ancient armies. Every silhouette and detail is authored here. */
@@ -16,7 +17,7 @@ function palette(color: Faction): Palette {
   const make = (name: string, value: number, metalness: number, roughness: number) => {
     const m = new THREE.MeshStandardMaterial({ color: value, metalness, roughness });
     m.name = `${color}-${name}`;
-    return m;
+    return finishMaterial(m,{scale:4,grain:.06,roughness:.16,shade:.32});
   };
   const p = {
     armor: make('enamel-and-plate', light ? 0xf0dfb7 : 0x394755, .5, .41),

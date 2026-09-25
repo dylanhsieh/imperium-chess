@@ -44,8 +44,8 @@
       "muted": false,
       "pieces": 6,
       "diagnostics": {
-        "frame": 413,
-        "fps": 61,
+        "frame": 301,
+        "fps": 60,
         "game": {
           "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
           "turn": "b",
@@ -56,24 +56,25 @@
             "g4"
           ],
           "animating": true,
-          "actionProgress": 0.1034888888878955,
+          "actionProgress": 0.10371111111011766,
           "gameOver": false
         },
         "renderer": {
-          "calls": 220,
-          "triangles": 80996,
-          "geometries": 385,
-          "textures": 39
+          "calls": 221,
+          "triangles": 81008,
+          "geometries": 386,
+          "textures": 40
         },
         "render": {
-          "calls": 220,
-          "triangles": 80996
+          "calls": 221,
+          "triangles": 81008
         },
         "memory": {
-          "geometries": 385,
-          "textures": 39
+          "geometries": 386,
+          "textures": 40
         },
         "quality": {
+          "graphics": "enhanced",
           "dpr": 1,
           "shadowMapSize": 2048,
           "shadowLights": 1,
@@ -105,8 +106,8 @@
       "muted": false,
       "pieces": 6,
       "diagnostics": {
-        "frame": 436,
-        "fps": 60,
+        "frame": 325,
+        "fps": 62,
         "game": {
           "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
           "turn": "b",
@@ -117,24 +118,25 @@
             "g4"
           ],
           "animating": true,
-          "actionProgress": 0.18875555555522444,
+          "actionProgress": 0.1924444444444444,
           "gameOver": false
         },
         "renderer": {
-          "calls": 160,
-          "triangles": 72807,
-          "geometries": 384,
-          "textures": 39
+          "calls": 162,
+          "triangles": 72831,
+          "geometries": 386,
+          "textures": 40
         },
         "render": {
-          "calls": 160,
-          "triangles": 72807
+          "calls": 162,
+          "triangles": 72831
         },
         "memory": {
-          "geometries": 384,
-          "textures": 39
+          "geometries": 386,
+          "textures": 40
         },
         "quality": {
+          "graphics": "enhanced",
           "dpr": 1,
           "shadowMapSize": 2048,
           "shadowLights": 1,
@@ -166,8 +168,8 @@
       "muted": false,
       "pieces": 6,
       "diagnostics": {
-        "frame": 460,
-        "fps": 60,
+        "frame": 349,
+        "fps": 62,
         "game": {
           "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
           "turn": "b",
@@ -178,24 +180,25 @@
             "g4"
           ],
           "animating": true,
-          "actionProgress": 0.2776444444441134,
+          "actionProgress": 0.2813333333333332,
           "gameOver": false
         },
         "renderer": {
-          "calls": 161,
-          "triangles": 72819,
-          "geometries": 385,
-          "textures": 39
+          "calls": 162,
+          "triangles": 72831,
+          "geometries": 386,
+          "textures": 40
         },
         "render": {
-          "calls": 161,
-          "triangles": 72819
+          "calls": 162,
+          "triangles": 72831
         },
         "memory": {
-          "geometries": 385,
-          "textures": 39
+          "geometries": 386,
+          "textures": 40
         },
         "quality": {
+          "graphics": "enhanced",
           "dpr": 1,
           "shadowMapSize": 2048,
           "shadowLights": 1,
@@ -224,7 +227,7 @@
       "muted": false,
       "pieces": 6,
       "diagnostics": {
-        "frame": 482,
+        "frame": 371,
         "fps": 60,
         "game": {
           "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
@@ -236,24 +239,25 @@
             "g4"
           ],
           "animating": true,
-          "actionProgress": 0.35911111111111127,
+          "actionProgress": 0.36293333333233974,
           "gameOver": false
         },
         "renderer": {
-          "calls": 86,
-          "triangles": 74175,
-          "geometries": 385,
-          "textures": 39
+          "calls": 89,
+          "triangles": 74523,
+          "geometries": 386,
+          "textures": 40
         },
         "render": {
-          "calls": 86,
-          "triangles": 74175
+          "calls": 89,
+          "triangles": 74523
         },
         "memory": {
-          "geometries": 385,
-          "textures": 39
+          "geometries": 386,
+          "textures": 40
         },
         "quality": {
+          "graphics": "enhanced",
           "dpr": 1,
           "shadowMapSize": 2048,
           "shadowLights": 1,
@@ -282,8 +286,8 @@
       "muted": false,
       "pieces": 6,
       "diagnostics": {
-        "frame": 506,
-        "fps": 61,
+        "frame": 394,
+        "fps": 60,
         "game": {
           "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
           "turn": "b",
@@ -294,24 +298,25 @@
             "g4"
           ],
           "animating": true,
-          "actionProgress": 0.44797777777744696,
+          "actionProgress": 0.44813333333366434,
           "gameOver": false
         },
         "renderer": {
-          "calls": 116,
-          "triangles": 80718,
-          "geometries": 385,
-          "textures": 39
+          "calls": 117,
+          "triangles": 80730,
+          "geometries": 386,
+          "textures": 40
         },
         "render": {
-          "calls": 116,
-          "triangles": 80718
+          "calls": 117,
+          "triangles": 80730
         },
         "memory": {
-          "geometries": 385,
-          "textures": 39
+          "geometries": 386,
+          "textures": 40
         },
         "quality": {
+          "graphics": "enhanced",
           "dpr": 1,
           "shadowMapSize": 2048,
           "shadowLights": 1,
@@ -340,7 +345,7 @@
       "muted": false,
       "pieces": 6,
       "diagnostics": {
-        "frame": 529,
+        "frame": 417,
         "fps": 60,
         "game": {
           "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
@@ -352,24 +357,25 @@
             "g4"
           ],
           "animating": true,
-          "actionProgress": 0.5331777777771161,
+          "actionProgress": 0.53331111111078,
           "gameOver": false
         },
         "renderer": {
-          "calls": 116,
-          "triangles": 80718,
-          "geometries": 385,
-          "textures": 39
+          "calls": 117,
+          "triangles": 80730,
+          "geometries": 386,
+          "textures": 40
         },
         "render": {
-          "calls": 116,
-          "triangles": 80718
+          "calls": 117,
+          "triangles": 80730
         },
         "memory": {
-          "geometries": 385,
-          "textures": 39
+          "geometries": 386,
+          "textures": 40
         },
         "quality": {
+          "graphics": "enhanced",
           "dpr": 1,
           "shadowMapSize": 2048,
           "shadowLights": 1,
@@ -398,8 +404,8 @@
       "muted": false,
       "pieces": 6,
       "diagnostics": {
-        "frame": 552,
-        "fps": 60,
+        "frame": 441,
+        "fps": 61,
         "game": {
           "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
           "turn": "b",
@@ -410,24 +416,25 @@
             "g4"
           ],
           "animating": true,
-          "actionProgress": 0.6183777777767853,
+          "actionProgress": 0.6221777777771154,
           "gameOver": false
         },
         "renderer": {
-          "calls": 114,
-          "triangles": 80704,
-          "geometries": 385,
-          "textures": 39
+          "calls": 115,
+          "triangles": 80716,
+          "geometries": 386,
+          "textures": 40
         },
         "render": {
-          "calls": 114,
-          "triangles": 80704
+          "calls": 115,
+          "triangles": 80716
         },
         "memory": {
-          "geometries": 385,
-          "textures": 39
+          "geometries": 386,
+          "textures": 40
         },
         "quality": {
+          "graphics": "enhanced",
           "dpr": 1,
           "shadowMapSize": 2048,
           "shadowLights": 1,
@@ -454,8 +461,8 @@
       "muted": false,
       "pieces": 6,
       "diagnostics": {
-        "frame": 573,
-        "fps": 14,
+        "frame": 464,
+        "fps": 62,
         "game": {
           "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
           "turn": "b",
@@ -464,24 +471,25 @@
           "legal": [],
           "fear": [],
           "animating": true,
-          "actionProgress": 0.6909333333333332,
+          "actionProgress": 0.6908813333333531,
           "gameOver": false
         },
         "renderer": {
-          "calls": 114,
-          "triangles": 80778,
-          "geometries": 386,
-          "textures": 39
+          "calls": 115,
+          "triangles": 80790,
+          "geometries": 387,
+          "textures": 40
         },
         "render": {
-          "calls": 114,
-          "triangles": 80778
+          "calls": 115,
+          "triangles": 80790
         },
         "memory": {
-          "geometries": 386,
-          "textures": 39
+          "geometries": 387,
+          "textures": 40
         },
         "quality": {
+          "graphics": "enhanced",
           "dpr": 1,
           "shadowMapSize": 2048,
           "shadowLights": 1,
@@ -508,7 +516,7 @@
       "muted": false,
       "pieces": 6,
       "diagnostics": {
-        "frame": 597,
+        "frame": 487,
         "fps": 60,
         "game": {
           "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
@@ -518,24 +526,25 @@
           "legal": [],
           "fear": [],
           "animating": true,
-          "actionProgress": 0.7479213333334194,
+          "actionProgress": 0.7443320000005097,
           "gameOver": false
         },
         "renderer": {
-          "calls": 76,
-          "triangles": 72884,
-          "geometries": 386,
-          "textures": 39
+          "calls": 77,
+          "triangles": 72896,
+          "geometries": 387,
+          "textures": 40
         },
         "render": {
-          "calls": 76,
-          "triangles": 72884
+          "calls": 77,
+          "triangles": 72896
         },
         "memory": {
-          "geometries": 386,
-          "textures": 39
+          "geometries": 387,
+          "textures": 40
         },
         "quality": {
+          "graphics": "enhanced",
           "dpr": 1,
           "shadowMapSize": 2048,
           "shadowLights": 1,
@@ -562,8 +571,8 @@
       "muted": false,
       "pieces": 6,
       "diagnostics": {
-        "frame": 619,
-        "fps": 61,
+        "frame": 509,
+        "fps": 62,
         "game": {
           "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
           "turn": "b",
@@ -572,24 +581,25 @@
           "legal": [],
           "fear": [],
           "animating": true,
-          "actionProgress": 0.8293435555553108,
+          "actionProgress": 0.8257097777772942,
           "gameOver": false
         },
         "renderer": {
-          "calls": 77,
-          "triangles": 72832,
-          "geometries": 385,
-          "textures": 39
+          "calls": 78,
+          "triangles": 72844,
+          "geometries": 386,
+          "textures": 40
         },
         "render": {
-          "calls": 77,
-          "triangles": 72832
+          "calls": 78,
+          "triangles": 72844
         },
         "memory": {
-          "geometries": 385,
-          "textures": 39
+          "geometries": 386,
+          "textures": 40
         },
         "quality": {
+          "graphics": "enhanced",
           "dpr": 1,
           "shadowMapSize": 2048,
           "shadowLights": 1,
@@ -616,7 +626,7 @@
       "muted": false,
       "pieces": 6,
       "diagnostics": {
-        "frame": 640,
+        "frame": 531,
         "fps": 60,
         "game": {
           "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
@@ -626,24 +636,25 @@
           "legal": [],
           "fear": [],
           "animating": true,
-          "actionProgress": 0.9071657777781955,
+          "actionProgress": 0.9072875555554032,
           "gameOver": false
         },
         "renderer": {
-          "calls": 81,
-          "triangles": 72996,
-          "geometries": 385,
-          "textures": 39
+          "calls": 82,
+          "triangles": 73008,
+          "geometries": 386,
+          "textures": 40
         },
         "render": {
-          "calls": 81,
-          "triangles": 72996
+          "calls": 82,
+          "triangles": 73008
         },
         "memory": {
-          "geometries": 385,
-          "textures": 39
+          "geometries": 386,
+          "textures": 40
         },
         "quality": {
+          "graphics": "enhanced",
           "dpr": 1,
           "shadowMapSize": 2048,
           "shadowLights": 1,
@@ -670,7 +681,7 @@
       "muted": false,
       "pieces": 6,
       "diagnostics": {
-        "frame": 662,
+        "frame": 552,
         "fps": 60,
         "game": {
           "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
@@ -680,24 +691,25 @@
           "legal": [],
           "fear": [],
           "animating": true,
-          "actionProgress": 0.9886546666660914,
+          "actionProgress": 0.9850431111106279,
           "gameOver": false
         },
         "renderer": {
-          "calls": 100,
-          "triangles": 73402,
-          "geometries": 385,
-          "textures": 39
+          "calls": 101,
+          "triangles": 73412,
+          "geometries": 386,
+          "textures": 40
         },
         "render": {
-          "calls": 100,
-          "triangles": 73402
+          "calls": 101,
+          "triangles": 73412
         },
         "memory": {
-          "geometries": 385,
-          "textures": 39
+          "geometries": 386,
+          "textures": 40
         },
         "quality": {
+          "graphics": "enhanced",
           "dpr": 1,
           "shadowMapSize": 2048,
           "shadowLights": 1,
@@ -724,8 +736,8 @@
       "muted": false,
       "pieces": 5,
       "diagnostics": {
-        "frame": 684,
-        "fps": 60,
+        "frame": 574,
+        "fps": 58,
         "game": {
           "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
           "turn": "b",
@@ -738,20 +750,21 @@
           "gameOver": false
         },
         "renderer": {
-          "calls": 86,
-          "triangles": 73914,
+          "calls": 84,
+          "triangles": 73668,
           "geometries": 387,
-          "textures": 39
+          "textures": 40
         },
         "render": {
-          "calls": 86,
-          "triangles": 73914
+          "calls": 84,
+          "triangles": 73668
         },
         "memory": {
           "geometries": 387,
-          "textures": 39
+          "textures": 40
         },
         "quality": {
+          "graphics": "enhanced",
           "dpr": 1,
           "shadowMapSize": 2048,
           "shadowLights": 1,
@@ -762,7 +775,7 @@
     }
   ],
   "diagnostics": {
-    "frame": 889,
+    "frame": 780,
     "fps": 60,
     "game": {
       "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
@@ -776,20 +789,21 @@
       "gameOver": false
     },
     "renderer": {
-      "calls": 129,
-      "triangles": 323242,
+      "calls": 124,
+      "triangles": 322864,
       "geometries": 490,
-      "textures": 39
+      "textures": 40
     },
     "render": {
-      "calls": 129,
-      "triangles": 323242
+      "calls": 124,
+      "triangles": 322864
     },
     "memory": {
       "geometries": 490,
-      "textures": 39
+      "textures": 40
     },
     "quality": {
+      "graphics": "enhanced",
       "dpr": 1,
       "shadowMapSize": 2048,
       "shadowLights": 1,

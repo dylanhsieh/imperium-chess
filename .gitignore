@@ -1,3 +1,13 @@
 node_modules/
 __pycache__/
 .DS_Store
+
+# Local credentials and scratch files
+.env
+.env.*
+!.env.example
+github-token
+.github_token
+*.pem
+*.key
+work/

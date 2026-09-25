@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {finishMaterial,onGraphicsChange} from './surface-shading';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
@@ -140,6 +141,8 @@ export function createWorld(scene: THREE.Scene, renderer: THREE.WebGLRenderer) {
   const hemi=new THREE.HemisphereLight('#d3e3d9','#313127',2.0); scene.add(hemi);
   const sun=new THREE.DirectionalLight('#ffe5bb',3.3); sun.position.set(-5,14,8); sun.castShadow=true; sun.shadow.mapSize.set(2048,2048); sun.shadow.camera.left=-9;sun.shadow.camera.right=9;sun.shadow.camera.top=9;sun.shadow.camera.bottom=-9;sun.shadow.camera.near=.5;sun.shadow.camera.far=35;sun.shadow.bias=-.00035;sun.shadow.normalBias=.025;scene.add(sun);
   const rim=new THREE.DirectionalLight('#aacbd4',2.4);rim.position.set(8,10,-10);scene.add(rim);
+  scene.traverse(node=>{if(node instanceof THREE.Mesh){for(const m of Array.isArray(node.material)?node.material:[node.material])if(m instanceof THREE.MeshStandardMaterial)finishMaterial(m,{scale:1.4,grain:.09,roughness:.18,shade:.27});}});
+  onGraphicsChange(mode=>{const enhanced=mode==='enhanced';hemi.intensity=enhanced?.65:2;sun.intensity=enhanced?4.4:3.3;rim.intensity=enhanced?2.0:2.4;scene.environmentIntensity=enhanced?.8:.65;});
   const dustGeo = new THREE.BufferGeometry(), positions=new Float32Array(220*3);
   for(let i=0;i<220;i++){positions[i*3]=(random()-.5)*35;positions[i*3+1]=random()*12;positions[i*3+2]=(random()-.5)*35;}
   dustGeo.setAttribute('position',new THREE.BufferAttribute(positions,3));

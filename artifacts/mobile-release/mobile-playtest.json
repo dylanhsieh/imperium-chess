@@ -1,0 +1,334 @@
+{
+  "url": "http://127.0.0.1:5194",
+  "input": "Chrome touchscreen.tap and CDP Input.dispatchTouchEvent; no mouse input",
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844,
+      "checks": [
+        "All 64 board cells unobstructed; visible top/board controls at least 44 px; no horizontal overflow",
+        "Tap selects, repeated tap cancels, explicit Cancel cancels",
+        "Out-and-back drag rotates camera without accidentally selecting or moving",
+        "Two-finger pinch zooms with no accidental move",
+        "Cancelled touch releases interaction; next tap still works",
+        "Actual touch opening e4 d5 exd5 and full cinematic capture",
+        "Touch Undo restores captured piece and correct turn",
+        "Touch Flip and Overview camera controls work",
+        "Basic/enhanced lighting switch keeps the same game",
+        "Promotion exposes 4 reachable touch choices and creates chosen queen",
+        "Settings → New game → confirmation resets to 32 pieces",
+        "Orientation round-trip preserves game and touch picking"
+      ],
+      "layout": {
+        "targets": [
+          {
+            "id": "sound",
+            "width": 44,
+            "height": 44
+          },
+          {
+            "id": "settings",
+            "width": 44,
+            "height": 44
+          },
+          {
+            "id": "help",
+            "width": 44,
+            "height": 44
+          },
+          {
+            "id": "undo",
+            "width": 65.609375,
+            "height": 44
+          },
+          {
+            "id": "flip",
+            "width": 65.609375,
+            "height": 44
+          },
+          {
+            "id": "reset-camera",
+            "width": 65.609375,
+            "height": 44
+          },
+          {
+            "id": "cancel-selection",
+            "width": 48,
+            "height": 44
+          }
+        ],
+        "blockedCells": [],
+        "documentWidth": 390,
+        "viewport": 390
+      },
+      "audit": {
+        "pointerTypes": [
+          "touch"
+        ],
+        "audio": [
+          "running"
+        ],
+        "diagnostics": {
+          "frame": 1123,
+          "fps": 63,
+          "game": {
+            "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+            "turn": "w",
+            "moves": 0,
+            "selected": "g1",
+            "legal": [
+              "f3",
+              "h3"
+            ],
+            "fear": [],
+            "animating": false,
+            "actionProgress": 0,
+            "gameOver": false
+          },
+          "renderer": {
+            "calls": 124,
+            "triangles": 322476,
+            "geometries": 205,
+            "textures": 39
+          },
+          "render": {
+            "calls": 124,
+            "triangles": 322476
+          },
+          "memory": {
+            "geometries": 205,
+            "textures": 39
+          },
+          "quality": {
+            "graphics": "basic",
+            "dpr": 1,
+            "shadowMapSize": 2048,
+            "shadowLights": 1,
+            "postPasses": 0
+          },
+          "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+        }
+      }
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "checks": [
+        "All 64 board cells unobstructed; visible top/board controls at least 44 px; no horizontal overflow",
+        "Tap selects, repeated tap cancels, explicit Cancel cancels",
+        "Out-and-back drag rotates camera without accidentally selecting or moving",
+        "Two-finger pinch zooms with no accidental move",
+        "Cancelled touch releases interaction; next tap still works",
+        "Actual touch opening e4 d5 exd5 and full cinematic capture",
+        "Touch Undo restores captured piece and correct turn",
+        "Touch Flip and Overview camera controls work",
+        "Basic/enhanced lighting switch keeps the same game",
+        "Promotion exposes 4 reachable touch choices and creates chosen queen",
+        "Settings → New game → confirmation resets to 32 pieces",
+        "Orientation round-trip preserves game and touch picking"
+      ],
+      "layout": {
+        "targets": [
+          {
+            "id": "sound",
+            "width": 44,
+            "height": 44
+          },
+          {
+            "id": "settings",
+            "width": 44,
+            "height": 44
+          },
+          {
+            "id": "help",
+            "width": 44,
+            "height": 44
+          },
+          {
+            "id": "undo",
+            "width": 78,
+            "height": 44
+          },
+          {
+            "id": "flip",
+            "width": 78,
+            "height": 44
+          },
+          {
+            "id": "reset-camera",
+            "width": 78,
+            "height": 44
+          },
+          {
+            "id": "cancel-selection",
+            "width": 78,
+            "height": 44
+          }
+        ],
+        "blockedCells": [],
+        "documentWidth": 844,
+        "viewport": 844
+      },
+      "audit": {
+        "pointerTypes": [
+          "touch"
+        ],
+        "audio": [
+          "running"
+        ],
+        "diagnostics": {
+          "frame": 1118,
+          "fps": 60,
+          "game": {
+            "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+            "turn": "w",
+            "moves": 0,
+            "selected": "g1",
+            "legal": [
+              "f3",
+              "h3"
+            ],
+            "fear": [],
+            "animating": false,
+            "actionProgress": 0,
+            "gameOver": false
+          },
+          "renderer": {
+            "calls": 124,
+            "triangles": 322476,
+            "geometries": 204,
+            "textures": 39
+          },
+          "render": {
+            "calls": 124,
+            "triangles": 322476
+          },
+          "memory": {
+            "geometries": 204,
+            "textures": 39
+          },
+          "quality": {
+            "graphics": "basic",
+            "dpr": 1,
+            "shadowMapSize": 2048,
+            "shadowLights": 1,
+            "postPasses": 0
+          },
+          "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+        }
+      }
+    },
+    {
+      "width": 360,
+      "height": 640,
+      "checks": [
+        "All 64 board cells unobstructed; visible top/board controls at least 44 px; no horizontal overflow",
+        "Tap selects, repeated tap cancels, explicit Cancel cancels",
+        "Out-and-back drag rotates camera without accidentally selecting or moving",
+        "Two-finger pinch zooms with no accidental move",
+        "Cancelled touch releases interaction; next tap still works",
+        "Actual touch opening e4 d5 exd5 and full cinematic capture",
+        "Touch Undo restores captured piece and correct turn",
+        "Touch Flip and Overview camera controls work",
+        "Basic/enhanced lighting switch keeps the same game",
+        "Promotion exposes 4 reachable touch choices and creates chosen queen",
+        "Settings → New game → confirmation resets to 32 pieces",
+        "Orientation round-trip preserves game and touch picking"
+      ],
+      "layout": {
+        "targets": [
+          {
+            "id": "sound",
+            "width": 44,
+            "height": 44
+          },
+          {
+            "id": "settings",
+            "width": 44,
+            "height": 44
+          },
+          {
+            "id": "help",
+            "width": 44,
+            "height": 44
+          },
+          {
+            "id": "undo",
+            "width": 65.609375,
+            "height": 44
+          },
+          {
+            "id": "flip",
+            "width": 65.609375,
+            "height": 44
+          },
+          {
+            "id": "reset-camera",
+            "width": 65.609375,
+            "height": 44
+          },
+          {
+            "id": "cancel-selection",
+            "width": 48,
+            "height": 44
+          }
+        ],
+        "blockedCells": [],
+        "documentWidth": 360,
+        "viewport": 360
+      },
+      "audit": {
+        "pointerTypes": [
+          "touch"
+        ],
+        "audio": [
+          "running"
+        ],
+        "diagnostics": {
+          "frame": 1119,
+          "fps": 60,
+          "game": {
+            "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+            "turn": "w",
+            "moves": 0,
+            "selected": "g1",
+            "legal": [
+              "f3",
+              "h3"
+            ],
+            "fear": [],
+            "animating": false,
+            "actionProgress": 0,
+            "gameOver": false
+          },
+          "renderer": {
+            "calls": 124,
+            "triangles": 322476,
+            "geometries": 204,
+            "textures": 39
+          },
+          "render": {
+            "calls": 124,
+            "triangles": 322476
+          },
+          "memory": {
+            "geometries": 204,
+            "textures": 39
+          },
+          "quality": {
+            "graphics": "basic",
+            "dpr": 1,
+            "shadowMapSize": 2048,
+            "shadowLights": 1,
+            "postPasses": 0
+          },
+          "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "Chrome phone emulation verifies touch and layout, not real-device Safari behavior, thermal throttling, or phone GPU performance."
+  ]
+}
