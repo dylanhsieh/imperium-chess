@@ -2,6 +2,8 @@ import * as THREE from 'three';
 
 export type GraphicsMode = 'basic' | 'enhanced';
 const preferenceKey = 'voxel-games-graphics-v1';
+const surfaceMood={value:0};
+export function setSurfaceMood(night:number){surfaceMood.value=night;}
 const callbacks = new Set<(mode:GraphicsMode)=>void>();
 const materials = new Set<THREE.MeshStandardMaterial>();
 function initialMode():GraphicsMode {
@@ -23,7 +25,7 @@ export function setGraphicsMode(next:GraphicsMode){
 }
 export function onGraphicsChange(callback:(mode:GraphicsMode)=>void){callbacks.add(callback);callback(mode);return()=>callbacks.delete(callback);}
 let grain:THREE.DataTexture|undefined;
-function surfaceGrain(){
+export function getSurfaceGrain(){
  if(grain)return grain;
  const size=128,data=new Uint8Array(size*size*4);let seed=71839;
  for(let i=0;i<size*size;i++){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const value=72+(seed>>>24)*.56;data.set([value,value,value,255],i*4);}
@@ -36,10 +38,11 @@ export function finishMaterial<T extends THREE.MeshStandardMaterial>(material:T,
  const config=new THREE.Vector4(options.scale??1.8,options.grain??.045,options.roughness??.12,options.shade??.24);
  material.onBeforeCompile=(shader,renderer)=>{
   previous.call(material,shader,renderer);if(mode==='basic')return;
-  shader.uniforms.uSurfaceGrain={value:surfaceGrain()};shader.uniforms.uSurfaceFinish={value:config};
+  shader.uniforms.uSurfaceMood=surfaceMood;
+  shader.uniforms.uSurfaceGrain={value:getSurfaceGrain()};shader.uniforms.uSurfaceFinish={value:config};
   shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vFinishPosition;\nvarying float vFinishUp;')
    .replace('#include <begin_vertex>','#include <begin_vertex>\nvFinishPosition=position;\nvFinishUp=clamp(normal.y*.5+.5,0.0,1.0);');
-  shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nuniform sampler2D uSurfaceGrain;\nuniform vec4 uSurfaceFinish;\nvarying vec3 vFinishPosition;\nvarying float vFinishUp;')
+  shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nuniform sampler2D uSurfaceGrain;\nuniform vec4 uSurfaceFinish;\nuniform float uSurfaceMood;\nvarying vec3 vFinishPosition;\nvarying float vFinishUp;')
    .replace('#include <color_fragment>',`#include <color_fragment>
     vec2 finishUv=vec2(vFinishPosition.x+vFinishPosition.y*.37,vFinishPosition.z+vFinishPosition.y*.73)*uSurfaceFinish.x;
     float finishGrain=texture2D(uSurfaceGrain,finishUv).r-.5;
@@ -47,10 +50,14 @@ export function finishMaterial<T extends THREE.MeshStandardMaterial>(material:T,
    .replace('#include <roughnessmap_fragment>','#include <roughnessmap_fragment>\nroughnessFactor=clamp(roughnessFactor+finishGrain*uSurfaceFinish.z,.045,1.0);')
    .replace('#include <aomap_fragment>','#include <aomap_fragment>\nreflectedLight.indirectDiffuse*=1.0-uSurfaceFinish.w*(1.0-vFinishUp);')
    .replace('#include <opaque_fragment>',`float finishLight=clamp(dot(outgoingLight,vec3(.2126,.7152,.0722))*.6,0.0,1.0);
-    outgoingLight*=mix(vec3(.76,.89,1.10),vec3(1.095,1.035,.92),finishLight);
+    vec3 shadowTint=mix(vec3(.80,.84,.97),vec3(.67,.79,1.13),uSurfaceMood);
+    vec3 highlightTint=mix(vec3(1.12,1.02,.83),vec3(.96,1.04,1.12),uSurfaceMood);
+    outgoingLight*=mix(shadowTint,highlightTint,smoothstep(.02,.85,finishLight));
+    float edgeLight=pow(1.0-clamp(dot(normal,normalize(vViewPosition)),0.0,1.0),3.0);
+    outgoingLight+=mix(vec3(.20,.16,.10),vec3(.10,.15,.28),uSurfaceMood)*edgeLight*metalnessFactor*.28;
     #include <opaque_fragment>`);
  };
- material.customProgramCacheKey=()=>cacheKey+(mode==='enhanced'?'|local-finish-v1':'|basic');
+ material.customProgramCacheKey=()=>cacheKey+(mode==='enhanced'?'|cinematic-finish-v2':'|basic');
  return material;
 }
 export interface ContactSpot{x:number;y:number;z:number;rx:number;rz:number;yaw?:number;height?:number;}

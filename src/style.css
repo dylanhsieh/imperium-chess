@@ -39,3 +39,15 @@ html.reduced-motion *,html.reduced-motion *:before,html.reduced-motion *:after{t
 @media(max-height:500px) and (pointer:coarse) and (orientation:landscape){.view-tools{top:48px;bottom:auto;left:12px;right:auto;flex-direction:column;width:78px;gap:8px}.view-tools button{width:78px}.toast{bottom:12px;left:55%;max-width:65%}.route-label{bottom:12px;left:55%}}
 .graphics-row{flex-wrap:wrap}.graphics-choices{display:flex;gap:7px}.graphics-choices button{min-height:44px;padding:10px 12px;font-size:11px;letter-spacing:.5px}.graphics-choices button[aria-pressed=true]{background:#c0a572;color:#142017;border-color:#c0a572}
 @media(max-width:760px),(max-height:500px) and (pointer:coarse){.graphics-row{gap:8px}.graphics-choices{flex:1;justify-content:flex-end}.graphics-choices button{flex:1;max-width:120px;padding:10px 7px}}
+
+/* The room and surrounding UI make the active army obvious at every viewport. */
+html[data-turn=w]{--turn-accent:#efc781;--turn-panel:#30261b;--turn-deep:#17130f;--turn-line:#c9a26344}
+html[data-turn=b]{--turn-accent:#c4b3ff;--turn-panel:#22253f;--turn-deep:#0e1227;--turn-line:#a8a7ed44}
+html[data-turn] .topbar{background:linear-gradient(var(--turn-panel),var(--turn-deep));border-color:var(--turn-line);transition:background .7s,border-color .7s}
+html[data-turn] .sidebar{background:linear-gradient(145deg,var(--turn-panel),var(--turn-deep) 70%);border-color:var(--turn-line)}
+html[data-turn] .footer{background:var(--turn-deep)}
+html[data-turn] .turn-title,html[data-turn] #turn-banner,html[data-turn] .scene-tag{color:var(--turn-accent)}
+html[data-turn] .turn-indicator{background:var(--turn-accent);box-shadow:0 0 18px var(--turn-accent)}
+html[data-turn] .turn-block{border-color:var(--turn-line)}
+html[data-graphics=enhanced] .stage-vignette{box-shadow:inset 0 0 120px 20px #02041088;background:radial-gradient(ellipse at 50% 48%,transparent 40%,#04030b38 100%)}
+@media(max-width:760px){html[data-graphics=enhanced] .stage-vignette{box-shadow:inset 0 0 65px 8px #02041055}}

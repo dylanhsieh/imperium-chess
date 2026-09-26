@@ -1,5 +1,6 @@
 import * as THREE from 'three';
-import {finishMaterial,onGraphicsChange} from './surface-shading';
+import {finishMaterial} from './surface-shading';
+import {TurnAtmosphere} from './atmosphere';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
@@ -106,7 +107,7 @@ export function createWorld(scene: THREE.Scene, renderer: THREE.WebGLRenderer) {
   for(let i=0;i<32;i++) {
     const a=i*Math.PI/16; const m=new THREE.BoxGeometry(.025,.01,11); m.rotateY(a); m.translate(Math.sin(a)*17,-1.273,Math.cos(a)*17); add(m,edge);
   }
-  const flameObjects: THREE.Mesh[]=[];
+  const flameObjects: THREE.Mesh[]=[],braziers:THREE.PointLight[]=[];
   const flames = new THREE.MeshBasicMaterial({color:'#ffbb58',transparent:true,opacity:.9,blending:THREE.AdditiveBlending,depthWrite:false});
   for(const x of [-8.4,8.4]) for(const z of [-8.4,8.4]) {
     // Four architectonic braziers with claw crowns.
@@ -116,7 +117,7 @@ export function createWorld(scene: THREE.Scene, renderer: THREE.WebGLRenderer) {
     add(new THREE.TorusGeometry(.64,.038,6,24),bronze,x,.5,z,Math.PI/2);
     for(let j=0;j<8;j++){const a=j*Math.PI/4; add(new THREE.ConeGeometry(.045,.4,5),bronze,x+Math.cos(a)*.62,.65,z+Math.sin(a)*.62);}
     const flame = new THREE.Mesh(new THREE.SphereGeometry(.32,10,10),flames); flame.scale.set(.85,2.5,.85); flame.position.set(x,.84,z); scene.add(flame); flameObjects.push(flame);
-    const light=new THREE.PointLight('#ff9c47',12,9,2); light.position.set(x,1.15,z); scene.add(light);
+    const light=new THREE.PointLight('#ff9c47',12,9,2); light.position.set(x,1.15,z); scene.add(light);braziers.push(light);
   }
   // Paired fluted columns and lintels provide a real far layer for cinematic shots.
   for(const x of [-15,-10,-5,0,5,10,15]) {
@@ -142,12 +143,12 @@ export function createWorld(scene: THREE.Scene, renderer: THREE.WebGLRenderer) {
   const sun=new THREE.DirectionalLight('#ffe5bb',3.3); sun.position.set(-5,14,8); sun.castShadow=true; sun.shadow.mapSize.set(2048,2048); sun.shadow.camera.left=-9;sun.shadow.camera.right=9;sun.shadow.camera.top=9;sun.shadow.camera.bottom=-9;sun.shadow.camera.near=.5;sun.shadow.camera.far=35;sun.shadow.bias=-.00035;sun.shadow.normalBias=.025;scene.add(sun);
   const rim=new THREE.DirectionalLight('#aacbd4',2.4);rim.position.set(8,10,-10);scene.add(rim);
   scene.traverse(node=>{if(node instanceof THREE.Mesh){for(const m of Array.isArray(node.material)?node.material:[node.material])if(m instanceof THREE.MeshStandardMaterial)finishMaterial(m,{scale:1.4,grain:.09,roughness:.18,shade:.27});}});
-  onGraphicsChange(mode=>{const enhanced=mode==='enhanced';hemi.intensity=enhanced?.65:2;sun.intensity=enhanced?4.4:3.3;rim.intensity=enhanced?2.0:2.4;scene.environmentIntensity=enhanced?.8:.65;});
   const dustGeo = new THREE.BufferGeometry(), positions=new Float32Array(220*3);
   for(let i=0;i<220;i++){positions[i*3]=(random()-.5)*35;positions[i*3+1]=random()*12;positions[i*3+2]=(random()-.5)*35;}
   dustGeo.setAttribute('position',new THREE.BufferAttribute(positions,3));
   const dust=new THREE.Points(dustGeo,new THREE.PointsMaterial({color:'#d9c498',size:.028,transparent:true,opacity:.45,depthWrite:false}));scene.add(dust);
-  return {update(time:number){dust.rotation.y=time*.009;flameObjects.forEach((f,i)=>{f.scale.y=2.2+Math.sin(time*9+i*2)*.35;f.scale.x=.8+Math.sin(time*12+i)*.1;});}, shadowLight:sun};
+  const atmosphere=new TurnAtmosphere({scene,renderer,stone,edge,darkMetal,hemi,sun,rim,flames,braziers,dust:dust.material});
+  return {setTurn:(side:'w'|'b',instant=false)=>atmosphere.setTurn(side,instant),theme:()=>atmosphere.state(),update(time:number,reduced=false){atmosphere.update(time,reduced);dust.rotation.y=time*.009;flameObjects.forEach((f,i)=>{f.scale.y=2.2+Math.sin(time*9+i*2)*.35;f.scale.x=.8+Math.sin(time*12+i)*.1;});}, shadowLight:sun};
 }
 
 type Particle={velocity:THREE.Vector3,age:number,life:number,size:number};
