@@ -84,7 +84,25 @@ function loadSaved(){try{const pgn=localStorage.getItem('imperium-pgn');if(pgn)g
 if(!debug)loadSaved();
 audio.setVolume(volume);audio.setMuted(muted);
 function save(){if(debug)return;try{localStorage.setItem('imperium-pgn',game.pgn());localStorage.setItem('imperium-settings',JSON.stringify({cinematic,muted,volume,reduced}));}catch{/* Private browsing may disable storage. */}}
-function syncSettings(){$('sound').innerHTML=svg(muted?'muted':'sound');$('sound').setAttribute('aria-pressed',String(!muted));$('sound').title=muted?'開啟音效':'靜音';$('cinema').classList.toggle('active',cinematic);$('cinema').setAttribute('aria-pressed',String(cinematic));audio.setMuted(muted);audio.setVolume(volume);save();}
+function cinemaEnabled(){return cinematic&&!reduced;}
+function setCinematic(enabled:boolean){
+  cinematic=enabled;
+  // An explicit request for the film camera overrides reduced motion in this game.
+  // Keep the system preference as the initial default until the player chooses.
+  if(enabled)reduced=false;
+  syncSettings();
+}
+function syncSettings(){
+  const film=cinemaEnabled();
+  $('sound').innerHTML=svg(muted?'muted':'sound');$('sound').setAttribute('aria-pressed',String(!muted));$('sound').title=muted?'開啟音效':'靜音';
+  $('cinema').classList.toggle('active',film);$('cinema').setAttribute('aria-pressed',String(film));$('cinema').innerHTML=svg('film')+`運鏡：${film?'開':'關'}`;
+  $('cinema').title=reduced?'減少動態已啟用；點一下開啟完整電影運鏡':film?'關閉電影運鏡':'開啟電影運鏡';
+  const cinemaSwitch=document.getElementById('setting-cinema') as HTMLInputElement|null,motionSwitch=document.getElementById('setting-motion') as HTMLInputElement|null;
+  if(cinemaSwitch)cinemaSwitch.checked=film;if(motionSwitch)motionSwitch.checked=reduced;
+  const note=document.getElementById('cinema-status');if(note)note.textContent=reduced?'減少動態已啟用；開啟運鏡會切回完整動畫':film?'移動與攻擊時，切入兵種專屬鏡位':'目前使用固定戰術視角';
+  document.documentElement.classList.toggle('reduced-motion',reduced);
+  audio.setMuted(muted);audio.setVolume(volume);save();
+}
 
 function clearGroup(group:THREE.Group){for(const obj of [...group.children]){group.remove(obj);if(obj instanceof THREE.Mesh){obj.geometry.dispose();(obj.material as THREE.Material).dispose();}}}
 function clearFear(relax=true){if(relax)for(const square of fears){if(!pieces.has(square))continue;const sprite=new THREE.Sprite(reliefMaterial);sprite.scale.set(.72,.5,1);sprite.position.copy(squarePosition(square)).add(new THREE.Vector3(0,2.05,0));sprite.renderOrder=9;scene.add(sprite);const old=reliefs.get(square);if(old)scene.remove(old.sprite);reliefs.set(square,{time:0,sprite});}fears.clear();fearGroup.clear();fearSprites.clear();}
@@ -173,7 +191,7 @@ function commitMove(from:Square,to:Square,promotion='q'){
   const start=squarePosition(from),end=squarePosition(to),impact=target?squarePosition(captureSquare):end.clone(),dir=impact.clone().sub(start).normalize();
   selected=null;legal=[];clearFear();previewRoute(null);clearGroup(highlightGroup);transition=null;
   controls.update();controls.enabled=false;
-  action={move,root,target,from:start,to:end,impact,stance:impact.clone().addScaledVector(dir,target?-.63:0),dir,elapsed:0,duration:reduced?.6:cinematic?(target?4.5:3.05):target?1.8:1.25,hit:false,hitstop:0,started:false,swung:false,step:0,camPos:camera.position.clone(),camTarget:controls.target.clone(),returnPos:new THREE.Vector3(),returnTarget:new THREE.Vector3(),film:cinematic&&!reduced};
+  action={move,root,target,from:start,to:end,impact,stance:impact.clone().addScaledVector(dir,target?-.63:0),dir,elapsed:0,duration:reduced?.6:cinematic?(target?4.5:3.05):target?1.8:1.25,hit:false,hitstop:0,started:false,swung:false,step:0,camPos:camera.position.clone(),camTarget:controls.target.clone(),returnPos:new THREE.Vector3(),returnTarget:new THREE.Vector3(),film:cinemaEnabled()};
   if(move.isKingsideCastle()||move.isQueensideCastle()){const rank=from[1],rf=`${move.isKingsideCastle()?'h':'a'}${rank}`,rt=`${move.isKingsideCastle()?'f':'d'}${rank}`;action.castle={root:pieces.get(rf)!,from:squarePosition(rf),to:squarePosition(rt)};}
   root.rotation.y=Math.atan2(dir.x,dir.z);
   if(target&&move.piece!=='r'){
@@ -265,9 +283,9 @@ const demoFen='4k3/8/3n4/8/1b1R2p1/8/8/7K w - - 0 1';
 function askNew(){if(action)return;openModal('<div class="eyebrow">A NEW CAMPAIGN</div><h2>新的戰役</h2><p>重新集結兩支軍團，開始標準對局。<br>目前戰局將被取代。</p><div class="modal-actions"><button class="secondary" data-close>繼續對弈</button><button class="primary" id="confirm-new">開始新局</button></div>','新的戰役');$('confirm-new').onclick=()=>startNew();}
 function syncGraphicsButtons(){document.querySelectorAll<HTMLButtonElement>('[data-graphics]').forEach(button=>{button.setAttribute('aria-pressed',String(button.dataset.graphics===getGraphicsMode()));button.onclick=()=>setGraphicsMode(button.dataset.graphics as 'basic'|'enhanced');});}
 onGraphicsChange(syncGraphicsButtons);
-function settings(){if(action)return;openModal(`<div class="eyebrow">MAKE THE BATTLE YOURS</div><h2>戰場設定</h2><div class="setting-row graphics-row"><span>光影品質<small>隨時切換，棋局繼續</small></span><div class="graphics-choices" role="group" aria-label="光影品質"><button id="graphics-basic" data-graphics="basic" class="secondary" aria-pressed="false">基本光影</button><button id="graphics-enhanced" data-graphics="enhanced" class="secondary" aria-pressed="false">加強光影</button></div></div><label class="setting-row"><span>電影運鏡<small>每次行動切入兵種專屬鏡位</small></span><input class="switch" id="setting-cinema" type="checkbox" ${cinematic?'checked':''}></label><label class="setting-row"><span>減少動態<small>固定視角、加速行動、停用震動</small></span><input class="switch" id="setting-motion" type="checkbox" ${reduced?'checked':''}></label><label class="setting-row"><span>戰場音量<small>所有聲音在本機合成</small></span><input id="setting-volume" type="range" min="0" max="1" step=".05" value="${volume}" aria-label="戰場音量"></label><div class="demo-choices"><button class="secondary" id="demo">戰車演示</button><button class="secondary" id="sword-demo">揮劍演示</button></div><div class="modal-actions"><button class="primary" data-close>返回戰場</button></div><button id="settings-new" style="margin-top:20px;border:0;background:none;color:#a9b49d;font-size:11px">開始新的標準對局</button><p style="font-size:9px;margin-bottom:0">演示會開啟獨立戰局，取代目前棋局。</p>`,'設定');
-  syncGraphicsButtons();
-  $<HTMLInputElement>('setting-cinema').onchange=e=>{cinematic=(e.target as HTMLInputElement).checked;syncSettings();};
+function settings(){if(action)return;openModal(`<div class="eyebrow">MAKE THE BATTLE YOURS</div><h2>戰場設定</h2><div class="setting-row graphics-row"><span>光影品質<small>隨時切換，棋局繼續</small></span><div class="graphics-choices" role="group" aria-label="光影品質"><button id="graphics-basic" data-graphics="basic" class="secondary" aria-pressed="false">基本光影</button><button id="graphics-enhanced" data-graphics="enhanced" class="secondary" aria-pressed="false">加強光影</button></div></div><label class="setting-row"><span>電影運鏡<small id="cinema-status"></small></span><input class="switch" id="setting-cinema" type="checkbox" ${cinemaEnabled()?'checked':''}></label><label class="setting-row"><span>減少動態<small>固定視角、加速行動、停用震動</small></span><input class="switch" id="setting-motion" type="checkbox" ${reduced?'checked':''}></label><label class="setting-row"><span>戰場音量<small>所有聲音在本機合成</small></span><input id="setting-volume" type="range" min="0" max="1" step=".05" value="${volume}" aria-label="戰場音量"></label><div class="demo-choices"><button class="secondary" id="demo">戰車演示</button><button class="secondary" id="sword-demo">揮劍演示</button></div><div class="modal-actions"><button class="primary" data-close>返回戰場</button></div><button id="settings-new" style="margin-top:20px;border:0;background:none;color:#a9b49d;font-size:11px">開始新的標準對局</button><p style="font-size:9px;margin-bottom:0">演示會開啟獨立戰局，取代目前棋局。</p>`,'設定');
+  syncGraphicsButtons();syncSettings();
+  $<HTMLInputElement>('setting-cinema').onchange=e=>setCinematic((e.target as HTMLInputElement).checked);
   $<HTMLInputElement>('setting-motion').onchange=e=>{reduced=(e.target as HTMLInputElement).checked;syncSettings();};
   $<HTMLInputElement>('setting-volume').oninput=e=>{volume=Number((e.target as HTMLInputElement).value);audio.setVolume(volume);save();};
   $('demo').onclick=()=>{startNew(demoFen);toast('點選 D4 戰車：三名敵棋都會嚇到發抖。');};$('sword-demo').onclick=()=>{startNew(demoFen.replace('1b1R2p1','1b1Q2p1'));toast('點選 D4 女皇，再點紅格敵棋，觀看揮劍與戰吼。');};$('settings-new').onclick=askNew;
@@ -275,7 +293,7 @@ function settings(){if(action)return;openModal(`<div class="eyebrow">MAKE THE BA
 function help(){openModal(`<div class="eyebrow">THE COMMANDER'S HANDBOOK</div><h2>指揮你的軍團</h2><div class="help-grid"><p><b>01 · 選擇戰士</b><br>雙方共用同一台裝置，白方先行。點選己方棋子，藍色菱形格可移動，紅色交叉劍格可攻擊。滑過目的地可預覽同色路線。</p><p><b>02 · 下達命令</b><br>點選合法目標完成移動。能被吃掉的敵人會害怕發抖！動畫期間點「略過動畫」或按空白鍵可略過。</p><p><b>03 · 奪取王權</b><br>遵循標準西洋棋规则，支援王車易位、吃過路兵、升變、將軍、將死與和棋。</p><p>再點已選棋子或「取消」可取消命令。<br>單指拖曳旋轉 · 雙指張合縮放<br><span class="keyboard">U</span>悔棋 <span class="keyboard">F</span>換邊 <span class="keyboard">R</span>全景 <span class="keyboard">ESC</span>取消</p></div><div class="modal-actions"><button class="primary" data-close>進入戰場</button></div>`,'玩法說明');}
 modal.addEventListener('click',e=>{if((e.target as HTMLElement).closest('[data-close]')||e.target===modal)closeModal();});
 $('sound').onclick=()=>{muted=!muted;syncSettings();};$('settings').onclick=settings;$('help').onclick=help;$('new-game').onclick=askNew;$('undo').onclick=undo;
-$('flip').onclick=()=>{if(action)return;viewSide*=-1;resetCamera();};$('reset-camera').onclick=()=>{if(!action)resetCamera();};$('cinema').onclick=()=>{cinematic=!cinematic;syncSettings();toast(cinematic?'電影運鏡已開啟。':'切換為戰術視角。');};$('skip').onclick=finishAction;$('cancel-selection').onclick=clearSelection;
+$('flip').onclick=()=>{if(action)return;viewSide*=-1;resetCamera();};$('reset-camera').onclick=()=>{if(!action)resetCamera();};$('cinema').onclick=()=>{if(action)return;setCinematic(!cinemaEnabled());toast(cinemaEnabled()?'電影運鏡已開啟。':'切換為戰術視角。');};$('skip').onclick=finishAction;$('cancel-selection').onclick=clearSelection;
 $('unit-info').addEventListener('click',e=>{if((e.target as HTMLElement).closest('#inspect')&&selected&&!action){const root=pieces.get(selected)!;const pos=root.position.clone().add(new THREE.Vector3(0,.8,0));const front=root.userData.color==='w'?-1:1;moveCamera(pos.clone().add(new THREE.Vector3(2.6,1.8,front*3.2)),pos,.8);}});
 
 function clearSelection(){if(action)return;selected=null;legal=[];clearFear();refreshMarks();updateUI();}

@@ -1,0 +1,166 @@
+{
+  "url": "http://127.0.0.1:5194",
+  "viewports": [
+    {
+      "width": 820,
+      "height": 1180,
+      "checks": [
+        "System Reduce Motion respected and cinema shown OFF with explanation",
+        "One touch enables cinema and synchronizes both switches and CSS motion",
+        "Real touch e2→e4 visibly moves camera close, plays full film, restores board view",
+        "Choosing Reduce Motion restores fixed camera without a misleading ON state",
+        "Toolbar re-enables film; real touch chariot capture plays through and removes target"
+      ],
+      "camera": {
+        "before": {
+          "position": [
+            5.8,
+            28.8,
+            23.8
+          ],
+          "target": [
+            0,
+            0,
+            0
+          ],
+          "distance": 37.80899363908011
+        },
+        "during": {
+          "position": [
+            7.406000000000001,
+            2.551168408522668,
+            0.7180155161480082
+          ],
+          "target": [
+            0.71,
+            1.1711684085226681,
+            3.4540155161480084
+          ],
+          "distance": 7.3638652893707945
+        }
+      }
+    },
+    {
+      "width": 1180,
+      "height": 820,
+      "checks": [
+        "System Reduce Motion respected and cinema shown OFF with explanation",
+        "One touch enables cinema and synchronizes both switches and CSS motion",
+        "Real touch e2→e4 visibly moves camera close, plays full film, restores board view",
+        "Choosing Reduce Motion restores fixed camera without a misleading ON state",
+        "Toolbar re-enables film; real touch chariot capture plays through and removes target"
+      ],
+      "camera": {
+        "before": {
+          "position": [
+            11.6,
+            16.9,
+            17.6
+          ],
+          "target": [
+            0,
+            0,
+            0
+          ],
+          "distance": 27.017216733038953
+        },
+        "during": {
+          "position": [
+            5.825,
+            2.551168408522668,
+            1.364015516148009
+          ],
+          "target": [
+            0.71,
+            1.1711684085226681,
+            3.454015516148009
+          ],
+          "distance": 5.69523704511059
+        }
+      }
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "checks": [
+        "System Reduce Motion respected and cinema shown OFF with explanation",
+        "One touch enables cinema and synchronizes both switches and CSS motion",
+        "Real touch e2→e4 visibly moves camera close, plays full film, restores board view",
+        "Choosing Reduce Motion restores fixed camera without a misleading ON state",
+        "Toolbar re-enables film; real touch chariot capture plays through and removes target"
+      ],
+      "camera": {
+        "before": {
+          "position": [
+            5.8,
+            28.8,
+            23.8
+          ],
+          "target": [
+            0,
+            0,
+            0
+          ],
+          "distance": 37.80899363908011
+        },
+        "during": {
+          "position": [
+            7.406000000000001,
+            2.551168408516271,
+            0.7180155161313393
+          ],
+          "target": [
+            0.71,
+            1.1711684085162712,
+            3.4540155161313395
+          ],
+          "distance": 7.3638652893707945
+        }
+      }
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "checks": [
+        "System Reduce Motion respected and cinema shown OFF with explanation",
+        "One touch enables cinema and synchronizes both switches and CSS motion",
+        "Real touch e2→e4 visibly moves camera close, plays full film, restores board view",
+        "Choosing Reduce Motion restores fixed camera without a misleading ON state",
+        "Toolbar re-enables film; real touch chariot capture plays through and removes target"
+      ],
+      "camera": {
+        "before": {
+          "position": [
+            11.6,
+            16.9,
+            17.6
+          ],
+          "target": [
+            0,
+            0,
+            0
+          ],
+          "distance": 27.017216733038953
+        },
+        "during": {
+          "position": [
+            5.825,
+            2.551168408516271,
+            1.3640155161313396
+          ],
+          "target": [
+            0.71,
+            1.1711684085162712,
+            3.4540155161313395
+          ],
+          "distance": 5.69523704511059
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "iPad dimensions and touch emulation on Mac Chrome; not a physical iPad."
+  ],
+  "persistence": "Existing conflicting preference is displayed honestly; explicit enable persists after reload while OS Reduce Motion remains enabled"
+}
