@@ -51,8 +51,8 @@ export function finishMaterial<T extends THREE.MeshStandardMaterial>(material:T,
    .replace('#include <roughnessmap_fragment>','#include <roughnessmap_fragment>\nroughnessFactor=clamp(roughnessFactor+finishGrain*uSurfaceFinish.z,.045,1.0);')
    .replace('#include <aomap_fragment>','#include <aomap_fragment>\nreflectedLight.indirectDiffuse*=1.0-uSurfaceFinish.w*(1.0-vFinishUp);')
    .replace('#include <opaque_fragment>',`float finishLight=clamp(dot(outgoingLight,vec3(.2126,.7152,.0722))*.6,0.0,1.0);
-    vec3 shadowTint=mix(vec3(.80,.84,.97),vec3(.67,.79,1.13),uSurfaceMood);
-    vec3 highlightTint=mix(vec3(1.12,1.02,.83),vec3(.96,1.04,1.12),uSurfaceMood);
+    vec3 shadowTint=mix(vec3(.80,.84,.97),vec3(.82,.88,1.03),uSurfaceMood);
+    vec3 highlightTint=mix(vec3(1.12,1.02,.83),vec3(.99,1.01,1.06),uSurfaceMood);
     outgoingLight*=mix(shadowTint,highlightTint,smoothstep(.02,.85,finishLight));
     // Sub-pixel bevel glints on authored box faces. One derivative pair,
     // no normal-map lookup and no additional render target.
@@ -61,10 +61,10 @@ export function finishMaterial<T extends THREE.MeshStandardMaterial>(material:T,
     float forgedEdge=1.0-smoothstep(0.0,min(edgeWidth.x,edgeWidth.y),min(edgeDistance.x,edgeDistance.y));
     outgoingLight+=diffuseColor.rgb*forgedEdge*uSurfaceEdge*(.45+.55*vFinishUp)*metalnessFactor;
     float edgeLight=pow(1.0-clamp(dot(normal,normalize(vViewPosition)),0.0,1.0),3.0);
-    outgoingLight+=mix(vec3(.20,.16,.10),vec3(.10,.15,.28),uSurfaceMood)*edgeLight*metalnessFactor*.28;
+    outgoingLight+=mix(vec3(.20,.16,.10),vec3(.10,.13,.19),uSurfaceMood)*edgeLight*metalnessFactor*.28;
     #include <opaque_fragment>`);
  };
- material.customProgramCacheKey=()=>cacheKey+(mode==='enhanced'?'|forged-finish-v3':'|basic');
+ material.customProgramCacheKey=()=>cacheKey+(mode==='enhanced'?'|forged-finish-v4':'|basic');
  return material;
 }
 export interface ContactSpot{x:number;y:number;z:number;rx:number;rz:number;yaw?:number;height?:number;}

@@ -28,17 +28,9 @@ export class BattleAudio {
   private lastEvents = new Map<BattleSound, number>();
   private variant = 0;
   private readonly maxVoices = 76;
-  private voiceBuffers = new Map<string, AudioBuffer>();
-  private voiceLoading: Promise<void> | null = null;
-  private voiceAbort: AbortController | null = null;
-  private criesPlayed = 0;
-  private lastCry: string | null = null;
-  private cryVariant = 0;
   private battlePan = 0;
-  private announcer = true;
-  private lastAnnouncement = -100;
-  private announcementsPlayed = 0;
-  private cryTimes = new Map<string, number>();
+  private paused = false;
+  private scoreBuffer: AudioBuffer | null = null;
 
   private readonly onVisibility = () => {
     if (!this.ctx || this.ctx.state === 'closed' || this.disposed) return;
@@ -46,7 +38,7 @@ export class BattleAudio {
       this.clearVoices();
       this.removeAmbience();
       void this.ctx.suspend().catch(() => {});
-    } else if (this.unlocked) {
+    } else if (this.unlocked && !this.paused) {
       void this.ctx.resume().then(() => {
         if (this.ambienceWanted && !this.disposed) this.startAmbience();
       }).catch(() => {});
@@ -54,7 +46,7 @@ export class BattleAudio {
   };
 
   async unlock(): Promise<void> {
-    if (this.disposed || typeof window === 'undefined') return;
+    if (this.disposed || this.paused || typeof window === 'undefined') return;
     if (this.unlocking) return this.unlocking;
     // Do not create an AudioContext from a timer or an animation callback.
     if (!this.unlocked && navigator.userActivation && !navigator.userActivation.isActive) return;
@@ -76,95 +68,38 @@ export class BattleAudio {
     this.unlocking = ctx.resume().then(() => {
       if (this.disposed || ctx.state !== 'running') return;
       this.unlocked = true;
-      void this.preloadBattleVoices();
       if (this.ambienceWanted) this.startAmbience();
     }).catch(() => {}).finally(() => { this.unlocking = null; });
     return this.unlocking;
   }
 
-  /** Local voice files are decoded ahead of time; an event never waits for loading. */
-  private preloadBattleVoices(): Promise<void> {
-    if (this.voiceLoading || this.disposed || !this.ctx) return this.voiceLoading ?? Promise.resolve();
-    const ctx = this.ctx;
-    this.voiceAbort = new AbortController();
-    const signal = this.voiceAbort.signal;
-    const base = (import.meta as ImportMeta & { env: { BASE_URL: string } }).env.BASE_URL;
-    const names = ['male-attack-ha', 'male-attack-he', 'female-attack-ha', 'female-attack-he', 'male-defeat', 'female-defeat', 'commander-begin', 'commander-check', 'commander-checkmate', 'commander-draw', 'commander-fear', 'commander-relief'];
-    this.voiceLoading = Promise.all(names.map(async name => {
-      try {
-        const response = await fetch(new URL(`${base}audio/${name}.wav`, document.baseURI), { signal });
-        if (!response.ok) return;
-        const buffer = await ctx.decodeAudioData(await response.arrayBuffer());
-        if (!this.disposed && ctx.state !== 'closed') this.voiceBuffers.set(name, buffer);
-      } catch { /* A missing or unavailable local voice falls back immediately at event time. */ }
-    })).then(() => {});
-    return this.voiceLoading;
+  /** Compatibility only: the game deliberately contains no human speech,
+   * battle cries, vocal samples, synthesized vowels, or network audio loads. */
+  voiceStatus(): { loaded: number; played: number; last: string | null; announcements: number; active: number } {
+    return { loaded: 0, played: 0, last: null, announcements: 0, active: this.voices.length };
   }
+  setBattlePosition(pan: number): void { this.battlePan = Math.max(-.75, Math.min(.75, pan * .65)); }
+  setAnnouncer(_enabled: boolean): void {}
+  announce(_event: Announcement): void {}
+  battleCry(_event: 'attack' | 'defeat', _piece: string): void {}
 
-  voiceStatus(): { loaded: number; played: number; last: string | null; announcements:number; active:number } {
-    return { loaded: this.voiceBuffers.size, played: this.criesPlayed, last: this.lastCry,announcements:this.announcementsPlayed,active:this.voices.length };
-  }
-
-  setBattlePosition(pan:number):void {this.battlePan=Math.max(-.75,Math.min(.75,pan*.65));}
-  setAnnouncer(enabled:boolean):void {this.announcer=enabled;}
-  announce(event:Announcement):void {
-    const ctx=this.ctx;if(!ctx||!this.unlocked||this.disposed||this.muted||!this.announcer||ctx.state!=='running'||document.hidden)return;
-    const comic=event==='fear'||event==='relief';if(comic&&ctx.currentTime-this.lastAnnouncement<1.3)return;
-    const buffer=this.voiceBuffers.get('commander-'+event);if(!buffer)return;
-    this.lastAnnouncement=ctx.currentTime;this.announcementsPlayed++;
-    const source=ctx.createBufferSource();source.buffer=buffer;source.playbackRate.value=1;
-    const at=ctx.currentTime+.012,duration=buffer.duration,filter=ctx.createBiquadFilter();filter.type='highpass';filter.frequency.value=100;
-    this.prepareVoice(source,filter,{at,duration:duration+.03,frequency:1,volume:comic?.46:.61,attack:.008,wet:comic?.11:.22,pan:comic?this.battlePan:0});
-    const voice=this.voices[this.voices.length-1];voice.gain.gain.cancelScheduledValues(at);voice.gain.gain.setValueAtTime(0,at);voice.gain.gain.linearRampToValueAtTime(comic?.46:.61,at+.01);voice.gain.gain.setValueAtTime(comic?.46:.61,at+Math.max(.02,duration-.06));voice.gain.gain.linearRampToValueAtTime(0,at+duration+.015);
-    source.start(at);source.stop(at+duration+.04);
-  }
-
-  battleCry(event: 'attack' | 'defeat', piece: string): void {
-    const ctx = this.ctx;
-    if (!ctx || !this.unlocked || this.disposed || this.muted || ctx.state !== 'running' || document.hidden) return;
-    if (ctx.currentTime - (this.cryTimes.get(event) ?? -100) < 0.16) return;
-    this.cryTimes.set(event, ctx.currentTime);
-    const kind = piece.toLowerCase();
-    const female = kind === 'q' || kind === 'queen';
-    const variant = event === 'attack' && this.cryVariant++ % 2 ? 'he' : 'ha';
-    const name = `${female ? 'female' : 'male'}-${event === 'attack' ? `attack-${variant}` : 'defeat'}`;
-    const buffer = this.voiceBuffers.get(name);
-    const at = ctx.currentTime + 0.006;
-    if (!buffer) {
-      this.lastCry = `${event}:${piece}:fallback`;
-      // A shaped, breathy vowel only covers a missing clip; no delayed replay.
-      const duration = event === 'attack' ? 0.24 : 0.49;
-      const pitch = female ? 230 : 125;
-      this.tone({ at, duration, frequency: pitch, endFrequency: pitch * (event === 'attack' ? 0.77 : 0.54), volume: 0.13, wave: 'sawtooth', cutoff: female ? 1350 : 1050, attack: 0.017, wet: 0.13 });
-      this.noise({ at, duration: duration * 0.8, frequency: female ? 1800 : 1350, endFrequency: 600, volume: 0.075, attack: 0.012, wet: 0.12 });
-      return;
+  /** Independent from mute: film pause stops scheduled foley and the musical bed,
+   * so resuming never plays a backlog of impacts. No autoplay outside a gesture. */
+  setPaused(paused: boolean): void {
+    if (this.paused === paused) return;
+    this.paused = paused;
+    if (paused) { this.clearVoices(); this.removeAmbience(); }
+    else if (this.unlocked && this.ambienceWanted && !this.muted && !document.hidden) {
+      if (this.ctx?.state === 'suspended') void this.ctx.resume().then(() => this.startAmbience()).catch(() => {});
+      else this.startAmbience();
     }
-    const source = ctx.createBufferSource();
-    source.buffer = buffer;
-    const rates: Record<string, number> = { p: 1.02, r: 0.91, n: 0.98, b: 1.05, k: 0.94, q: 1.01 };
-    source.playbackRate.value = rates[kind] ?? 1;
-    const duration = buffer.duration / source.playbackRate.value;
-    const filter = ctx.createBiquadFilter();
-    filter.type = 'highpass';
-    filter.frequency.value = 95;
-    filter.Q.value = 0.5;
-    this.prepareVoice(source, filter, { at, duration: duration + 0.025, frequency: 1, volume: 0.64, attack: 0.005, wet: 0.2, pan:this.battlePan });
-    // Voice clips already carry a deliberate envelope: preserve the full phrase.
-    const voice = this.voices[this.voices.length - 1];
-    voice.gain.gain.cancelScheduledValues(at);
-    voice.gain.gain.setValueAtTime(0, at);
-    voice.gain.gain.linearRampToValueAtTime(event === 'attack' ? 0.64 : 0.7, at + 0.008);
-    voice.gain.gain.setValueAtTime(event === 'attack' ? 0.64 : 0.7, at + Math.max(0.012, duration - 0.035));
-    voice.gain.gain.linearRampToValueAtTime(0, at + duration + 0.005);
-    source.start(at);
-    source.stop(at + duration + 0.02);
-    this.criesPlayed++;
-    this.lastCry = `${event}:${piece}:${name}`;
   }
 
   setMuted(muted: boolean): void {
     this.muted = muted;
     this.applyMaster();
+    if (muted) { this.clearVoices(); this.removeAmbience(); }
+    else if (!this.paused && this.ambienceWanted) this.startAmbience();
   }
 
   setVolume(volume: number): void {
@@ -214,6 +149,7 @@ export class BattleAudio {
     this.reverb = reverb;
     this.sharedNodes = [master, compressor, sfx, ui, ambience, reverb, wetCut, wet];
     this.noiseBuffer = this.createNoise(4, 0x6e624eb7);
+    this.scoreBuffer = this.createWordlessScore();
   }
 
   private random(seed: number): () => number {
@@ -233,6 +169,35 @@ export class BattleAudio {
     const random = this.random(seed);
     // White noise is filtered separately for wind, leather, metal and stone.
     for (let i = 0; i < data.length; i++) data[i] = random() * 2 - 1;
+    return buffer;
+  }
+
+  /** A quiet 24-second D/A string bed and three distant frame-drum phrases.
+   * Render once at 22 kHz; one looping source, no musical timers or network files. */
+  private createWordlessScore(): AudioBuffer {
+    const rate = 22050, duration = 24;
+    const buffer = this.ctx!.createBuffer(2, rate * duration, rate);
+    for (let channel = 0; channel < 2; channel++) {
+      const data = buffer.getChannelData(channel), random = this.random(8421 + channel * 401);
+      for (let i = 0; i < data.length; i++) {
+        const t = i / rate, swell = Math.pow(Math.sin(Math.PI * t / duration), 2);
+        let sample = 0;
+        for (const [j, frequency] of [73.416, 110, 146.832].entries()) {
+          const phase = 2 * Math.PI * (frequency + (channel ? .11 : -.09)) * t;
+          const bowed = Math.sin(phase) + .22 * Math.sin(phase * 2) + .07 * Math.sin(phase * 3);
+          const phrase = .65 + .35 * Math.sin(t * .32 + j * 1.7 + channel * .2);
+          sample += bowed * phrase * swell * (j === 0 ? .035 : .018);
+        }
+        for (const beat of [1.2, 9.2, 17.2, 17.62]) {
+          const since = t - beat;
+          if (since < 0 || since > 1.6) continue;
+          const phase = 2 * Math.PI * (48 * since + 1.25 * (1 - Math.exp(-since * 35)));
+          const strike = Math.sin(phase) * Math.exp(-since * 5.2) + (random() * 2 - 1) * Math.exp(-since * 44) * .11;
+          sample += strike * (beat === 17.62 ? .12 : .23) * Math.min(1, since * 350);
+        }
+        data[i] = sample;
+      }
+    }
     return buffer;
   }
 
@@ -360,7 +325,7 @@ export class BattleAudio {
 
   play(event: BattleSound, type = 'p'): void {
     const ctx = this.ctx;
-    if (!ctx || !this.unlocked || this.disposed || this.muted || ctx.state !== 'running' || document.hidden) return;
+    if (!ctx || !this.unlocked || this.disposed || this.paused || this.muted || ctx.state !== 'running' || document.hidden) return;
     const now = ctx.currentTime;
     const cooldown = event === 'step' ? 0.055 : event === 'select' ? 0.065 : 0.08;
     if (now - (this.lastEvents.get(event) ?? -100) < cooldown) return;
@@ -402,7 +367,9 @@ export class BattleAudio {
           this.swish(at + 0.09, 0.38, 0.3);
         } else if (caster) {
           this.swish(at, 0.53, 0.55);
-          for (const [i, frequency] of [220, 329.63, 440].entries()) this.tone({ at: at + i * 0.07, duration: 0.57, frequency, endFrequency: frequency * 1.05, volume: 0.022, wave: 'triangle', cutoff: 1700, attack: 0.1, wet: 0.45 });
+          this.foot(at + .1, false, pan); this.foot(at + .32, false, -pan);
+          this.noise({at:at+.04,duration:.37,frequency:1900,endFrequency:650,volume:.042,pan,wet:.18});
+          this.metal(at + .21, .18, pan);
         } else {
           this.foot(at, false, -0.08);
           this.foot(at + 0.2, true, 0.08);
@@ -423,7 +390,7 @@ export class BattleAudio {
       case 'impact':
         if(this.ambience){this.ambience.gain.cancelScheduledValues(at);this.ambience.gain.setValueAtTime(.05,at);this.ambience.gain.linearRampToValueAtTime(.14,at+.6);}
         if(rook){for(let i=0;i<4;i++)this.noise({at:at+i*.07,duration:.2,frequency:280+i*210,volume:.12-i*.02,filter:'lowpass',pan:i%2?.5:-.5,wet:.28});this.tone({at,duration:.65,frequency:53,endFrequency:24,volume:.16,pan,wet:.25});}
-        else if(caster){for(const [i,f]of[440,660,880,1320].entries())this.tone({at:at+i*.025,duration:.48-i*.065,frequency:f,endFrequency:f*.91,volume:.025,pan,wet:.43});}
+        else if(caster){this.noise({at,duration:.065,frequency:5400,endFrequency:1400,volume:.12,pan,wet:.12});this.metal(at+.036,.62,pan);}
         else{this.noise({at,duration:.045,frequency:6500,endFrequency:2300,volume:.16,pan,wet:.1});this.tone({at,duration:.3,frequency:knight?970:1511,endFrequency:knight?760:1470,volume:.038,pan,wet:.3});}
         this.tone({ at, duration: 0.48, frequency: 145, endFrequency: 36, volume: 0.39, wet: 0.13 });
         this.noise({ at, duration: 0.23, frequency: 750, endFrequency: 130, filter: 'lowpass', volume: 0.43, wet: 0.32 });
@@ -463,7 +430,7 @@ export class BattleAudio {
   startAmbience(): void {
     this.ambienceWanted = true;
     const ctx = this.ctx;
-    if (!ctx || !this.unlocked || this.disposed || ctx.state !== 'running' || this.ambienceSources.length || document.hidden) return;
+    if (!ctx || !this.unlocked || this.disposed || this.paused || this.muted || ctx.state !== 'running' || this.ambienceSources.length || document.hidden) return;
     const wind = ctx.createBufferSource();
     // Seamless noise boundary is masked by the low-pass and very low level.
     wind.buffer = this.noiseBuffer;
@@ -475,7 +442,7 @@ export class BattleAudio {
     highpass.type = 'highpass';
     highpass.frequency.value = 90;
     const windGain = ctx.createGain();
-    windGain.gain.value = 0.085;
+    windGain.gain.value = 0.052;
     wind.connect(lowpass).connect(highpass).connect(windGain).connect(this.ambience!);
     const lfo = ctx.createOscillator();
     lfo.frequency.value = 0.11;
@@ -484,16 +451,10 @@ export class BattleAudio {
     lfo.connect(lfoGain).connect(windGain.gain);
     this.ambienceNodes = [wind, lowpass, highpass, windGain, lfo, lfoGain];
     this.ambienceSources = [wind, lfo];
-    for (const frequency of [55, 82.406, 110.15]) {
-      const oscillator = ctx.createOscillator();
-      const gain = ctx.createGain();
-      oscillator.type = 'sine';
-      oscillator.frequency.value = frequency;
-      gain.gain.value = frequency < 60 ? 0.018 : 0.008;
-      oscillator.connect(gain).connect(this.ambience!);
-      this.ambienceSources.push(oscillator);
-      this.ambienceNodes.push(oscillator, gain);
-    }
+    const score = ctx.createBufferSource(), scoreGain = ctx.createGain();
+    score.buffer = this.scoreBuffer; score.loop = true; scoreGain.gain.value = .78;
+    score.connect(scoreGain).connect(this.ambience!);
+    this.ambienceSources.push(score); this.ambienceNodes.push(score, scoreGain);
     const now = ctx.currentTime;
     this.ambience!.gain.cancelScheduledValues(now);
     this.ambience!.gain.setValueAtTime(0, now);
@@ -523,9 +484,7 @@ export class BattleAudio {
     for (const node of this.sharedNodes) node.disconnect();
     this.sharedNodes = [];
     this.noiseBuffer = null;
-    this.voiceAbort?.abort();
-    this.voiceBuffers.clear();
-    this.cryTimes.clear();
+    this.scoreBuffer = null;
     this.lastEvents.clear();
     if (this.ctx && this.ctx.state !== 'closed') void this.ctx.close().catch(() => {});
   }

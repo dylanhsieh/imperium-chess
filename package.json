@@ -1,7 +1,7 @@
 {
   "name": "imperium-chess",
   "private": true,
-  "version": "2.0.0",
+  "version": "3.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1 --port 5188",
@@ -13,7 +13,8 @@
     "test:rules": "node tests/rules-ai.mjs",
     "test:v2": "node tests/v2-browser.mjs",
     "test:mobile": "node tests/mobile-release.mjs",
-    "test:cinematics": "node tests/v2-cinematics.mjs"
+    "test:cinematics": "node tests/v2-cinematics.mjs",
+    "test:spectator": "node tests/v3-spectator.mjs"
   },
   "dependencies": {
     "chess.js": "^1.4.0",

@@ -1,5 +1,5 @@
 {
-  "url": "http://127.0.0.1:5194",
+  "url": "http://127.0.0.1:5195",
   "input": "Chrome touchscreen.tap and CDP Input.dispatchTouchEvent; no mouse input",
   "viewports": [
     {
@@ -69,8 +69,8 @@
           "running"
         ],
         "diagnostics": {
-          "frame": 1125,
-          "fps": 64,
+          "frame": 1123,
+          "fps": 60,
           "game": {
             "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
             "turn": "w",
@@ -87,24 +87,26 @@
           },
           "renderer": {
             "calls": 96,
-            "triangles": 315940,
-            "geometries": 183,
-            "textures": 8
+            "triangles": 312648,
+            "geometries": 184,
+            "textures": 10
           },
           "render": {
             "calls": 96,
-            "triangles": 315940
+            "triangles": 312648
           },
           "memory": {
-            "geometries": 183,
-            "textures": 8
+            "geometries": 184,
+            "textures": 10
           },
           "quality": {
             "atmosphere": {
               "side": "w",
               "blend": 0,
               "enhanced": false,
-              "mistDraws": 0
+              "mistDraws": 0,
+              "shafts": 0,
+              "localArchitecture": true
             },
             "graphics": "basic",
             "dpr": 1,
@@ -183,8 +185,8 @@
           "running"
         ],
         "diagnostics": {
-          "frame": 1123,
-          "fps": 56,
+          "frame": 1122,
+          "fps": 60,
           "game": {
             "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
             "turn": "w",
@@ -201,24 +203,26 @@
           },
           "renderer": {
             "calls": 96,
-            "triangles": 315940,
-            "geometries": 183,
-            "textures": 8
+            "triangles": 312648,
+            "geometries": 184,
+            "textures": 10
           },
           "render": {
             "calls": 96,
-            "triangles": 315940
+            "triangles": 312648
           },
           "memory": {
-            "geometries": 183,
-            "textures": 8
+            "geometries": 184,
+            "textures": 10
           },
           "quality": {
             "atmosphere": {
               "side": "w",
               "blend": 0,
               "enhanced": false,
-              "mistDraws": 0
+              "mistDraws": 0,
+              "shafts": 0,
+              "localArchitecture": true
             },
             "graphics": "basic",
             "dpr": 1,
@@ -297,8 +301,8 @@
           "running"
         ],
         "diagnostics": {
-          "frame": 1122,
-          "fps": 63,
+          "frame": 1118,
+          "fps": 60,
           "game": {
             "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
             "turn": "w",
@@ -315,24 +319,26 @@
           },
           "renderer": {
             "calls": 96,
-            "triangles": 315940,
-            "geometries": 183,
-            "textures": 8
+            "triangles": 312648,
+            "geometries": 184,
+            "textures": 10
           },
           "render": {
             "calls": 96,
-            "triangles": 315940
+            "triangles": 312648
           },
           "memory": {
-            "geometries": 183,
-            "textures": 8
+            "geometries": 184,
+            "textures": 10
           },
           "quality": {
             "atmosphere": {
               "side": "w",
               "blend": 0,
               "enhanced": false,
-              "mistDraws": 0
+              "mistDraws": 0,
+              "shafts": 0,
+              "localArchitecture": true
             },
             "graphics": "basic",
             "dpr": 1,

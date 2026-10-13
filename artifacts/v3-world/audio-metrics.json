@@ -1,0 +1,33 @@
+{
+  "initial": {
+    "loaded": 0,
+    "played": 0,
+    "last": null,
+    "announcements": 0,
+    "active": 0
+  },
+  "sampleRate": 48000,
+  "scoreSeconds": 24,
+  "ambienceSources": 3,
+  "afterVocalAPIs": {
+    "loaded": 0,
+    "played": 0,
+    "last": null,
+    "announcements": 0,
+    "active": 0
+  },
+  "hitActive": 8,
+  "paused": {
+    "active": 0,
+    "ambience": 0
+  },
+  "pausedAfterPlay": 0,
+  "resumed": 3,
+  "muted": {
+    "active": 0,
+    "ambience": 0
+  },
+  "unmuted": 3,
+  "audioRequests": [],
+  "errors": []
+}

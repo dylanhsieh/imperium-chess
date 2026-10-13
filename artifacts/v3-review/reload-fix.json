@@ -1,0 +1,14 @@
+{
+  "test": "reload-mid-animation-fixed",
+  "before": {
+    "moves": "1",
+    "animating": true,
+    "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"?\"]\n[Black \"?\"]\n[Result \"*\"]\n\n1. Nc3 *"
+  },
+  "after": {
+    "moves": "1",
+    "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"?\"]\n[Black \"?\"]\n[Result \"*\"]\n\n1. Nc3 *"
+  },
+  "pass": true,
+  "errors": []
+}

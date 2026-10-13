@@ -1,0 +1,242 @@
+{
+  "before": {
+    "camera": {
+      "position": [
+        4.139971410032985,
+        4.507037748714748,
+        2.051358559085082
+      ],
+      "target": [
+        -2.378811881455168,
+        2.411352795585051,
+        2.6276237629103365
+      ],
+      "distance": 6.871572790074999
+    },
+    "state": {
+      "mode": "watch",
+      "watchPaused": true,
+      "watchFrozen": true,
+      "humanColor": "w",
+      "difficulty": "normal",
+      "thinking": false,
+      "aiError": "",
+      "aiStats": {
+        "depth": 3,
+        "nodes": 1208,
+        "elapsedMs": 500.39999997615814
+      },
+      "status": {
+        "repetitions": 1,
+        "halfmoveClock": 1,
+        "claimable": [],
+        "over": false,
+        "kind": "playing",
+        "title": "對局中",
+        "reason": "所有亮起的走法均符合棋種規則，而且走完後己王不會遭到將軍。"
+      },
+      "illegalMessage": "",
+      "fen": "rnbqkbnr/pppppppp/8/8/8/2N5/PPPPPPPP/R1BQKBNR b KQkq - 1 1",
+      "selected": null,
+      "legal": [],
+      "fears": [],
+      "relief": [],
+      "animating": true,
+      "history": [
+        "Nc3"
+      ],
+      "turn": "b",
+      "gameOver": false,
+      "cinematic": true,
+      "reduced": false,
+      "muted": false,
+      "pieces": 32
+    },
+    "combat": {
+      "progress": 0.529411764705882,
+      "hit": false,
+      "root": [
+        -2.378811881455168,
+        1.311352795585051,
+        2.6276237629103365
+      ],
+      "impact": [
+        -2.13,
+        0.16,
+        2.13
+      ],
+      "weapon": {
+        "base": [
+          -2.2955384453746985,
+          3.0033615139874668,
+          2.768551898282049
+        ],
+        "tip": [
+          -2.317117809160329,
+          3.1666115976703186,
+          2.7927596415917697
+        ]
+      },
+      "joints": [
+        {
+          "name": "torso",
+          "rotation": [
+            0,
+            0,
+            0,
+            "XYZ"
+          ]
+        },
+        {
+          "name": "weapon-arm",
+          "rotation": [
+            -0.0876588335258433,
+            0,
+            -0.04456849531296972,
+            "XYZ"
+          ]
+        },
+        {
+          "name": "weapon-elbow",
+          "rotation": [
+            -0.31576368661670556,
+            0,
+            0,
+            "XYZ"
+          ]
+        },
+        {
+          "name": "weapon-wrist",
+          "rotation": [
+            0.17827398125187888,
+            0,
+            0,
+            "XYZ"
+          ]
+        }
+      ]
+    }
+  },
+  "after": {
+    "camera": {
+      "position": [
+        -1.1284800324142077,
+        11.318469882640587,
+        2.5170935143012727
+      ],
+      "target": [
+        -2.378811881455168,
+        2.411352795585051,
+        2.6276237629103365
+      ],
+      "distance": 8.995125428313964
+    },
+    "state": {
+      "mode": "watch",
+      "watchPaused": true,
+      "watchFrozen": true,
+      "humanColor": "w",
+      "difficulty": "normal",
+      "thinking": false,
+      "aiError": "",
+      "aiStats": {
+        "depth": 3,
+        "nodes": 1208,
+        "elapsedMs": 500.39999997615814
+      },
+      "status": {
+        "repetitions": 1,
+        "halfmoveClock": 1,
+        "claimable": [],
+        "over": false,
+        "kind": "playing",
+        "title": "對局中",
+        "reason": "所有亮起的走法均符合棋種規則，而且走完後己王不會遭到將軍。"
+      },
+      "illegalMessage": "",
+      "fen": "rnbqkbnr/pppppppp/8/8/8/2N5/PPPPPPPP/R1BQKBNR b KQkq - 1 1",
+      "selected": null,
+      "legal": [],
+      "fears": [],
+      "relief": [],
+      "animating": true,
+      "history": [
+        "Nc3"
+      ],
+      "turn": "b",
+      "gameOver": false,
+      "cinematic": true,
+      "reduced": false,
+      "muted": false,
+      "pieces": 32
+    },
+    "combat": {
+      "progress": 0.529411764705882,
+      "hit": false,
+      "root": [
+        -2.378811881455168,
+        1.311352795585051,
+        2.6276237629103365
+      ],
+      "impact": [
+        -2.13,
+        0.16,
+        2.13
+      ],
+      "weapon": {
+        "base": [
+          -2.2955384453746985,
+          3.0033615139874668,
+          2.768551898282049
+        ],
+        "tip": [
+          -2.317117809160329,
+          3.1666115976703186,
+          2.7927596415917697
+        ]
+      },
+      "joints": [
+        {
+          "name": "torso",
+          "rotation": [
+            0,
+            0,
+            0,
+            "XYZ"
+          ]
+        },
+        {
+          "name": "weapon-arm",
+          "rotation": [
+            -0.0876588335258433,
+            0,
+            -0.04456849531296972,
+            "XYZ"
+          ]
+        },
+        {
+          "name": "weapon-elbow",
+          "rotation": [
+            -0.31576368661670556,
+            0,
+            0,
+            "XYZ"
+          ]
+        },
+        {
+          "name": "weapon-wrist",
+          "rotation": [
+            0.17827398125187888,
+            0,
+            0,
+            "XYZ"
+          ]
+        }
+      ]
+    },
+    "scripts": [
+      "http://127.0.0.1:5195/assets/index-UMUNpI_k.js"
+    ]
+  },
+  "errors": []
+}

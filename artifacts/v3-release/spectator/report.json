@@ -1,0 +1,222 @@
+{
+  "checks": [
+    "1440x940: real mouse start, cancel thinking, freeze action, resume both AI, modal freeze, local/side takeover preserve position and reject stale AI",
+    "Dual AI progresses 20 legal plies without human moves",
+    "390x844: real touch start, cancel thinking, freeze action, resume both AI, modal freeze, local/side takeover preserve position and reject stale AI",
+    "844x390: real touch start, cancel thinking, freeze action, resume both AI, modal freeze, local/side takeover preserve position and reject stale AI",
+    "360x640: real touch start, cancel thinking, freeze action, resume both AI, modal freeze, local/side takeover preserve position and reject stale AI",
+    "Production reload preserves paused spectator mode; debug helpers absent"
+  ],
+  "errors": [],
+  "audioRequests": [],
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 940,
+      "layout": {
+        "overflow": false,
+        "buttons": [
+          {
+            "id": "watch-pause",
+            "w": 101,
+            "h": 44,
+            "visible": true
+          },
+          {
+            "id": "watch-takeover",
+            "w": 100,
+            "h": 44,
+            "visible": true
+          },
+          {
+            "id": "watch-journal",
+            "w": 100,
+            "h": 44,
+            "visible": true
+          }
+        ],
+        "stage": {
+          "x": 0,
+          "y": 84,
+          "width": 1440,
+          "height": 733,
+          "top": 84,
+          "right": 1440,
+          "bottom": 817,
+          "left": 0
+        }
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "layout": {
+        "overflow": false,
+        "buttons": [
+          {
+            "id": "watch-pause",
+            "w": 117.328125,
+            "h": 44,
+            "visible": true
+          },
+          {
+            "id": "watch-takeover",
+            "w": 117.34375,
+            "h": 44,
+            "visible": true
+          },
+          {
+            "id": "watch-journal",
+            "w": 117.328125,
+            "h": 44,
+            "visible": true
+          }
+        ],
+        "stage": {
+          "x": 0,
+          "y": 62,
+          "width": 390,
+          "height": 650,
+          "top": 62,
+          "right": 390,
+          "bottom": 712,
+          "left": 0
+        }
+      }
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "layout": {
+        "overflow": false,
+        "buttons": [
+          {
+            "id": "watch-pause",
+            "w": 90,
+            "h": 44,
+            "visible": true
+          },
+          {
+            "id": "watch-takeover",
+            "w": 90,
+            "h": 44,
+            "visible": true
+          },
+          {
+            "id": "watch-journal",
+            "w": 90,
+            "h": 44,
+            "visible": true
+          }
+        ],
+        "stage": {
+          "x": 0,
+          "y": 52,
+          "width": 844,
+          "height": 256,
+          "top": 52,
+          "right": 844,
+          "bottom": 308,
+          "left": 0
+        }
+      }
+    },
+    {
+      "width": 360,
+      "height": 640,
+      "layout": {
+        "overflow": false,
+        "buttons": [
+          {
+            "id": "watch-pause",
+            "w": 107.328125,
+            "h": 44,
+            "visible": true
+          },
+          {
+            "id": "watch-takeover",
+            "w": 107.34375,
+            "h": 44,
+            "visible": true
+          },
+          {
+            "id": "watch-journal",
+            "w": 107.328125,
+            "h": 44,
+            "visible": true
+          }
+        ],
+        "stage": {
+          "x": 0,
+          "y": 62,
+          "width": 360,
+          "height": 446,
+          "top": 62,
+          "right": 360,
+          "bottom": 508,
+          "left": 0
+        }
+      }
+    }
+  ],
+  "bot": {
+    "mode": "watch",
+    "watchPaused": true,
+    "watchFrozen": true,
+    "humanColor": "w",
+    "difficulty": "normal",
+    "thinking": false,
+    "aiError": "",
+    "aiStats": {
+      "depth": 2,
+      "nodes": 625,
+      "elapsedMs": 501.19999998807907
+    },
+    "status": {
+      "repetitions": 1,
+      "halfmoveClock": 0,
+      "claimable": [],
+      "over": false,
+      "kind": "playing",
+      "title": "對局中",
+      "reason": "所有亮起的走法均符合棋種規則，而且走完後己王不會遭到將軍。"
+    },
+    "illegalMessage": "",
+    "fen": "r2qk2r/2p1p1b1/1pn1pnp1/p2p3p/P2P3P/1PN1BNP1/2P1PP2/R2QK2R w KQkq - 0 11",
+    "selected": null,
+    "legal": [],
+    "fears": [
+      "e6"
+    ],
+    "relief": [],
+    "animating": true,
+    "history": [
+      "Nc3",
+      "Nc6",
+      "Nf3",
+      "Nf6",
+      "a4",
+      "a5",
+      "d4",
+      "d5",
+      "Be3",
+      "Be6",
+      "h4",
+      "h5",
+      "b3",
+      "b6",
+      "g3",
+      "g6",
+      "Bh3",
+      "Bg7",
+      "Bxe6",
+      "fxe6"
+    ],
+    "turn": "w",
+    "gameOver": false,
+    "cinematic": true,
+    "reduced": true,
+    "muted": false,
+    "pieces": 31
+  }
+}

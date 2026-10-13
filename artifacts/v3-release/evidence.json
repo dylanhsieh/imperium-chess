@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "runId": "v3-release",
+  "captures": [
+    {
+      "mode": "desktop",
+      "state": "active-play",
+      "report": "artifacts/v3-release/visual/desktop-active-play.json"
+    },
+    {
+      "mode": "desktop",
+      "state": "threat-preview",
+      "report": "artifacts/v3-release/visual/desktop-threat-preview.json"
+    },
+    {
+      "mode": "desktop",
+      "state": "checkmate",
+      "report": "artifacts/v3-release/visual/desktop-checkmate.json"
+    },
+    {
+      "mode": "mobile",
+      "state": "active-play",
+      "report": "artifacts/v3-release/visual/mobile-active-play.json"
+    },
+    {
+      "mode": "desktop",
+      "state": "spectator-play",
+      "report": "artifacts/v3-release/visual/desktop-spectator-play.json"
+    },
+    {
+      "mode": "mobile",
+      "state": "spectator-play",
+      "report": "artifacts/v3-release/visual/mobile-spectator-play.json"
+    }
+  ],
+  "artifacts": [
+    "artifacts/v3-release/spectator/report.json",
+    "artifacts/v3-release/motion/report.json",
+    "artifacts/v3-models/report.md",
+    "artifacts/v3-world/review.md"
+  ]
+}

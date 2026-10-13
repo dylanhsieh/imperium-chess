@@ -4,7 +4,7 @@ import fs from 'node:fs/promises';
 import { Chess } from 'chess.js';
 
 const url = process.env.TEST_URL || 'http://127.0.0.1:5194';
-const out = 'artifacts/v2-release';
+const out = 'artifacts/v3-release/regression';
 await fs.mkdir(out, { recursive: true });
 const browser = await puppeteer.launch({ executablePath: process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', headless: true, args: ['--no-sandbox', '--use-gl=angle', '--use-angle=metal'] });
 const report = { url, checks: [], errors: [], workers: [], limitations: ['Mobile emulation on desktop GPU; no physical phone or Safari claim.'] };
@@ -96,10 +96,10 @@ try {
   assert.equal(await page.$eval('#undo', e => e.disabled), true);
   report.checks.push('Playing black rotates board and AI plays white opening; cannot Undo before human first move');
   const voices = await page.evaluate(() => window.__CHESS_DEBUG__.voiceStatus()); report.voices = voices;
-  assert.equal(voices.loaded, 12); assert(voices.announcements > 0);
+  assert.equal(voices.loaded, 0); assert.equal(voices.announcements, 0);
   await tap('#sound'); assert.equal((await state()).muted, true); await tap('#sound');
-  await tap('#settings'); await tap('#setting-voice'); await tap('[data-close]');
-  report.checks.push('All 12 local voice clips decode; actual gestures play announcements; mute and voice setting operate');
+  await tap('#settings'); assert.equal(await page.$('#setting-voice'), null); await tap('[data-close]');
+  report.checks.push('Speech removed; zero voice clips or announcements; mute operates');
 
   await setup(true); await config('w', 'easy', true); await playOpening(true); await settled(2);
   const cdp = await page.createCDPSession(); await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });

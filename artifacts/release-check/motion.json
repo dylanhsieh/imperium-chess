@@ -2,6 +2,8 @@
   {
     "frame": 0,
     "mode": "local",
+    "watchPaused": false,
+    "watchFrozen": false,
     "humanColor": "w",
     "difficulty": "normal",
     "thinking": false,
@@ -38,8 +40,8 @@
     "muted": false,
     "pieces": 6,
     "diagnostics": {
-      "frame": 325,
-      "fps": 62,
+      "frame": 335,
+      "fps": 60,
       "game": {
         "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
         "turn": "b",
@@ -50,29 +52,31 @@
           "g4"
         ],
         "animating": true,
-        "actionProgress": 0.11813333332538607,
+        "actionProgress": 0.11848888888623982,
         "gameOver": false
       },
       "renderer": {
-        "calls": 203,
-        "triangles": 81478,
-        "geometries": 371,
-        "textures": 9
+        "calls": 218,
+        "triangles": 81120,
+        "geometries": 394,
+        "textures": 13
       },
       "render": {
-        "calls": 203,
-        "triangles": 81478
+        "calls": 218,
+        "triangles": 81120
       },
       "memory": {
-        "geometries": 371,
-        "textures": 9
+        "geometries": 394,
+        "textures": 13
       },
       "quality": {
         "atmosphere": {
           "side": "w",
           "blend": 0,
           "enhanced": true,
-          "mistDraws": 1
+          "mistDraws": 1,
+          "shafts": 1,
+          "localArchitecture": true
         },
         "graphics": "enhanced",
         "dpr": 1,
@@ -86,6 +90,8 @@
   {
     "frame": 1,
     "mode": "local",
+    "watchPaused": false,
+    "watchFrozen": false,
     "humanColor": "w",
     "difficulty": "normal",
     "thinking": false,
@@ -122,7 +128,7 @@
     "muted": false,
     "pieces": 6,
     "diagnostics": {
-      "frame": 350,
+      "frame": 360,
       "fps": 60,
       "game": {
         "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
@@ -134,29 +140,31 @@
           "g4"
         ],
         "animating": true,
-        "actionProgress": 0.2108666666613684,
+        "actionProgress": 0.21115555555290644,
         "gameOver": false
       },
       "renderer": {
-        "calls": 162,
-        "triangles": 73539,
-        "geometries": 372,
-        "textures": 9
+        "calls": 175,
+        "triangles": 72912,
+        "geometries": 394,
+        "textures": 13
       },
       "render": {
-        "calls": 162,
-        "triangles": 73539
+        "calls": 175,
+        "triangles": 72912
       },
       "memory": {
-        "geometries": 372,
-        "textures": 9
+        "geometries": 394,
+        "textures": 13
       },
       "quality": {
         "atmosphere": {
           "side": "w",
           "blend": 0,
           "enhanced": true,
-          "mistDraws": 1
+          "mistDraws": 1,
+          "shafts": 1,
+          "localArchitecture": true
         },
         "graphics": "enhanced",
         "dpr": 1,
@@ -170,6 +178,8 @@
   {
     "frame": 2,
     "mode": "local",
+    "watchPaused": false,
+    "watchFrozen": false,
     "humanColor": "w",
     "difficulty": "normal",
     "thinking": false,
@@ -206,8 +216,8 @@
     "muted": false,
     "pieces": 6,
     "diagnostics": {
-      "frame": 374,
-      "fps": 60,
+      "frame": 386,
+      "fps": 61,
       "game": {
         "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
         "turn": "b",
@@ -218,29 +228,31 @@
           "g4"
         ],
         "animating": true,
-        "actionProgress": 0.2997555555502571,
+        "actionProgress": 0.3073777777751285,
         "gameOver": false
       },
       "renderer": {
-        "calls": 162,
-        "triangles": 73539,
-        "geometries": 372,
-        "textures": 9
+        "calls": 175,
+        "triangles": 72912,
+        "geometries": 394,
+        "textures": 13
       },
       "render": {
-        "calls": 162,
-        "triangles": 73539
+        "calls": 175,
+        "triangles": 72912
       },
       "memory": {
-        "geometries": 372,
-        "textures": 9
+        "geometries": 394,
+        "textures": 13
       },
       "quality": {
         "atmosphere": {
           "side": "w",
           "blend": 0,
           "enhanced": true,
-          "mistDraws": 1
+          "mistDraws": 1,
+          "shafts": 1,
+          "localArchitecture": true
         },
         "graphics": "enhanced",
         "dpr": 1,
@@ -254,6 +266,8 @@
   {
     "frame": 3,
     "mode": "local",
+    "watchPaused": false,
+    "watchFrozen": false,
     "humanColor": "w",
     "difficulty": "normal",
     "thinking": false,
@@ -287,8 +301,8 @@
     "muted": false,
     "pieces": 6,
     "diagnostics": {
-      "frame": 398,
-      "fps": 62,
+      "frame": 412,
+      "fps": 60,
       "game": {
         "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
         "turn": "b",
@@ -299,29 +313,31 @@
           "g4"
         ],
         "animating": true,
-        "actionProgress": 0.3885999999973506,
+        "actionProgress": 0.40368888888094107,
         "gameOver": false
       },
       "renderer": {
-        "calls": 95,
-        "triangles": 78849,
-        "geometries": 372,
-        "textures": 9
+        "calls": 103,
+        "triangles": 79186,
+        "geometries": 394,
+        "textures": 13
       },
       "render": {
-        "calls": 95,
-        "triangles": 78849
+        "calls": 103,
+        "triangles": 79186
       },
       "memory": {
-        "geometries": 372,
-        "textures": 9
+        "geometries": 394,
+        "textures": 13
       },
       "quality": {
         "atmosphere": {
           "side": "w",
           "blend": 0,
           "enhanced": true,
-          "mistDraws": 1
+          "mistDraws": 1,
+          "shafts": 1,
+          "localArchitecture": true
         },
         "graphics": "enhanced",
         "dpr": 1,
@@ -335,6 +351,8 @@
   {
     "frame": 4,
     "mode": "local",
+    "watchPaused": false,
+    "watchFrozen": false,
     "humanColor": "w",
     "difficulty": "normal",
     "thinking": false,
@@ -368,8 +386,8 @@
     "muted": false,
     "pieces": 6,
     "diagnostics": {
-      "frame": 423,
-      "fps": 60,
+      "frame": 438,
+      "fps": 61,
       "game": {
         "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
         "turn": "b",
@@ -380,29 +398,31 @@
           "g4"
         ],
         "animating": true,
-        "actionProgress": 0.4812222222222219,
+        "actionProgress": 0.4999999999999995,
         "gameOver": false
       },
       "renderer": {
-        "calls": 109,
-        "triangles": 71631,
-        "geometries": 372,
-        "textures": 9
+        "calls": 112,
+        "triangles": 71732,
+        "geometries": 394,
+        "textures": 13
       },
       "render": {
-        "calls": 109,
-        "triangles": 71631
+        "calls": 112,
+        "triangles": 71732
       },
       "memory": {
-        "geometries": 372,
-        "textures": 9
+        "geometries": 394,
+        "textures": 13
       },
       "quality": {
         "atmosphere": {
           "side": "w",
           "blend": 0,
           "enhanced": true,
-          "mistDraws": 1
+          "mistDraws": 1,
+          "shafts": 1,
+          "localArchitecture": true
         },
         "graphics": "enhanced",
         "dpr": 1,
@@ -416,6 +436,8 @@
   {
     "frame": 5,
     "mode": "local",
+    "watchPaused": false,
+    "watchFrozen": false,
     "humanColor": "w",
     "difficulty": "normal",
     "thinking": false,
@@ -449,8 +471,8 @@
     "muted": false,
     "pieces": 6,
     "diagnostics": {
-      "frame": 448,
-      "fps": 62,
+      "frame": 464,
+      "fps": 60,
       "game": {
         "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
         "turn": "b",
@@ -461,29 +483,31 @@
           "g4"
         ],
         "animating": true,
-        "actionProgress": 0.5736888888809409,
+        "actionProgress": 0.596266666664017,
         "gameOver": false
       },
       "renderer": {
-        "calls": 109,
-        "triangles": 71631,
-        "geometries": 372,
-        "textures": 9
+        "calls": 112,
+        "triangles": 71732,
+        "geometries": 394,
+        "textures": 13
       },
       "render": {
-        "calls": 109,
-        "triangles": 71631
+        "calls": 112,
+        "triangles": 71732
       },
       "memory": {
-        "geometries": 372,
-        "textures": 9
+        "geometries": 394,
+        "textures": 13
       },
       "quality": {
         "atmosphere": {
           "side": "w",
           "blend": 0,
           "enhanced": true,
-          "mistDraws": 1
+          "mistDraws": 1,
+          "shafts": 1,
+          "localArchitecture": true
         },
         "graphics": "enhanced",
         "dpr": 1,
@@ -497,6 +521,8 @@
   {
     "frame": 6,
     "mode": "local",
+    "watchPaused": false,
+    "watchFrozen": false,
     "humanColor": "w",
     "difficulty": "normal",
     "thinking": false,
@@ -515,9 +541,7 @@
     "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
     "selected": null,
     "legal": [],
-    "fears": [
-      "g4"
-    ],
+    "fears": [],
     "relief": [],
     "animating": true,
     "history": [
@@ -530,7 +554,7 @@
     "muted": false,
     "pieces": 6,
     "diagnostics": {
-      "frame": 473,
+      "frame": 490,
       "fps": 60,
       "game": {
         "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
@@ -538,33 +562,33 @@
         "moves": 1,
         "selected": null,
         "legal": [],
-        "fear": [
-          "g4"
-        ],
+        "fear": [],
         "animating": true,
-        "actionProgress": 0.666399999989403,
+        "actionProgress": 0.69,
         "gameOver": false
       },
       "renderer": {
-        "calls": 109,
-        "triangles": 71631,
-        "geometries": 372,
-        "textures": 9
+        "calls": 114,
+        "triangles": 72346,
+        "geometries": 395,
+        "textures": 13
       },
       "render": {
-        "calls": 109,
-        "triangles": 71631
+        "calls": 114,
+        "triangles": 72346
       },
       "memory": {
-        "geometries": 372,
-        "textures": 9
+        "geometries": 395,
+        "textures": 13
       },
       "quality": {
         "atmosphere": {
           "side": "w",
           "blend": 0,
           "enhanced": true,
-          "mistDraws": 1
+          "mistDraws": 1,
+          "shafts": 1,
+          "localArchitecture": true
         },
         "graphics": "enhanced",
         "dpr": 1,
@@ -578,6 +602,8 @@
   {
     "frame": 7,
     "mode": "local",
+    "watchPaused": false,
+    "watchFrozen": false,
     "humanColor": "w",
     "difficulty": "normal",
     "thinking": false,
@@ -609,8 +635,8 @@
     "muted": false,
     "pieces": 6,
     "diagnostics": {
-      "frame": 498,
-      "fps": 60,
+      "frame": 516,
+      "fps": 63,
       "game": {
         "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
         "turn": "b",
@@ -619,29 +645,31 @@
         "legal": [],
         "fear": [],
         "animating": true,
-        "actionProgress": 0.7190871111096276,
+        "actionProgress": 0.7404764444510138,
         "gameOver": false
       },
       "renderer": {
-        "calls": 93,
-        "triangles": 70125,
-        "geometries": 373,
-        "textures": 9
+        "calls": 71,
+        "triangles": 63780,
+        "geometries": 395,
+        "textures": 13
       },
       "render": {
-        "calls": 93,
-        "triangles": 70125
+        "calls": 71,
+        "triangles": 63780
       },
       "memory": {
-        "geometries": 373,
-        "textures": 9
+        "geometries": 395,
+        "textures": 13
       },
       "quality": {
         "atmosphere": {
           "side": "w",
           "blend": 0,
           "enhanced": true,
-          "mistDraws": 1
+          "mistDraws": 1,
+          "shafts": 1,
+          "localArchitecture": true
         },
         "graphics": "enhanced",
         "dpr": 1,
@@ -655,6 +683,8 @@
   {
     "frame": 8,
     "mode": "local",
+    "watchPaused": false,
+    "watchFrozen": false,
     "humanColor": "w",
     "difficulty": "normal",
     "thinking": false,
@@ -686,8 +716,8 @@
     "muted": false,
     "pieces": 6,
     "diagnostics": {
-      "frame": 524,
-      "fps": 63,
+      "frame": 542,
+      "fps": 61,
       "game": {
         "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
         "turn": "b",
@@ -696,29 +726,31 @@
         "legal": [],
         "fear": [],
         "animating": true,
-        "actionProgress": 0.8068577777798969,
+        "actionProgress": 0.8368319999986222,
         "gameOver": false
       },
       "renderer": {
-        "calls": 68,
-        "triangles": 63692,
-        "geometries": 373,
-        "textures": 9
+        "calls": 69,
+        "triangles": 63524,
+        "geometries": 394,
+        "textures": 13
       },
       "render": {
-        "calls": 68,
-        "triangles": 63692
+        "calls": 69,
+        "triangles": 63524
       },
       "memory": {
-        "geometries": 373,
-        "textures": 9
+        "geometries": 394,
+        "textures": 13
       },
       "quality": {
         "atmosphere": {
           "side": "w",
           "blend": 0,
           "enhanced": true,
-          "mistDraws": 1
+          "mistDraws": 1,
+          "shafts": 1,
+          "localArchitecture": true
         },
         "graphics": "enhanced",
         "dpr": 1,
@@ -732,6 +764,8 @@
   {
     "frame": 9,
     "mode": "local",
+    "watchPaused": false,
+    "watchFrozen": false,
     "humanColor": "w",
     "difficulty": "normal",
     "thinking": false,
@@ -763,7 +797,7 @@
     "muted": false,
     "pieces": 6,
     "diagnostics": {
-      "frame": 548,
+      "frame": 569,
       "fps": 60,
       "game": {
         "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
@@ -773,29 +807,31 @@
         "legal": [],
         "fear": [],
         "animating": true,
-        "actionProgress": 0.895902222221692,
+        "actionProgress": 0.936898666667938,
         "gameOver": false
       },
       "renderer": {
-        "calls": 67,
-        "triangles": 63848,
-        "geometries": 373,
-        "textures": 9
+        "calls": 68,
+        "triangles": 63164,
+        "geometries": 394,
+        "textures": 13
       },
       "render": {
-        "calls": 67,
-        "triangles": 63848
+        "calls": 68,
+        "triangles": 63164
       },
       "memory": {
-        "geometries": 373,
-        "textures": 9
+        "geometries": 394,
+        "textures": 13
       },
       "quality": {
         "atmosphere": {
           "side": "w",
           "blend": 0,
           "enhanced": true,
-          "mistDraws": 1
+          "mistDraws": 1,
+          "shafts": 1,
+          "localArchitecture": true
         },
         "graphics": "enhanced",
         "dpr": 1,
@@ -809,6 +845,8 @@
   {
     "frame": 10,
     "mode": "local",
+    "watchPaused": false,
+    "watchFrozen": false,
     "humanColor": "w",
     "difficulty": "normal",
     "thinking": false,
@@ -829,7 +867,7 @@
     "legal": [],
     "fears": [],
     "relief": [],
-    "animating": true,
+    "animating": false,
     "history": [
       "Rxg4"
     ],
@@ -838,9 +876,9 @@
     "cinematic": true,
     "reduced": false,
     "muted": false,
-    "pieces": 6,
+    "pieces": 5,
     "diagnostics": {
-      "frame": 575,
+      "frame": 596,
       "fps": 60,
       "game": {
         "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
@@ -849,30 +887,32 @@
         "selected": null,
         "legal": [],
         "fear": [],
-        "animating": true,
-        "actionProgress": 0.9959022222216919,
+        "animating": false,
+        "actionProgress": 0,
         "gameOver": false
       },
       "renderer": {
-        "calls": 75,
-        "triangles": 74064,
-        "geometries": 373,
-        "textures": 9
+        "calls": 54,
+        "triangles": 73522,
+        "geometries": 395,
+        "textures": 13
       },
       "render": {
-        "calls": 75,
-        "triangles": 74064
+        "calls": 54,
+        "triangles": 73522
       },
       "memory": {
-        "geometries": 373,
-        "textures": 9
+        "geometries": 395,
+        "textures": 13
       },
       "quality": {
         "atmosphere": {
-          "side": "w",
-          "blend": 0,
+          "side": "b",
+          "blend": 0.5922087998857731,
           "enhanced": true,
-          "mistDraws": 1
+          "mistDraws": 1,
+          "shafts": 1,
+          "localArchitecture": true
         },
         "graphics": "enhanced",
         "dpr": 1,
@@ -886,6 +926,8 @@
   {
     "frame": 11,
     "mode": "local",
+    "watchPaused": false,
+    "watchFrozen": false,
     "humanColor": "w",
     "difficulty": "normal",
     "thinking": false,
@@ -917,8 +959,8 @@
     "muted": false,
     "pieces": 5,
     "diagnostics": {
-      "frame": 604,
-      "fps": 62,
+      "frame": 623,
+      "fps": 60,
       "game": {
         "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
         "turn": "b",
@@ -931,25 +973,27 @@
         "gameOver": false
       },
       "renderer": {
-        "calls": 55,
-        "triangles": 74320,
-        "geometries": 374,
-        "textures": 9
+        "calls": 54,
+        "triangles": 73522,
+        "geometries": 395,
+        "textures": 13
       },
       "render": {
-        "calls": 55,
-        "triangles": 74320
+        "calls": 54,
+        "triangles": 73522
       },
       "memory": {
-        "geometries": 374,
-        "textures": 9
+        "geometries": 395,
+        "textures": 13
       },
       "quality": {
         "atmosphere": {
           "side": "b",
-          "blend": 0.9322682345627606,
+          "blend": 0.9726106218576442,
           "enhanced": true,
-          "mistDraws": 1
+          "mistDraws": 1,
+          "shafts": 1,
+          "localArchitecture": true
         },
         "graphics": "enhanced",
         "dpr": 1,
@@ -963,6 +1007,8 @@
   {
     "frame": 12,
     "mode": "local",
+    "watchPaused": false,
+    "watchFrozen": false,
     "humanColor": "w",
     "difficulty": "normal",
     "thinking": false,
@@ -994,8 +1040,8 @@
     "muted": false,
     "pieces": 5,
     "diagnostics": {
-      "frame": 631,
-      "fps": 62,
+      "frame": 651,
+      "fps": 60,
       "game": {
         "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
         "turn": "b",
@@ -1008,25 +1054,27 @@
         "gameOver": false
       },
       "renderer": {
-        "calls": 55,
-        "triangles": 74320,
-        "geometries": 374,
-        "textures": 9
+        "calls": 54,
+        "triangles": 73522,
+        "geometries": 395,
+        "textures": 13
       },
       "render": {
-        "calls": 55,
-        "triangles": 74320
+        "calls": 54,
+        "triangles": 73522
       },
       "memory": {
-        "geometries": 374,
-        "textures": 9
+        "geometries": 395,
+        "textures": 13
       },
       "quality": {
         "atmosphere": {
           "side": "b",
-          "blend": 0.9954453199860408,
+          "blend": 0.9983337838469541,
           "enhanced": true,
-          "mistDraws": 1
+          "mistDraws": 1,
+          "shafts": 1,
+          "localArchitecture": true
         },
         "graphics": "enhanced",
         "dpr": 1,

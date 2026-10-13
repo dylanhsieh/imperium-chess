@@ -1,0 +1,123 @@
+{
+  "url": "http://127.0.0.1:5195/?debug=1",
+  "mode": "desktop",
+  "state": "spectator-play",
+  "requestedState": "spectator-play",
+  "appliedState": "spectator-play",
+  "runId": "v3-release",
+  "seed": null,
+  "screenshotPath": "artifacts/v3-release/visual/desktop-spectator-play.png",
+  "gpu": {
+    "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)",
+    "vendor": "Google Inc. (Apple)",
+    "softwareRendered": false
+  },
+  "result": {
+    "ok": true,
+    "reason": "nonblank",
+    "rect": {
+      "x": 0,
+      "y": 84,
+      "width": 1440,
+      "height": 733
+    },
+    "drawingBuffer": {
+      "width": 1440,
+      "height": 733
+    },
+    "alphaPixels": 4108,
+    "variance": 246,
+    "colorBuckets": 159,
+    "metrics": {
+      "colorBuckets": 235,
+      "colorEntropyBits": 4.91,
+      "edgeDensity": 0.279,
+      "luminance": {
+        "mean": 92.1,
+        "p5": 34,
+        "p95": 148.7,
+        "contrast": 114.7
+      },
+      "dominantColorShare": 0.167,
+      "nonBackgroundShare": 0.833
+    },
+    "renderBudget": {
+      "tier": "desktop",
+      "note": "starting-point budget; adjust per game and document overrides",
+      "rows": [
+        {
+          "metric": "calls",
+          "actual": 98,
+          "limit": 300,
+          "ok": true
+        },
+        {
+          "metric": "triangles",
+          "actual": 313510,
+          "limit": 750000,
+          "ok": true
+        },
+        {
+          "metric": "geometries",
+          "actual": 96,
+          "limit": 300,
+          "ok": true
+        },
+        {
+          "metric": "textures",
+          "actual": 11,
+          "limit": 60,
+          "ok": true
+        }
+      ],
+      "withinBudget": true
+    },
+    "diagnostics": {
+      "frame": 76,
+      "fps": 57,
+      "game": {
+        "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+        "turn": "w",
+        "moves": 4,
+        "selected": null,
+        "legal": [],
+        "fear": [],
+        "animating": false,
+        "actionProgress": 0,
+        "gameOver": false
+      },
+      "renderer": {
+        "calls": 98,
+        "triangles": 313510,
+        "geometries": 96,
+        "textures": 11
+      },
+      "render": {
+        "calls": 98,
+        "triangles": 313510
+      },
+      "memory": {
+        "geometries": 96,
+        "textures": 11
+      },
+      "quality": {
+        "atmosphere": {
+          "side": "w",
+          "blend": 0,
+          "enhanced": true,
+          "mistDraws": 1,
+          "shafts": 1,
+          "localArchitecture": true
+        },
+        "graphics": "enhanced",
+        "dpr": 1,
+        "shadowMapSize": 2048,
+        "shadowLights": 1,
+        "postPasses": 0
+      },
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+    }
+  },
+  "consoleErrors": [],
+  "pageErrors": []
+}

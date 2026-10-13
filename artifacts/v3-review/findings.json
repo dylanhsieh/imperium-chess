@@ -1,0 +1,137 @@
+[
+  {
+    "test": "persist-during-first-animation",
+    "beforeReload": {
+      "moves": "1",
+      "animating": true,
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"?\"]\n[Black \"?\"]\n[Result \"*\"]\n *",
+      "settings": {
+        "cinematic": true,
+        "muted": false,
+        "volume": 0.65,
+        "reduced": false,
+        "watchPaused": false,
+        "matchMode": "watch",
+        "humanColor": "w",
+        "difficulty": "normal",
+        "adjudication": null
+      }
+    },
+    "afterReload": {
+      "moves": "0",
+      "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"?\"]\n[Black \"?\"]\n[Result \"*\"]\n *"
+    }
+  },
+  {
+    "test": "pause-live-action",
+    "sameFen": true,
+    "sameProgress": true,
+    "before": 0.22550000001402465,
+    "after": 0.22550000001402465
+  },
+  {
+    "test": "takeover-black-midaction",
+    "beforeFen": "rnbqkbnr/pppppppp/8/8/8/2N5/PPPPPPPP/R1BQKBNR b KQkq - 1 1",
+    "after": {
+      "mode": "ai",
+      "watchPaused": false,
+      "watchFrozen": false,
+      "humanColor": "b",
+      "difficulty": "normal",
+      "thinking": false,
+      "aiError": "",
+      "aiStats": {
+        "depth": 3,
+        "nodes": 1205,
+        "elapsedMs": 500.19999998807907
+      },
+      "status": {
+        "repetitions": 1,
+        "halfmoveClock": 1,
+        "claimable": [],
+        "over": false,
+        "kind": "playing",
+        "title": "對局中",
+        "reason": "所有亮起的走法均符合棋種規則，而且走完後己王不會遭到將軍。"
+      },
+      "illegalMessage": "",
+      "fen": "rnbqkbnr/pppppppp/8/8/8/2N5/PPPPPPPP/R1BQKBNR b KQkq - 1 1",
+      "selected": null,
+      "legal": [],
+      "fears": [],
+      "relief": [],
+      "animating": false,
+      "history": [
+        "Nc3"
+      ],
+      "turn": "b",
+      "gameOver": false,
+      "cinematic": true,
+      "reduced": false,
+      "muted": false,
+      "pieces": 32
+    }
+  },
+  {
+    "test": "mobile-controls",
+    "width": 360,
+    "height": 640,
+    "controls": [
+      {
+        "id": "watch-pause",
+        "x": 12,
+        "y": 584,
+        "w": 107.328125,
+        "h": 44,
+        "inViewport": true
+      },
+      {
+        "id": "watch-takeover",
+        "x": 126.328125,
+        "y": 584,
+        "w": 107.34375,
+        "h": 44,
+        "inViewport": true
+      },
+      {
+        "id": "watch-journal",
+        "x": 240.671875,
+        "y": 584,
+        "w": 107.328125,
+        "h": 44,
+        "inViewport": true
+      }
+    ]
+  },
+  {
+    "test": "mobile-controls",
+    "width": 568,
+    "height": 320,
+    "controls": [
+      {
+        "id": "watch-pause",
+        "x": 266,
+        "y": 257.5,
+        "w": 90,
+        "h": 44,
+        "inViewport": true
+      },
+      {
+        "id": "watch-takeover",
+        "x": 363,
+        "y": 257.5,
+        "w": 90,
+        "h": 44,
+        "inViewport": true
+      },
+      {
+        "id": "watch-journal",
+        "x": 460,
+        "y": 257.5,
+        "w": 90,
+        "h": 44,
+        "inViewport": true
+      }
+    ]
+  }
+]

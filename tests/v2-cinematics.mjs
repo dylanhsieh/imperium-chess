@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer-core';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-const out='artifacts/v2-release/motion'; await fs.mkdir(out,{recursive:true});
+const out='artifacts/v3-release/motion'; await fs.mkdir(out,{recursive:true});
 const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true,args:['--no-sandbox','--use-gl=angle','--use-angle=metal']});
 const report={unpaused:true,shots:[],errors:[]};
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
@@ -29,7 +29,7 @@ try {
    assert.equal(await page.$$eval('#history .history-step',es=>es.length),1);
    const contact=shot.samples.find(s=>s.combat.hit)?.combat;
    if(contact.weapon){const point=contact.weapon.base.map((v,i)=>v+(contact.weapon.tip[i]-v)*.84);shot.contactErrorXZ=Math.hypot(point[0]-contact.impact[0],point[2]-contact.impact[2]);assert(shot.contactErrorXZ<.3);}
-   assert((await page.evaluate(()=>window.__CHESS_DEBUG__.voiceStatus())).played>=2);
+   assert.equal((await page.evaluate(()=>window.__CHESS_DEBUG__.voiceStatus())).played,0);
    await wait(250);
   }
  }

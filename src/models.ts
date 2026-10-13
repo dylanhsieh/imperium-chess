@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {finishMaterial} from './surface-shading';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 
-/** Locally sculpted ancient armies. Every silhouette and detail is authored here. */
+/** Locally sculpted historical miniatures: curved armor, adult faces, draped cloth. */
 type Faction = 'w' | 'b';
 type Mode = 'idle' | 'move' | 'attack' | 'fear' | 'relief';
 type V3 = [number, number, number];
@@ -28,6 +28,9 @@ function palette(color: Faction): Palette {
     skin: make('skin', light ? 0xd2a07b : 0xbb8464, .01, .85),
     horse: make('warhorse', light ? 0x9c9483 : 0x3c3030, .07, .87),
   };
+  // Cloth is a thin woven shell. Double-sided opaque shading avoids duplicating
+  // every cape triangle and still lights the inside correctly as it flutters.
+  p.cloth.side=THREE.DoubleSide;
   palettes.set(color, p);
   return p;
 }
@@ -47,112 +50,64 @@ class Sculpt {
     this.parts.set(material, list);
     return this;
   }
-  box(size: V3, at: V3, m: THREE.Material, rotation: V3 = ZERO, _bevel = .018) {
-    return this.add(new THREE.BoxGeometry(...size), m, at, rotation);
-  }
-  /** Emit only exposed faces of a stepped solid. Hidden interior cube walls
-   * never reach the GPU; the authored voxel silhouette stays identical. */
-  columns(depths: number[][], dx: number, dy: number, at: V3, m: THREE.Material, rotation: V3) {
-    const rows=depths.length, cols=depths[0].length, positions:number[]=[], normals:number[]=[], uvs:number[]=[];
-    const quad=(a:V3,b:V3,c:V3,d:V3,n:V3)=>{
-      for(const [v,u] of [[a,[0,0]],[b,[1,0]],[c,[1,1]],[a,[0,0]],[c,[1,1]],[d,[0,1]]] as [V3,number[]][]){positions.push(...v);normals.push(...n);uvs.push(...u);}
-    };
-    for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){
-      const depth=depths[y][x];if(!depth)continue;
-      const x0=(x-cols/2)*dx,x1=x0+dx,y0=(y-rows/2)*dy,y1=y0+dy;
-      quad([x0,y0,depth],[x1,y0,depth],[x1,y1,depth],[x0,y1,depth],[0,0,1]);
-      quad([x1,y0,-depth],[x0,y0,-depth],[x0,y1,-depth],[x1,y1,-depth],[0,0,-1]);
-      for(const sign of [-1,1]){
-        const neighborX=depths[y][x+sign]||0, xx=sign<0?x0:x1;
-        if(neighborX<depth){
-          for(const [z0,z1] of neighborX?[[neighborX,depth],[-depth,-neighborX]]:[[-depth,depth]]){
-            if(sign<0)quad([xx,y0,z0],[xx,y0,z1],[xx,y1,z1],[xx,y1,z0],[-1,0,0]);
-            else quad([xx,y0,z1],[xx,y0,z0],[xx,y1,z0],[xx,y1,z1],[1,0,0]);
-          }
-        }
-        const neighborY=depths[y+sign]?.[x]||0, yy=sign<0?y0:y1;
-        if(neighborY<depth){
-          for(const [z0,z1] of neighborY?[[neighborY,depth],[-depth,-neighborY]]:[[-depth,depth]]){
-            if(sign<0)quad([x0,yy,z0],[x1,yy,z0],[x1,yy,z1],[x0,yy,z1],[0,-1,0]);
-            else quad([x0,yy,z1],[x1,yy,z1],[x1,yy,z0],[x0,yy,z0],[0,1,0]);
-          }
-        }
-      }
+  /** Small custom chamfers: 44 triangles rather than subdividing a rounded cube. */
+  box(size:V3,at:V3,m:THREE.Material,rotation:V3=ZERO,bevel=.008){
+    const cut=Math.min(bevel,Math.min(...size)*.22);
+    if(cut<.002||Math.max(...size)<.07)return this.add(new THREE.BoxGeometry(...size),m,at,rotation);
+    const pos:number[]=[],uv:number[]=[];
+    const tri=(a:V3,b:V3,c:V3)=>{pos.push(...a,...b,...c);uv.push(0,0,1,0,1,1);};
+    const quad=(a:V3,b:V3,c:V3,d:V3)=>{tri(a,b,c);tri(a,c,d);};
+    const h=size.map(v=>v/2),lo=h.map(v=>v-cut);
+    // Six inset faces, twelve bevel strips and eight corner facets.
+    for(let axis=0;axis<3;axis++)for(const sign of [-1,1]){
+      const u=(axis+1)%3,v=(axis+2)%3,points:V3[]=[];
+      for(const [a,b] of [[-1,-1],[1,-1],[1,1],[-1,1]]){const q=[0,0,0] as V3;q[axis]=sign*h[axis];q[u]=a*lo[u];q[v]=b*lo[v];points.push(q);}
+      if(sign<0)points.reverse();quad(points[0],points[1],points[2],points[3]);
     }
-    const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geo.setAttribute('normal',new THREE.Float32BufferAttribute(normals,3));geo.setAttribute('uv',new THREE.Float32BufferAttribute(uvs,2));
-    return this.add(geo,m,at,rotation);
-  }
-  // Fine 3–5 cm stepped hulls, without thousands of invisible internal faces.
-  ellipsoid(size: V3, at: V3, m: THREE.Material, rotation: V3 = ZERO, _segments = 12) {
-    const cell=Math.max(...size)<.06?.022:.044;
-    const nx=Math.max(1,Math.ceil(size[0]*2/cell)),ny=Math.max(1,Math.ceil(size[1]*2/cell));
-    const dx=size[0]*2/nx,dy=size[1]*2/ny;
-    const depths=Array.from({length:ny},(_,iy)=>Array.from({length:nx},(_,ix)=>{
-      const x=(ix+.5)*dx-size[0],y=(iy+.5)*dy-size[1],radial=1-(x/size[0])**2-(y/size[1])**2;
-      return radial<=.04?0:Math.max(cell,Math.round(Math.sqrt(radial)*size[2]*2/cell)*cell)*.5;
-    }));
-    return this.columns(depths,dx,dy,at,m,rotation);
-  }
-  cone(top:number,bottom:number,height:number,at:V3,m:THREE.Material,_segments=10,rotation:V3=ZERO){
-    const radius=Math.max(top,bottom),nx=Math.max(1,Math.ceil(radius*2/.05)),ny=Math.max(1,Math.ceil(height/.045));
-    const dx=radius*2/nx,dy=height/ny;
-    const depths=Array.from({length:ny},(_,y)=>Array.from({length:nx},(_,x)=>{
-      const r=bottom+(top-bottom)*(y+.5)/ny,xx=(x+.5)*dx-radius;
-      return Math.abs(xx)>=r?0:Math.max(.008,Math.round(Math.sqrt(r*r-xx*xx)/.018)*.018);
-    }));
-    return this.columns(depths,dx,dy,at,m,rotation);
-  }
-  rod(a: V3, b: V3, radius: number, m: THREE.Material, radius2 = radius, _sides = 8) {
-    const start = new THREE.Vector3(...a), end = new THREE.Vector3(...b);
-    const delta=end.clone().sub(start), axes=delta.toArray().filter(v=>Math.abs(v)>.00001);
-    if(axes.length===1&&radius===radius2){
-      // Straight shafts were overlapping identical voxel cubes. One cuboid has
-      // the exact same silhouette and removes all those hidden interior faces.
-      const dimensions=delta.toArray().map(v=>Math.abs(v)+radius*2) as V3;
-      return this.box(dimensions,start.clone().lerp(end,.5).toArray() as V3,m);
+    for(let axis=0;axis<3;axis++)for(const a of [-1,1])for(const b of [-1,1]){
+      const u=(axis+1)%3,v=(axis+2)%3;
+      const points:V3[]=[];
+      for(const [end,swap] of [[-1,0],[1,0],[1,1],[-1,1]]){const q=[0,0,0] as V3;q[axis]=end*lo[axis];q[u]=a*(swap?lo[u]:h[u]);q[v]=b*(swap?h[v]:lo[v]);points.push(q);}
+      const normal=new THREE.Vector3().subVectors(new THREE.Vector3(...points[1]),new THREE.Vector3(...points[0])).cross(new THREE.Vector3().subVectors(new THREE.Vector3(...points[2]),new THREE.Vector3(...points[0])));
+      const outward=new THREE.Vector3();outward.setComponent(u,a);outward.setComponent(v,b);if(normal.dot(outward)<0)points.reverse();quad(points[0],points[1],points[2],points[3]);
     }
-    const count = Math.max(1, Math.ceil(start.distanceTo(end) / .04));
-    for (let i = 0; i <= count; i++) {
-      const t = i / count, center = start.clone().lerp(end, t), r = radius + (radius2 - radius) * t;
-      this.box([r * 2, Math.max(r * 2, .045), r * 2], center.toArray() as V3, m);
+    for(const x of [-1,1])for(const y of [-1,1])for(const z of [-1,1]){
+      const points:V3[]=[[x*h[0],y*lo[1],z*lo[2]],[x*lo[0],y*h[1],z*lo[2]],[x*lo[0],y*lo[1],z*h[2]]];if(x*y*z<0)points.reverse();tri(points[0],points[1],points[2]);
     }
-    return this;
+    const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));geo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));geo.computeVertexNormals();return this.add(geo,m,at,rotation);
   }
-  plate(points: number[][], depth: number, at: V3, m: THREE.Material, rotation: V3 = ZERO, _bevel = .009) {
-    const bottom = Math.min(...points.map(p => p[1])), top = Math.max(...points.map(p => p[1]));
-    const rows = Math.max(1, Math.ceil((top - bottom) / .032));
-    const dy = (top - bottom) / rows;
-    const transform = new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(...rotation));
-    for (let row = 0; row < rows; row++) {
-      const y = bottom + (row + .5) * dy;
-      const hits: number[] = [];
-      for (let i = 0; i < points.length; i++) {
-        const a = points[i], b = points[(i + 1) % points.length];
-        if ((a[1] <= y && b[1] > y) || (b[1] <= y && a[1] > y)) hits.push(a[0] + (y - a[1]) / (b[1] - a[1]) * (b[0] - a[0]));
-      }
-      hits.sort((a, b) => a - b);
-      for (let i = 0; i + 1 < hits.length; i += 2) {
-        const width = Math.max(.008, Math.round((hits[i + 1] - hits[i]) / .014) * .014);
-        const center = new THREE.Vector3((hits[i + 1] + hits[i]) * .5, y, 0).applyMatrix4(transform);
-        this.box([width, dy, depth], [at[0] + center.x, at[1] + center.y, at[2] + center.z], m, rotation);
-      }
-    }
-    return this;
+  ellipsoid(size:V3,at:V3,m:THREE.Material,rotation:V3=ZERO,segments=10){
+    if(Math.max(...size)<.027)return this.add(new THREE.IcosahedronGeometry(1,0),m,at,rotation,size);
+    const detail=Math.max(...size)<.045?6:Math.min(12,Math.max(8,segments));
+    return this.add(new THREE.SphereGeometry(1,detail,Math.max(4,Math.floor(detail*.65))),m,at,rotation,size);
   }
-  curve(points: V3[], radius: number, m: THREE.Material, tubular = 16) {
-    const curve = new THREE.CatmullRomCurve3(points.map(p => new THREE.Vector3(...p)));
-    for (let i = 0; i < tubular; i++) this.rod(curve.getPoint(i / tubular).toArray() as V3, curve.getPoint((i + 1) / tubular).toArray() as V3, radius, m);
-    return this;
+  cone(top:number,bottom:number,height:number,at:V3,m:THREE.Material,segments=10,rotation:V3=ZERO){
+    return this.add(new THREE.CylinderGeometry(top,bottom,height,segments,1),m,at,rotation);
   }
-  ring(radius: number, thickness: number, at: V3, m: THREE.Material, rotation: V3 = ZERO) {
-    const count = Math.ceil(radius * Math.PI * 2 / .038);
-    const transform = new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(...rotation));
-    for (let i = 0; i < count; i++) {
-      const a = i / count * Math.PI * 2;
-      const local = new THREE.Vector3(Math.round(Math.sin(a) * radius / .025) * .025, Math.round(Math.cos(a) * radius / .025) * .025, 0).applyMatrix4(transform);
-      this.box([thickness * 2, thickness * 2, thickness * 2], [at[0] + local.x, at[1] + local.y, at[2] + local.z], m);
-    }
-    return this;
+  rod(a:V3,b:V3,radius:number,m:THREE.Material,radius2=radius,sides=8){
+    const start=new THREE.Vector3(...a),end=new THREE.Vector3(...b),direction=end.clone().sub(start);
+    const geo=new THREE.CylinderGeometry(radius2,radius,direction.length(),sides,1);
+    geo.applyQuaternion(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0),direction.normalize()));
+    return this.add(geo,m,start.add(end).multiplyScalar(.5).toArray() as V3);
+  }
+  plate(points:number[][],depth:number,at:V3,m:THREE.Material,rotation:V3=ZERO,bevel=.004){
+    const shape=new THREE.Shape();points.forEach(([x,y],i)=>i?shape.lineTo(x,y):shape.moveTo(x,y));shape.closePath();
+    const inset=Math.min(depth*.2,bevel);
+    const geo=new THREE.ExtrudeGeometry(shape,{depth:Math.max(.001,depth-inset*2),steps:1,bevelEnabled:inset>.001,bevelThickness:inset,bevelSize:inset,bevelSegments:1,curveSegments:3});
+    geo.translate(0,0,-depth*.5+inset);return this.add(geo,m,at,rotation);
+  }
+  curve(points:V3[],radius:number,m:THREE.Material,tubular=12){
+    return this.add(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p))),tubular,radius,5,false),m);
+  }
+  ring(radius:number,thickness:number,at:V3,m:THREE.Material,rotation:V3=ZERO){
+    return this.add(new THREE.TorusGeometry(radius,thickness,5,Math.max(12,Math.ceil(radius*70))),m,at,rotation);
+  }
+  /** Elliptical cross-sections form continuous fitted armor rather than a sphere. */
+  shell(profile:[number,number,number,number?][],at:V3,m:THREE.Material,segments=12){
+    const positions:number[]=[],uv:number[]=[],indices:number[]=[];
+    for(let row=0;row<profile.length;row++){const [y,rx,rz,cz=0]=profile[row];for(let i=0;i<=segments;i++){const a=i/segments*Math.PI*2;positions.push(Math.sin(a)*rx,y,Math.cos(a)*rz+cz);uv.push(i/segments,row/(profile.length-1));}}
+    for(let row=0;row<profile.length-1;row++)for(let i=0;i<segments;i++){const a=row*(segments+1)+i,b=a+segments+1;indices.push(a,a+1,b,b,a+1,b+1);}
+    const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geometry.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));geometry.setIndex(indices);geometry.computeVertexNormals();return this.add(geometry,m,at);
   }
   finish() {
     for (const [material, parts] of this.parts) {
@@ -173,8 +128,6 @@ function joint(parent: THREE.Group, name: string, at: V3) {
   const g = new THREE.Group(); g.name = name; g.position.set(...at); parent.add(g); return g;
 }
 
-const chestShape = [[-.2, .12], [-.14, .21], [.14, .21], [.2, .12], [.15, -.11], [0, -.17], [-.15, -.11]];
-const shieldShape = [[-.19, .2], [0, .27], [.19, .2], [.17, -.09], [0, -.3], [-.17, -.09]];
 const wingShape = [[-.04, -.04], [.21, -.07], [.28, .06], [.2, .03], [.24, .14], [.14, .1], [.16, .23], [.04, .14]];
 
 function emblem(s: Sculpt, at: V3, size = 1) {
@@ -185,90 +138,84 @@ function emblem(s: Sculpt, at: V3, size = 1) {
   }
 }
 
-function helmet(s: Sculpt, type: string, at: V3, scale = 1) {
-  const [x, y, z] = at;
-  const point = (dx: number, dy: number, dz: number): V3 => [x + dx * scale, y + dy * scale, z + dz * scale];
-  const block = (size: V3, loc: V3, material: THREE.Material) => s.box(size.map(n => n * scale) as V3, point(...loc), material);
-  // Large expressive faces follow the fine-voxel hero reference: sculpted jaw,
-  // square eyes, stepped hair, and open-faced antique helmets.
-  block([.28, .22, .215], [0, -.004, .027], s.p.skin);
-  block([.24, .065, .196], [0, -.137, .027], s.p.skin);
-  block([.19, .032, .17], [0, -.18, .018], s.p.skin);
-  block([.039, .057, .052], [0, -.051, .153], s.p.skin);
-  for (const side of [-1, 1]) {
-    block([.063, .066, .016], [side * .077, .006, .143], s.p.dark);
-    block([.043, .039, .019], [side * .077, .009, .155], s.p.steel);
-    block([.021, .032, .022], [side * .077 - .006, .007, .162], s.p.dark);
-    block([.008, .010, .025], [side * .077 - .010, .02, .163], s.p.armor);
-    block([.075, .018, .02], [side * .077, .065, .15], s.p.dark);
-    block([.036, .045, .086], [side * .155, -.04, .01], s.p.skin);
+function helmet(s:Sculpt,type:string,at:V3,scale=1){
+  const [x,y,z]=at,p=s.p;
+  const point=(dx:number,dy:number,dz:number):V3=>[x+dx*scale,y+dy*scale,z+dz*scale];
+  const oval=(r:V3,q:V3,m:THREE.Material,rotation:V3=ZERO)=>s.ellipsoid(r.map(v=>v*scale) as V3,point(...q),m,rotation,12);
+  const line=(a:V3,b:V3,r:number,m:THREE.Material)=>s.rod(point(...a),point(...b),r*scale,m);
+  // Adult face: shaped brow, cheekbones, jaw and nose, with narrow inset eyes.
+  // The head is ~one seventh of the whole sculpt including its ceremonial crest.
+  const faceRows:[number,number,number][]=[[-.19,.014,.031],[-.176,.047,.054],[-.14,.073,.068],[-.094,.086,.077],[-.04,.096,.083],[.017,.094,.081],[.07,.085,.075],[.119,.065,.058],[.14,.027,.03]];
+  const facePosition:number[]=[],faceUv:number[]=[],faceIndex:number[]=[],sides=16;
+  for(let row=0;row<faceRows.length;row++){
+    const [yy,rx,rz]=faceRows[row];
+    for(let i=0;i<=sides;i++){
+      const angle=i/sides*Math.PI*2,front=Math.max(0,Math.cos(angle));
+      const bridge=Math.max(0,1-Math.abs((yy+.05)/.085))*.027*Math.pow(front,14);
+      const brow=Math.exp(-(((yy-.013)/.028)**2))*.008*Math.pow(front,5);
+      facePosition.push(...point(Math.sin(angle)*rx,yy,Math.cos(angle)*rz+.012+bridge+brow));faceUv.push(i/sides,row/(faceRows.length-1));
+    }
   }
-  block([.063, .012, .014], [0, -.121, .132], s.p.dark);
-  block([.082, .019, .016], [0, -.144, .125], s.p.skin);
-  // Raised temple ribs, cheek hinges, and punched ventilation on the jaw guards.
+  for(let row=0;row<faceRows.length-1;row++)for(let i=0;i<sides;i++){const a=row*(sides+1)+i,b=a+sides+1;faceIndex.push(a,a+1,b,b,a+1,b+1);}
+  const face=new THREE.BufferGeometry();face.setAttribute('position',new THREE.Float32BufferAttribute(facePosition,3));face.setAttribute('uv',new THREE.Float32BufferAttribute(faceUv,2));face.setIndex(faceIndex);face.computeVertexNormals();s.add(face,p.skin);
   for(const side of [-1,1]){
-    block([.018,.15,.024],[side*.113,.149,.126],s.p.gold);
-    block([.055,.035,.023],[side*.151,-.003,.103],s.p.gold);
-    for(let vent=0;vent<3;vent++)block([.02,.008,.013],[side*.165,-.061-vent*.026,.092],s.p.dark);
+    oval([.017,.0055,.004],[side*.042,-.039,.091],p.dark);
+    oval([.005,.005,.004],[side*.042,-.039,.094],p.dark);
+    s.curve([point(side*.061,-.023,.087),point(side*.044,-.017,.097),point(side*.025,-.021,.103)],.0035*scale,p.dark,4);
+    oval([.012,.025,.014],[side*.094,-.062,.007],p.skin);
   }
-  // Pixel-built helmet shell: no spheres or smoothly rounded head primitives.
-  block([.34, .077, .27], [0, .113, 0], s.p.armor);
-  block([.28, .052, .22], [0, .177, -.012], s.p.armor);
-  block([.21, .026, .17], [0, .216, -.015], s.p.armor);
-  block([.35, .023, .028], [0, .086, .145], s.p.gold);
-  block([.035, .12, .045], [0, .173, .119], s.p.gold);
-  for (const side of [-1, 1]) {
-    block([.05, .19, .17], [side * .16, -.022, -.033], s.p.armor);
-    block([.047, .036, .15], [side * .163, -.131, -.015], s.p.gold);
-    block([.06, .04, .034], [side * .152, .057, .139], s.p.gold);
+  s.curve([point(-.023,-.128,.081),point(0,-.125,.086),point(.023,-.128,.081)],.0025*scale,p.dark,5);
+  // Spun shell, reinforced brow and hinged cheek pieces: visible continuous curves.
+  const dome=new THREE.SphereGeometry(1,14,8,0,Math.PI*2,0,Math.PI*.53);
+  s.add(dome,p.armor,point(0,.035,-.008),ZERO,[.12*scale,.15*scale,.114*scale]);
+  s.add(new THREE.TorusGeometry(.113,.01,5,18),p.gold,point(0,.024,-.008),[Math.PI/2,0,0],[1,1,1.04]);
+  s.curve([point(-.114,.03,.025),point(-.088,.052,.09),point(0,.058,.113),point(.088,.052,.09),point(.114,.03,.025)],.013*scale,p.gold,12);
+  for(const side of [-1,1]){
+    s.plate([[-.033,.038],[.033,.027],[.038,-.065],[.012,-.125],[-.022,-.101]],.018*scale,point(side*.105,-.045,.023),p.armor,[0,side*1.1,side*.08],.005);
+    oval([.015,.015,.013],[side*.115,.002,.03],p.gold);
+    for(let rivet=0;rivet<3;rivet++)oval([.004,.004,.004],[side*.106,-.032-rivet*.026,.061],p.gold);
   }
-  if (type === 'p' || type === 'n' || type === 'r') {
-    for (let i = 0; i < 8; i++) {
-      const dz = (i - 3.5) * .041;
-      const rise = Math.round((.075 + Math.sin(i / 7 * Math.PI) * .07) / .023) * .023;
-      block([type==='n'?.082:.057, rise, .043], [0, .213 + rise / 2, dz - .016], s.p.cloth);
-      if(i%2===0)block([.025,rise*.7,.044],[.019,.245+rise/2,dz-.016],s.p.dark);
-      block([.065, .02, .045], [0, .216, dz - .016], s.p.gold);
+  s.plate([[-.088,.018],[.088,.018],[.096,-.057],[0,-.081],[-.096,-.057]],.017,point(0,-.025,-.105),p.armor,[.25,0,0],.006);
+  if(type==='p'||type==='n'||type==='r'){
+    const crestScale=type==='n'?1.13:type==='r'?.82:1;
+    const shape=new THREE.Shape();shape.moveTo(-.16,.16);shape.bezierCurveTo(-.17,.29,-.08,.36,.035,.35);shape.bezierCurveTo(.14,.34,.18,.24,.17,.15);shape.lineTo(.11,.15);shape.quadraticCurveTo(0,.245,-.105,.155);shape.closePath();
+    const crest=new THREE.ExtrudeGeometry(shape,{depth:.025,bevelEnabled:true,bevelThickness:.003,bevelSize:.002,bevelSegments:1,steps:1,curveSegments:7});crest.translate(0,0,-.0125);crest.rotateY(Math.PI/2);
+    s.add(crest,p.cloth,point(0,0,-.002),ZERO,[scale,scale*crestScale,scale]);
+    for(let plume=0;plume<7;plume++){
+      const z0=(plume-3)*.037,high=.31+Math.cos((plume-3)*.36)*.035;
+      s.curve([point(.015,.18,z0),point(.017,(high+.18)*.5,z0*1.06),point(.016,high*crestScale,z0*1.08)],.0024*scale,p.dark,5);
+    }
+    s.curve([point(0,.18,-.14),point(0,.195,0),point(0,.18,.14)],.013*scale,p.gold,10);
+  }
+  if(type==='k'||type==='q'){
+    s.cone(.126*scale,.124*scale,.047*scale,point(0,.095,-.004),p.gold,16);
+    s.cone(.119*scale,.122*scale,.038*scale,point(0,.096,-.004),p.dark,16);
+    s.ring(.126*scale,.006*scale,point(0,.07,-.004),p.gold,[Math.PI/2,0,0]);
+    s.ring(.127*scale,.006*scale,point(0,.118,-.004),p.gold,[Math.PI/2,0,0]);
+    const count=type==='q'?7:5;
+    for(let i=0;i<count;i++){
+      const angle=(i/count)*Math.PI*2,xx=Math.sin(angle)*.124,zz=Math.cos(angle)*.124-.004;
+      s.plate([[-.035,0],[-.025,.035],[0,type==='q'?.12:.078],[.025,.035],[.035,0]],.012,point(xx,.118,zz),p.gold,[0,angle,0],.002);
+      oval([.01,.015,.009],[xx,.108,zz+.009],p.cloth);
+    }
+    if(type==='k'){
+      s.curve([point(-.118,.105,0),point(-.07,.217,0),point(0,.249,0),point(.07,.217,0),point(.118,.105,0)],.011*scale,p.gold,12);
+      line([0,.24,0],[0,.314,0],.011,p.gold);line([-.035,.287,0],[.035,.287,0],.009,p.gold);
+      // A swept beard follows the jaw rather than three square tiers.
+      oval([.067,.058,.027],[0,-.171,.075],p.dark);
+      for(let strand=-2;strand<=2;strand++)s.curve([point(strand*.021,-.14,.096),point(strand*.019,-.179,.10),point(strand*.012,-.216,.066)],.007*scale,p.dark,5);
+    }else{
+      for(const side of [-1,1])for(let lock=0;lock<3;lock++)s.curve([point(side*(.092+lock*.013),.02,-.031),point(side*(.12+lock*.012),-.09,-.065),point(side*(.108+lock*.014),-.23,-.06),point(side*(.13+lock*.012),-.29,-.098)],.018*scale,p.dark,9);
+      for(const side of [-1,1])oval([.011,.023,.009],[side*.107,-.1,.052],p.gold);
     }
   }
-  if (type === 'k' || type === 'q') {
-    block([.372, .054, .286], [0, .15, 0], s.p.gold);
-    block([.275, .038, .2], [0, .169, 0], s.p.armor);
-    for (const side of [-1, 1]) {
-      block([.04, .115, .045], [side * .16, .224, .124], s.p.gold);
-      block([.044, .086, .04], [side * .16, .21, -.124], s.p.gold);
+  if(type==='b'){
+    // Two tapering embossed mitre panels leave the traditional cleft visible.
+    for(const front of [-1,1]){
+      s.plate([[-.114,0],[-.097,.117],[0,.29],[.097,.117],[.114,0]],.026,point(0,.06,front*.064),p.armor,[front*-.10,0,0],.008);
+      s.plate([[-.009,0],[-.009,.171],[0,.211],[.009,.171],[.009,0]],.007,point(0,.08,front*.083),p.gold,[front*-.10,0,0],.001);
     }
-    block([.056, .13, .044], [0, .242, .124], s.p.gold);
-    block([.028, .036, .01], [0, .217, .153], s.p.cloth);
-    if (type === 'k') {
-      block([.05,.125,.042],[0,.352,.012],s.p.gold);
-      block([.145,.035,.04],[0,.371,.012],s.p.gold);
-      block([.028,.036,.021],[0,.308,.155],s.p.cloth);
-      // Three stepped beard tiers distinguish the broad commander.
-      block([.21, .062, .052], [0, -.15, .114], s.p.dark);
-      block([.146, .05, .04], [0, -.199, .119], s.p.dark);
-      block([.081, .035, .031], [0, -.236, .119], s.p.dark);
-    } else {
-      for(const side of [-1,1]){
-        block([.032,.155,.035],[side*.115,.279,.016],s.p.gold);
-        block([.053,.053,.038],[side*.115,.352,.016],s.p.steel);
-      }
-      // Individually stacked long hair locks, offset to create a sculpted block fall.
-      for (const side of [-1, 1]) for (let i = 0; i < 7; i++) {
-        block([.053 + i % 2 * .015, .063, .11], [side * (.163 + Math.floor(i / 3) * .016), .073 - i * .055, -.006 - i % 2 * .027], s.p.dark);
-        block([.043, .035, .085], [side * (.191 + Math.floor(i / 3) * .013), .055 - i * .055, -.02], s.p.gold);
-      }
-    }
-  }
-  if (type === 'b') {
-    for (let i = 0; i < 6; i++) {
-      block([.3 - i * .038, .046, .18 - i * .018], [0, .15 + i * .041, -.006], s.p.armor);
-      block([.025, .046, .021], [0, .15 + i * .041, .094 - i * .009], s.p.gold);
-    }
-    // The bishop's diagonal cleft is a visible dark inset, not an undifferentiated crown.
-    for(let cut=0;cut<5;cut++)block([.033,.035,.024],[-.061+cut*.024,.302+cut*.025,.079-cut*.008],s.p.dark);
-    block([.134, .025, .022], [0, .222, .092], s.p.gold);
-    for(const side of [-1,1])block([.065,.21,.021],[side*.071,-.06,-.147],s.p.cloth);
+    for(const side of [-1,1])s.plate([[-.026,0],[.026,0],[.035,-.24],[0,-.27],[-.029,-.24]],.007,point(side*.051,-.004,-.12),p.cloth,[.1,0,side*.07],.001);
   }
 }
 
@@ -282,38 +229,47 @@ function sword(s: Sculpt, at: V3, length: number, broad = false) {
   s.plate([[-.009, 0], [0, length * .92], [.009, 0]], .008, [x, y + .095, z + .022], s.p.gold, ZERO, .001);
 }
 
-function shield(s: Sculpt, at: V3, scale = 1, infantry = false) {
-  const form=infantry?[[-.18,.32],[.18,.32],[.22,.23],[.22,-.27],[.16,-.35],[-.16,-.35],[-.22,-.27],[-.22,.23]]:shieldShape;
-  const points = form.map(([x, y]) => [x * scale, y * scale]);
-  s.plate(points, .038, at, s.p.gold, [0, -.13, 0], .015);
-  s.plate(points.map(([x, y]) => [x * .88, y * .89]), .025, [at[0], at[1], at[2] + .027], s.p.armor, [0, -.13, 0]);
-  s.box([.027, .34 * scale, .025], [at[0], at[1] - .01, at[2] + .05], s.p.gold);
-  emblem(s, [at[0], at[1] + .025, at[2] + .07], .72 * scale);
-  if(infantry){
-    for(const side of [-1,1])for(const row of [-1,1]){
-      s.plate([[0,0],[side*.08,row*.08],[side*.035,row*.08],[side*.10,row*.20]],.014,[at[0]+side*.045,at[1]+row*.045,at[2]+.056],s.p.cloth);
+function shield(s:Sculpt,at:V3,scale=1,infantry=false){
+  const h=infantry?.35:.30,w=infantry?.20:.19;
+  const surface=(inset:number,offset:number,material:THREE.Material)=>{
+    const rows=6,columns=8,positions:number[]=[],uvs:number[]=[],indices:number[]=[];
+    for(let iy=0;iy<=rows;iy++)for(let ix=0;ix<=columns;ix++){
+      const t=iy/rows,u=ix/columns,yy=(t*2-1)*h*inset;
+      const taper=infantry?(.83+.17*Math.sin(Math.PI*t)):(.12+.88*Math.sin(t*Math.PI*.68));
+      const xx=(u*2-1)*w*taper*inset;
+      positions.push(at[0]+xx*scale,at[1]+yy*scale,at[2]+offset+Math.cos((u-.5)*1.35)*.068);
+      uvs.push(u,t);
     }
-    s.box([.10,.10,.037],[at[0],at[1],at[2]+.079],s.p.gold);
-    s.box([.045,.05,.023],[at[0],at[1],at[2]+.108],s.p.steel);
-  }
-  for (const side of [-1, 1]) for (const y of [-.02, .135]) s.ellipsoid([.01, .01, .01], [at[0] + side * .12 * scale, at[1] + y * scale, at[2] + .063], s.p.gold, ZERO, 6);
+    for(let y=0;y<rows;y++)for(let x=0;x<columns;x++){const a=y*(columns+1)+x,b=a+columns+1;if(material===s.p.dark)indices.push(a,b,a+1,a+1,b,b+1);else indices.push(a,a+1,b,a+1,b+1,b);}
+    const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uvs,2));g.setIndex(indices);g.computeVertexNormals();s.add(g,material);
+    return (side:number):V3[]=>Array.from({length:11},(_,i)=>{const t=i/10,taper=infantry?(.83+.17*Math.sin(Math.PI*t)):(.12+.88*Math.sin(t*Math.PI*.68));return[at[0]+side*w*taper*inset*scale,at[1]+(t*2-1)*h*inset*scale,at[2]+offset+Math.cos(.675)*.068] as V3;});
+  };
+  surface(1,0,s.p.dark);const border=surface(.99,.01,s.p.gold);surface(.91,.016,s.p.armor);
+  for(const side of [-1,1])s.curve(border(side),.008,s.p.gold,10);
+  // Continuous rear leather straps fasten the shield to the wrist.
+  for(const yy of [-.065,.065])s.curve([[at[0]-.073,at[1]+yy,at[2]+.01],[at[0],at[1]+yy,at[2]-.024],[at[0]+.073,at[1]+yy,at[2]+.01]],.008,s.p.dark,6);
+  s.ellipsoid([.042,.052,.025],[at[0],at[1],at[2]+.095],s.p.gold);
+  if(infantry){for(const side of [-1,1])for(const row of [-1,1])s.plate([[0,0],[side*.071,row*.065],[side*.035,row*.075],[side*.082,row*.203]],.009,[at[0]+side*.034,at[1]+row*.042,at[2]+.084],s.p.cloth,ZERO,.001);}
+  else emblem(s,[at[0],at[1]+.055,at[2]+.094],.66);
+  for(const side of [-1,1])for(const yy of [-.20,-.06,.10,.23])s.ellipsoid([.006,.006,.004],[at[0]+side*w*.85*scale,at[1]+yy*scale,at[2]+.069],s.p.gold);
 }
 
-function cape(parent: THREE.Group, p: Palette, top: number, length: number, wide = .25) {
-  const g = joint(parent, 'cape', [0, top, -.13]);
-  const s = new Sculpt(g, p);
-  const rows = Math.ceil(length / .066);
-  for (let row = 0; row < rows; row++) {
-    const t = row / rows, halfWidth = wide * (.6 + Math.floor(t * 4) * .13);
-    const columns = Math.ceil(halfWidth * 2 / .063), cell = halfWidth * 2 / columns;
-    for (let column = 0; column < columns; column++) {
-      const x = -halfWidth + (column + .5) * cell;
-      const z = -Math.floor(t * 5) * .026 + (column % 3 === 1 ? .025 : 0);
-      s.box([cell, length / rows + .004, .035], [x, -(row + .5) * length / rows, z], p.cloth);
-      if (column === 0 || column === columns - 1 || row === rows - 1) s.box([column === 0 || column === columns - 1 ? .019 : cell, row === rows - 1 ? .026 : length / rows, .009], [x, -(row + .5) * length / rows, z - .023], p.gold);
-    }
-  }
-  s.finish(); return g;
+function cape(parent:THREE.Group,p:Palette,top:number,length:number,wide=.25){
+  const g=joint(parent,'cape',[0,top,-.13]),s=new Sculpt(g,p);
+  const columns=16,rows=7,positions:number[]=[],uvs:number[]=[],indices:number[]=[];
+  const shape=(u:number,t:number):V3=>{
+    const spread=wide*(.65+.53*t),x=(u*2-1)*spread;
+    return[x,-length*t,-.025-t*.15+Math.sin(u*Math.PI*10)*(.014+t*.017)+Math.cos(u*Math.PI*2)*t*.025];
+  };
+  for(let row=0;row<=rows;row++)for(let col=0;col<=columns;col++){const u=col/columns,t=row/rows;positions.push(...shape(u,t));uvs.push(u,t);}
+  for(let row=0;row<rows;row++)for(let col=0;col<columns;col++){const a=row*(columns+1)+col,b=a+columns+1;indices.push(a,a+1,b,a+1,b+1,b);}
+  const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geometry.setAttribute('uv',new THREE.Float32BufferAttribute(uvs,2));geometry.setIndex(indices);geometry.computeVertexNormals();s.add(geometry,p.cloth);
+
+  for(const u of [0,1])s.curve(Array.from({length:7},(_,i)=>shape(u,i/6)),.006,p.gold,10);
+  s.curve(Array.from({length:15},(_,i)=>shape(i/14,1)),.006,p.gold,18);
+  // Brooches attach the draped cloth to the cuirass at its actual shoulders.
+  for(const side of [-1,1])s.ellipsoid([.026,.025,.012],[side*wide*.57,-.013,.007],p.gold);
+  s.finish();return g;
 }
 
 function soldier(parent: THREE.Group, type: string, p: Palette, at: V3 = ZERO, size = 1, mounted = false) {
@@ -322,11 +278,14 @@ function soldier(parent: THREE.Group, type: string, p: Palette, at: V3 = ZERO, s
   const body = joint(torso, 'body', [0, -.67, 0]); const s = new Sculpt(body, p);
   const royal = type === 'k' || type === 'q';
   // Breastplate, segmented abdominal armor, riveted belt and hanging leather pteruges.
-  s.ellipsoid([.2, .24, .135], [0, .86, 0], p.dark);
-  s.plate(chestShape, .115, [0, .9, .055], p.armor, ZERO, .025);
-  s.plate(chestShape.map(([x, y]) => [x * .82, y * .82]), .045, [0, .912, .131], p.gold, ZERO, .012);
-  s.ellipsoid([.145, .12, .042], [0, .96, .17], p.armor);
-  emblem(s, [0, .945, .22], .85);
+  s.shell([[-.24,.142,.081],[-.16,.16,.10],[-.03,.19,.132],[.12,.19,.124],[.2,.121,.077]],[0,.887,0],p.armor,14);
+  s.shell([[-.16,.145,.09],[-.04,.156,.103],[.09,.139,.086]],[0,.691,0],p.dark,10);
+  for(const side of [-1,1]){
+    s.ellipsoid([.089,.063,.028],[side*.091,.977,.115],p.armor,[0,side*-.17,side*.07],10);
+    s.curve([[side*.171,1.012,.066],[side*.114,1.069,.099],[side*.051,1.084,.080]],.008,p.gold,8);
+    s.curve([[side*.028,.789,.11],[side*.075,.85,.126],[side*.139,.899,.107]],.0045,p.gold,7);
+  }
+  emblem(s,[0,.944,.15],.64);
   for (let i = 0; i < 3; i++) s.box([.28 - i * .015, .058, .18], [0, .77 - i * .047, .015], i === 2 ? p.gold : p.armor, ZERO, .016);
   s.box([.068, .075, .024], [0, .68, .122], p.gold);
   for (let i = 0; i < 7; i++) {
@@ -347,7 +306,7 @@ function soldier(parent: THREE.Group, type: string, p: Palette, at: V3 = ZERO, s
   hs.finish();
   if (royal) {
     for (const side of [-1, 1]) {
-      s.plate(wingShape.map(([x, y]) => [x * side, y * .68]), .055, [side * .22, 1.062, -.015], p.gold, [0, side * -.1, side * -.15]);
+      s.plate(wingShape.map(([x, y]) => [x * side * .8, y * .49]), .055, [side * .22, 1.062, -.015], p.gold, [0, side * -.1, side * -.15]);
       for (let i = 0; i < 4; i++) s.ellipsoid([.033, .04, .032], [side * (.12 + i * .031), 1.116 - i * .008, -.078], p.armor, ZERO, 8);
     }
     s.curve([[-.13, 1.09, .09], [0, .99, .218], [.13, 1.09, .09]], .012, p.gold);
@@ -365,10 +324,12 @@ function soldier(parent: THREE.Group, type: string, p: Palette, at: V3 = ZERO, s
     const leg = joint(figure, side < 0 ? 'leg-left' : 'leg-right', [side * .092, .59, 0]);
     const l = new Sculpt(leg, p);
     l.cone(.071, .063, .215, [0, -.11, 0], p.dark);
-    l.ellipsoid([.083, .077, .061], [0, -.231, .024], p.gold);
+    l.ellipsoid([.067,.058,.041],[0,-.231,.036],p.armor);
+    l.curve([[-.061,-.225,.049],[0,-.18,.065],[.061,-.225,.049]],.005,p.gold,7);
     l.plate([[-.06, .115], [0, .14], [.06, .115], [.04, -.125], [-.04, -.125]], .058, [0, -.347, .016], p.armor, ZERO, .012);
     l.rod([0, -.245, .065], [0, -.439, .06], .013, p.gold);
-    l.box([.14, .078, .225], [0, -.49, .038], p.dark, ZERO, .022);
+    l.ellipsoid([.068,.043,.112],[0,-.492,.047],p.dark,ZERO,10);
+    l.box([.131,.023,.211],[0,-.517,.046],p.dark,ZERO,.005);
     l.box([.135, .037, .15], [0, -.467, .085], p.armor, [-.09, 0, 0], .015);
     for(let tier=0;tier<3;tier++)l.box([.128-tier*.011,.018,.042],[0,-.448-tier*.015,.056+tier*.055],p.gold);
     l.finish();
@@ -387,18 +348,23 @@ function soldier(parent: THREE.Group, type: string, p: Palette, at: V3 = ZERO, s
     upper.finish();
     const elbow = joint(arm, side < 0 ? 'weapon-elbow' : 'shield-elbow', [side * .025, -.222, .025]);
     const forearm = new Sculpt(elbow, p);
-    forearm.ellipsoid([.068, .069, .07], ZERO, p.gold);
+    forearm.ellipsoid([.049,.048,.048],ZERO,p.dark);
+    forearm.ellipsoid([.032,.036,.011],[0,0,-.047],p.armor);
     forearm.box([.115, .17, .115], [side * .004, -.082, .032], p.armor, [-.32, 0, 0], .026);
     forearm.box([.118, .026, .122], [side * .004, -.038, .01], p.gold, [-.32, 0, 0]);
     forearm.finish();
     const wrist = joint(elbow, side < 0 ? 'weapon-wrist' : 'shield-wrist', [side * .004, -.156, .084]);
     const hand = new Sculpt(wrist, p);
-    // A closed voxel gauntlet wraps the actual hilt. Hand and weapon share the
-    // wrist transform; no animation can detach the grip from the fingers.
-    hand.box([.078, .09, .032], [0, 0, -.027], p.dark);
-    hand.box([.083, .029, .053], [0, .042, -.013], p.armor);
-    for (let finger = 0; finger < 3; finger++) hand.box([.077, .021, .028], [0, -.027 + finger * .025, .025], p.armor);
-    hand.box([.024, .051, .058], [side * -.041, .012, .002], p.gold);
+    // Articulated leather palm and four curled metal finger segments encircle
+    // the hilt. The wrist is shared with the weapon; the grip cannot slide.
+    hand.ellipsoid([.039,.049,.026],[0,0,-.02],p.dark);
+    hand.plate([[-.035,-.025],[-.036,.032],[0,.05],[.036,.03],[.032,-.032]],.015,[0,.002,-.039],p.armor,[.07,0,0],.004);
+    for(let finger=0;finger<4;finger++){
+      const yy=-.03+finger*.020;
+      hand.rod([-.033,yy,.012],[.025,yy,.022],.010,p.armor,.009,6);
+      hand.ellipsoid([.011,.012,.014],[.032,yy,.009],p.gold);
+    }
+    hand.rod([side*-.031,.022,-.013],[side*-.039,-.007,.021],.015,p.dark,.011,6);
     hand.finish();
     if (side < 0) {
       const held = joint(wrist, 'held-weapon', ZERO);
@@ -438,22 +404,26 @@ function soldier(parent: THREE.Group, type: string, p: Palette, at: V3 = ZERO, s
 function warhorse(parent: THREE.Group, p: Palette) {
   const horse = joint(parent, 'horse', ZERO); const s = new Sculpt(horse, p);
   s.ellipsoid([.215, .235, .35], [0, .585, -.045], p.horse);
-  s.ellipsoid([.2, .24, .21], [0, .615, .18], p.horse, [.12, 0, 0]);
-  s.ellipsoid([.135, .29, .15], [0, .87, .25], p.horse, [.34, 0, 0]);
-  s.ellipsoid([.117, .14, .205], [0, 1.08, .345], p.horse, [-.39, 0, 0]);
-  s.ellipsoid([.108, .085, .116], [0, 1.02, .5], p.horse);
+  s.shell([[.43,.135,.11,.115],[.58,.16,.16,.15],[.75,.121,.132,.225],[.94,.079,.096,.283],[1.10,.063,.074,.302]],[0,0,0],p.horse,12);
+  // Equine skull along its long nasal axis; narrowing cheek to nasal bridge to muzzle.
+  const horseHeadPositions:number[]=[],horseHeadIndices:number[]=[],horseHeadUvs:number[]=[];
+  const headRows=[[.231,.05,.092,1.095],[.286,.091,.111,1.101],[.348,.086,.096,1.082],[.438,.062,.061,1.04],[.534,.065,.052,.996],[.574,.061,.043,.991]];
+  for(let row=0;row<headRows.length;row++){const [zz,rx,ry,cy]=headRows[row];for(let i=0;i<=12;i++){const a=i/12*Math.PI*2;horseHeadPositions.push(Math.sin(a)*rx,Math.cos(a)*ry+cy,zz);horseHeadUvs.push(i/12,row/(headRows.length-1));}}
+  for(let row=0;row<headRows.length-1;row++)for(let i=0;i<12;i++){const a=row*13+i,b=a+13;horseHeadIndices.push(a,b,a+1,a+1,b,b+1);}
+  const skull=new THREE.BufferGeometry();skull.setAttribute('position',new THREE.Float32BufferAttribute(horseHeadPositions,3));skull.setAttribute('uv',new THREE.Float32BufferAttribute(horseHeadUvs,2));skull.setIndex(horseHeadIndices);skull.computeVertexNormals();s.add(skull,p.horse);
+  s.ellipsoid([.059,.039,.013],[0,.991,.577],p.horse);
   for (const side of [-1, 1]) {
-    s.cone(.009, .048, .14, [side * .077, 1.218, .307], p.horse, 5, [-.3, 0, side * -.18]);
-    s.ellipsoid([.014, .012, .013], [side * .109, 1.106, .396], p.dark, ZERO, 8);
+    s.cone(.002,.025,.112,[side*.062,1.235,.273],p.horse,6,[-.3,0,side*-.17]);
+    s.ellipsoid([.007,.008,.012],[side*.088,1.12,.327],p.dark,ZERO,8);
     // Layered lamellar barding with bright scalloped edges.
     for (let i = 0; i < 4; i++) {
       s.plate([[-.075, .095], [.073, .095], [.069, -.09], [0, -.126], [-.07, -.09]], .028, [side * .205, .67, .18 - i * .137], i % 2 ? p.armor : p.gold, [0, side * Math.PI / 2, 0]);
     }
     s.curve([[side * .107, 1.095, .49], [side * .17, .95, .19], [side * .19, .97, -.035]], .009, p.dark, 10);
-    s.box([.033, .025, .26], [side * .107, 1.115, .37], p.gold, [-.4, 0, 0], .005);
+    s.curve([[side*.084,1.138,.317],[side*.073,1.081,.412],[side*.059,1.032,.523]],.006,p.gold,7);
   }
   for(const side of [-1,1]){
-    s.box([.03,.026,.031],[side*.077,1.04,.602],p.dark);
+    s.ellipsoid([.006,.012,.018],[side*.059,.995,.548],p.dark,[0,side*.15,0],6);
     s.box([.018,.075,.075],[side*.122,1.13,.35],p.gold,[0,0,side*.2]);
     for(let stitch=0;stitch<6;stitch++)s.box([.019,.025,.023],[side*.231,.43,-.32+stitch*.097],p.gold);
     for(let tier=0;tier<3;tier++){
@@ -462,9 +432,17 @@ function warhorse(parent: THREE.Group, p: Palette) {
     }
     s.curve([[side*.19,.84,-.045],[side*.26,.61,-.1],[side*.27,.51,-.04]],.013,p.gold,7);
   }
-  s.box([.24, .032, .035], [0, 1.044, .495], p.gold, [-.4, 0, 0]);
-  s.plate([[-.088, -.06], [0, .18], [.088, -.06], [0, -.17]], .028, [0, 1.124, .409], p.armor, [-.5, 0, 0]);
-  for (let i = 0; i < 9; i++) s.plate([[-.05, 0], [0, .08], [.05, 0]], .05, [0, 1.07 - i * .038, .22 - i * .013], p.cloth, [0, Math.PI / 2, 0]);
+  s.curve([[-.061,1.01,.535],[-.043,1.043,.537],[0,1.05,.536],[.043,1.043,.537],[.061,1.01,.535]],.008,p.gold,9);
+  s.plate([[-.044,-.04],[0,.10],[.044,-.04],[0,-.12]],.012,[0,1.155,.344],p.armor,[-.55,0,0],.004);
+  // A swept mane follows the muscular neck; no stacked triangular toy mane.
+  for(let lock=0;lock<9;lock++){
+    const yy=1.15-lock*.046,zz=.236-lock*.014;
+    s.curve([[0,yy,zz],[.013,yy-.018,zz-.06],[.016,yy-.09,zz-.065]],.018,p.dark,6);
+  }
+  for(const side of [-1,1]){
+    s.curve([[side*.19,.76,.24],[side*.219,.59,.16],[side*.19,.45,.07]],.018,p.dark,9);
+    s.curve([[side*.21,.62,-.27],[side*.18,.55,-.02],[side*.19,.56,.21]],.009,p.gold,10);
+  }
   s.box([.29, .065, .22], [0, .816, -.08], p.dark, ZERO, .02);
   s.box([.34, .1, .075], [0, .863, .015], p.gold, ZERO, .018);
   s.curve([[0, .65, -.35], [.025, .48, -.45], [.015, .22, -.44]], .055, p.dark);
@@ -474,10 +452,14 @@ function warhorse(parent: THREE.Group, p: Palette) {
     const l = new Sculpt(g, p);
     l.rod([0, 0, 0], [0, -.25, front > 0 ? -.028 : .044], .065, p.horse, .045);
     l.ellipsoid([.056, .061, .059], [0, -.257, front > 0 ? -.028 : .044], p.gold);
-    l.rod([0, -.27, front > 0 ? -.028 : .044], [0, -.46, .025], .03, p.horse, .034);
-    l.box([.102, .068, .145], [0, -.495, .045], p.dark, ZERO, .02);
-    l.box([.075, .09, .055], [0, -.31, .038], p.armor);
     l.finish();
+    const knee=joint(g,`horse-knee-${side}-${front}`,[0,-.25,front>0?-.028:.044]),shin=new Sculpt(knee,p);
+    shin.rod([0,-.015,0],[0,-.19,front>0?.035:-.02],.029,p.horse,.022,8);
+    shin.ellipsoid([.031,.04,.035],[0,-.19,.02],p.horse);
+    shin.box([.095,.064,.123],[0,-.231,.041],p.dark,ZERO,.017);
+    shin.box([.098,.012,.125],[0,-.258,.041],p.steel,ZERO,.005);
+    shin.plate([[-.023,.06],[.029,.062],[.024,-.05],[-.025,-.046]],.013,[0,-.1,.024],p.armor,ZERO,.003);
+    shin.finish();
   }
   const rider = soldier(horse, 'n', p, [0, .42, -.105], .73, true);
   rider.name = 'rider';
@@ -504,13 +486,13 @@ function chariot(parent: THREE.Group, p: Palette) {
   // Heavy frontal battering head and corner rivets read in the charge close-up.
   s.box([.61,.10,.085],[0,.33,.416],p.dark);
   s.box([.39,.075,.07],[0,.34,.481],p.gold);
-  s.box([.18,.11,.10],[0,.35,.54],p.steel);
+  s.plate([[-.135,-.057],[-.095,.027],[0,.086],[.095,.027],[.135,-.057]],.055,[0,.353,.545],p.steel,[.13,0,0],.009);
+  s.ellipsoid([.063,.045,.044],[0,.372,.584],p.gold);
   for(const side of [-1,1]){
     s.box([.067,.20,.074],[side*.3,.45,.4],p.gold);
     for(let bolt=0;bolt<3;bolt++)s.box([.027,.027,.02],[side*.3,.397+bolt*.055,.446],p.steel);
-    for(let arc=0;arc<7;arc++){const a=(arc/6)*Math.PI;
-      s.box([.12,.055,.09],[side*.434,.28+Math.sin(a)*.278,-.08+Math.cos(a)*.278],p.armor);
-    }
+    s.curve(Array.from({length:9},(_,i)=>{const a=i/8*Math.PI;return[side*.434,.28+Math.sin(a)*.283,-.08+Math.cos(a)*.283] as V3;}),.037,p.armor,14);
+    s.curve([[side*.3,.40,.41],[side*.35,.52,.40],[side*.30,.65,.40],[side*.20,.68,.40],[side*.18,.62,.40]],.018,p.gold,12);
   }
   // Driver and tall command standard make the rook unmistakable from above.
   const driver = joint(vehicle, 'figure', ZERO);
@@ -539,7 +521,8 @@ function chariot(parent: THREE.Group, p: Palette) {
   s.finish();
   for (const side of [-1, 1]) {
     const wheel = joint(vehicle, `wheel-${side}`, [side * .437, .28, -.08]); const w = new Sculpt(wheel, p);
-    w.ring(.24, .032, ZERO, p.dark, [0, Math.PI / 2, 0]);
+    w.ring(.24,.027,ZERO,p.horse,[0,Math.PI/2,0]);
+    w.ring(.257,.013,ZERO,p.dark,[0,Math.PI/2,0]);
     w.ring(.237, .018, [side * .04, 0, 0], p.gold, [0, Math.PI / 2, 0]);
     for (let i = 0; i < 10; i++) {
       const a = i / 10 * Math.PI * 2;
@@ -574,13 +557,13 @@ export function createPiece(type: string, color: Faction): THREE.Group {
     if (type === 'r') { const vehicle = chariot(rig, p); vehicle.scale.setScalar(.98); vehicle.position.y = .006; }
     else if (type === 'n') warhorse(rig, p).scale.setScalar(.95);
     else soldier(rig, type, p, [0, 0, 0], type === 'p' ? .9 : type === 'k' ? 1.04 : type === 'q' ? 1.015 : 1);
-    // All archetypes have a tiny shared oval footplate, helping clicks and grounding.
+    // All archetypes have a tiny shared sculptural footplate, helping clicks and grounding.
     const base = new Sculpt(rig, p);
     base.cone(.43, .45, .048, [0, .026, 0], p.dark, 32);
     base.cone(.435, .435, .013, [0, .049, 0], p.gold, 32);
     base.finish();
     const rest = bakeRest(rig, p); root.add(rest, rig); rig.visible = false;
-    root.userData.height = type === 'n' ? 1.82 : type === 'r' ? 1.56 : type === 'p' ? 1.46 : type === 'b' ? 1.65 : 1.7;
+    root.userData.height = type === 'n' ? 1.84 : type === 'r' ? 1.57 : type === 'p' ? 1.46 : type === 'b' ? 1.64 : type === 'q' ? 1.55 : 1.67;
     prototypes.set(key, root);
   }
   const root = prototypes.get(key)!.clone(true);
@@ -593,7 +576,7 @@ interface RigState {
   left?: THREE.Object3D; right?: THREE.Object3D; weapon?: THREE.Object3D; shield?: THREE.Object3D; head?: THREE.Object3D;
   torso?: THREE.Object3D; elbow?: THREE.Object3D; wrist?: THREE.Object3D; shieldElbow?: THREE.Object3D; shieldWrist?: THREE.Object3D;
   defaults: { object: THREE.Object3D; position: THREE.Vector3; rotation: THREE.Euler }[];
-  horse?: THREE.Object3D; horseLegs: THREE.Object3D[]; chariot?: THREE.Object3D; wheels: THREE.Object3D[];
+  horse?: THREE.Object3D; horseLegs: THREE.Object3D[]; horseKnees: THREE.Object3D[]; chariot?: THREE.Object3D; wheels: THREE.Object3D[];
 }
 const stateCache = new WeakMap<THREE.Group, RigState>();
 
@@ -715,6 +698,7 @@ export function animatePiece(root: THREE.Group, mode: Mode, progress: number, ti
       shieldElbow: rig.getObjectByName('shield-elbow'), shieldWrist: rig.getObjectByName('shield-wrist'),
       horse: rig.getObjectByName('horse'), chariot: rig.getObjectByName('chariot'),
       horseLegs: [-1, 1].flatMap(side => [-1, 1].map(front => rig.getObjectByName(`horse-leg-${side}-${front}`)!)).filter(Boolean),
+      horseKnees: [-1,1].flatMap(side=>[-1,1].map(front=>rig.getObjectByName(`horse-knee-${side}-${front}`)!)).filter(Boolean),
       wheels: [-1, 1].map(side => rig.getObjectByName(`wheel-${side}`)!).filter(Boolean),
     };
     rig.traverse(object => { if (object instanceof THREE.Group) state!.defaults.push({ object, position: object.position.clone(), rotation: object.rotation.clone() }); });
@@ -794,7 +778,7 @@ export function animatePiece(root: THREE.Group, mode: Mode, progress: number, ti
   if (state.horse) {
     state.horse.position.y = Math.abs(run) * .045 * envelope;
     state.horse.rotation.x = run * .065 * envelope;
-    state.horseLegs.forEach((leg, i) => { leg.rotation.x = Math.sin(p * Math.PI * 9 + (i === 0 || i === 3 ? 0 : Math.PI)) * .68 * envelope; });
+    state.horseLegs.forEach((leg,i)=>{const stride=Math.sin(p*Math.PI*9+(i===0||i===3?0:Math.PI));leg.rotation.x=stride*.56*envelope;if(state.horseKnees[i])state.horseKnees[i].rotation.x=-Math.max(0,-stride)*.8*envelope;});
   }
   if (state.chariot) {
     state.chariot.rotation.z = Math.sin(p * 45) * .018 * envelope;

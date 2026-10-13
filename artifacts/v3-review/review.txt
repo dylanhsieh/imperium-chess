@@ -1,0 +1,23 @@
+Independent spectator integration review — 2026-10-13
+Scope: read-only src/main.ts, src/ui.ts, src/style.css and real Chrome against production preview http://127.0.0.1:5195. Production files were not edited by this reviewer. This is a focused review, not full release certification.
+
+Fixed finding: P2 — paused orbit retained hidden cinematic bystanders.
+Source: main.ts 307–318, 342, 363–365, render-loop freeze.
+Reproduction: Start AI war movie. During the first Nc3 animation at approximately 53%, pause. Rotate upward to inspect the board. The white bishop on C1 and pawn on D2 are missing from the rendered board, although the unchanged FEN and pieces=32 show both still exist. Cinematic occlusion sets root.visible=false; pause enables OrbitControls but freezes animateAction, so the cameraCutaways set is not restored while the user freely inspects the board.
+Suggested fix: restore cameraCutaways when entering an inspectable paused state, or recalculate visibility for the user-controlled camera. On resume cinematic occlusion can be recalculated normally.
+Evidence: paused-orbit.json; paused-before-orbit.png; paused-after-orbit.png.
+Fix retest: production bundle index-UMUNpI_k.js on 5195 restores the C1 bishop and D2 pawn while paused and freely orbiting. Visual inspection of paused-after-orbit-fixed.png confirms both are visible; FEN and animation progress remain unchanged, page errors empty. Recorded in paused-orbit-fix.json.
+
+Fixed finding: P2 — committed move was not persisted until its cinematic finished.
+Original reproduction: first move UI showed Nc3 and move count=1, but reloading during animation restored 0 moves. Root moved save() directly after the legal game.move(). Retest on rebuilt 5195 passes: before/after reload both have 1 move and identical PGN `1. Nc3 *`; no page errors.
+Evidence: original findings.json; retest reload-fix.json.
+
+Successful focused checks:
+- Live action pause: FEN and animation progress stay identical after one second.
+- Take over black during first action: FEN/history unchanged, action ends, human black turn active, no AI thinking.
+- 360×640 and 568×320 layouts: pause, takeover and journal buttons all lie in viewport and are 44px tall.
+Evidence: findings.json; watch-360x640.png; watch-568x320.png.
+
+Root runs broader spectator tests separately, including long self-play, modal freeze, visibility cancellation and additional takeovers. No duplicate full suite was added here.
+
+Final focused review outcome: both concrete findings are fixed and independently reverified. No remaining reproducible blocker found in this review scope.

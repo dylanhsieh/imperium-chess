@@ -1,0 +1,202 @@
+[
+  {
+    "mobile": false,
+    "graphics": "basic",
+    "render": {
+      "mode": "basic",
+      "method": "synchronous-render-completion-cpu-and-gpu",
+      "samples": 40,
+      "medianMs": 0.5,
+      "p95Ms": 0.6000000238418579,
+      "calls": 94,
+      "triangles": 325588,
+      "geometries": 95,
+      "textures": 11,
+      "extraPostPasses": 0
+    },
+    "quality": {
+      "atmosphere": {
+        "side": "w",
+        "blend": 0,
+        "enhanced": false,
+        "mistDraws": 0,
+        "shafts": 0,
+        "localArchitecture": true
+      },
+      "graphics": "basic",
+      "dpr": 1,
+      "shadowMapSize": 2048,
+      "shadowLights": 1,
+      "postPasses": 0
+    },
+    "errors": []
+  },
+  {
+    "mobile": false,
+    "graphics": "enhanced",
+    "render": {
+      "mode": "enhanced",
+      "method": "synchronous-render-completion-cpu-and-gpu",
+      "samples": 40,
+      "medianMs": 0.40000003576278687,
+      "p95Ms": 0.699999988079071,
+      "calls": 97,
+      "triangles": 325662,
+      "geometries": 95,
+      "textures": 11,
+      "extraPostPasses": 0
+    },
+    "quality": {
+      "atmosphere": {
+        "side": "w",
+        "blend": 0,
+        "enhanced": true,
+        "mistDraws": 1,
+        "shafts": 1,
+        "localArchitecture": true
+      },
+      "graphics": "enhanced",
+      "dpr": 1,
+      "shadowMapSize": 2048,
+      "shadowLights": 1,
+      "postPasses": 0
+    },
+    "errors": []
+  },
+  {
+    "battle": {
+      "progress": 0.7776279999992579,
+      "hit": true,
+      "root": [
+        -0.5870768790698437,
+        0.16,
+        -1.1911847336847359
+      ],
+      "target": [
+        0.4986265847773357,
+        3.7393069418579454,
+        -6.158755282591119
+      ],
+      "impact": [
+        -0.71,
+        0.16,
+        -2.13
+      ],
+      "weapon": {
+        "base": [
+          -0.726268725843966,
+          0.908013718441935,
+          -1.3581727732919917
+        ],
+        "tip": [
+          -1.2599024204679719,
+          0.6091014271924273,
+          -1.2101693540683032
+        ]
+      },
+      "joints": [
+        {
+          "name": "torso",
+          "rotation": [
+            0.07468567658539128,
+            0.5078626007806607,
+            -0.07966472169108403,
+            "XYZ"
+          ]
+        },
+        {
+          "name": "weapon-arm",
+          "rotation": [
+            -0.28894451857757614,
+            0.023295036140817574,
+            0.26433655291483277,
+            "XYZ"
+          ]
+        },
+        {
+          "name": "weapon-elbow",
+          "rotation": [
+            -0.32541297165617283,
+            0.28191879558435506,
+            0.7701504768874211,
+            "XYZ"
+          ]
+        },
+        {
+          "name": "weapon-wrist",
+          "rotation": [
+            2.937235463330446,
+            -1.236828225269329,
+            -0.10360183865728624,
+            "XYZ"
+          ]
+        }
+      ]
+    },
+    "errors": []
+  },
+  {
+    "mobile": true,
+    "graphics": "basic",
+    "render": {
+      "mode": "basic",
+      "method": "synchronous-render-completion-cpu-and-gpu",
+      "samples": 40,
+      "medianMs": 0.5,
+      "p95Ms": 0.6000000238418579,
+      "calls": 92,
+      "triangles": 324868,
+      "geometries": 93,
+      "textures": 9,
+      "extraPostPasses": 0
+    },
+    "quality": {
+      "atmosphere": {
+        "side": "w",
+        "blend": 0,
+        "enhanced": false,
+        "mistDraws": 0,
+        "shafts": 0,
+        "localArchitecture": true
+      },
+      "graphics": "basic",
+      "dpr": 1,
+      "shadowMapSize": 1024,
+      "shadowLights": 1,
+      "postPasses": 0
+    },
+    "errors": []
+  },
+  {
+    "mobile": true,
+    "graphics": "enhanced",
+    "render": {
+      "mode": "enhanced",
+      "method": "synchronous-render-completion-cpu-and-gpu",
+      "samples": 40,
+      "medianMs": 0.5,
+      "p95Ms": 0.6000000238418579,
+      "calls": 95,
+      "triangles": 324942,
+      "geometries": 93,
+      "textures": 9,
+      "extraPostPasses": 0
+    },
+    "quality": {
+      "atmosphere": {
+        "side": "w",
+        "blend": 0,
+        "enhanced": true,
+        "mistDraws": 1,
+        "shafts": 1,
+        "localArchitecture": true
+      },
+      "graphics": "enhanced",
+      "dpr": 1,
+      "shadowMapSize": 1024,
+      "shadowLights": 1,
+      "postPasses": 0
+    },
+    "errors": []
+  }
+]

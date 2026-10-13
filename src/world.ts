@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {finishMaterial} from './surface-shading';
+import {finishMaterial,getSurfaceGrain,onGraphicsChange} from './surface-shading';
 import {TurnAtmosphere} from './atmosphere';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
@@ -50,6 +50,52 @@ function labelAtlas(){
   const texture=new THREE.CanvasTexture(c);texture.colorSpace=THREE.SRGBColorSpace;return texture;
 }
 
+/** Local texture paint: worn ashlar and woven military standards. No image files. */
+function ashlarTexture() {
+  const canvas=document.createElement('canvas');canvas.width=canvas.height=256;
+  const g=canvas.getContext('2d')!;g.fillStyle='#99998e';g.fillRect(0,0,256,256);
+  for(let row=0;row<8;row++)for(let col=-1;col<5;col++){
+    const x=col*64+(row%2)*32,y=row*32,v=144+Math.floor(random()*32);
+    g.fillStyle=`rgb(${v+8},${v+5},${v})`;g.fillRect(x+1,y+1,62,30);
+    g.fillStyle='rgba(242,237,216,.18)';g.fillRect(x+2,y+2,61,1);
+    g.fillStyle='rgba(31,28,22,.22)';g.fillRect(x+1,y+29,62,2);
+    for(let chip=0;chip<5;chip++){g.fillStyle=`rgba(55,47,36,${.04+random()*.12})`;g.fillRect(x+random()*61,y+random()*30,1+random()*5,1);}
+  }
+  const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;
+  texture.wrapS=texture.wrapT=THREE.RepeatWrapping;texture.repeat.set(3,2);texture.anisotropy=2;return texture;
+}
+function standardTexture(dark:boolean){
+  const canvas=document.createElement('canvas');canvas.width=256;canvas.height=512;const g=canvas.getContext('2d')!;
+  g.fillStyle=dark?'#202b3e':'#742d24';g.fillRect(0,0,256,512);
+  g.fillStyle='rgba(240,219,169,.07)';for(let x=0;x<256;x+=3)g.fillRect(x,0,1,512);
+  g.fillStyle='rgba(2,6,7,.10)';for(let y=0;y<512;y+=4)g.fillRect(0,y,256,1);
+  g.strokeStyle='#bca56f';g.lineWidth=5;g.strokeRect(13,13,230,486);g.lineWidth=1;g.strokeRect(23,22,210,468);
+  g.translate(128,182);g.strokeStyle='#d0b57b';g.lineWidth=9;g.beginPath();g.arc(0,0,44,0,Math.PI*2);g.stroke();
+  // Eagle wings and laurel, readable as heraldry instead of a fantasy neon glyph.
+  g.fillStyle='#cbb178';g.beginPath();g.moveTo(0,-30);g.lineTo(15,12);g.lineTo(6,37);g.lineTo(-6,37);g.lineTo(-15,12);g.closePath();g.fill();
+  for(const sign of[-1,1])for(let feather=0;feather<5;feather++){
+    g.save();g.scale(sign,1);g.beginPath();g.moveTo(10,feather*5);g.lineTo(73-feather*7,-41+feather*15);g.lineTo(59-feather*6,-7+feather*14);g.lineTo(10,12+feather*5);g.closePath();g.fill();g.restore();
+  }
+  g.font='600 26px Georgia';g.textAlign='center';g.fillText(dark?'NOCTIS':'AURELIA',0,128);
+  g.font='19px Georgia';g.fillText(dark?'LEGIO · IX':'LEGIO · IV',0,163);
+  const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=4;return texture;
+}
+function flameTexture(){
+  const canvas=document.createElement('canvas');canvas.width=128;canvas.height=256;const g=canvas.getContext('2d')!,pixels=g.createImageData(128,256);
+  for(let y=0;y<256;y++)for(let x=0;x<128;x++){
+    const height=1-y/255,width=.35*Math.pow(1-height,.62),center=.5+Math.sin(height*9.4)*height*.065;
+    const edge=Math.abs(x/127-center)/Math.max(.003,width),noise=.91+Math.sin(y*.18+x*.07)*.06;
+    const alpha=Math.max(0,Math.min(1,(1-Math.pow(edge,2.2))*3))*Math.min(1,(1-height)*13)*Math.min(1,height*15)*noise;
+    const core=Math.max(0,1-edge*1.6)*(1-height*.66),index=(y*128+x)*4;
+    pixels.data[index]=255;pixels.data[index+1]=110+core*135;pixels.data[index+2]=21+core*137;pixels.data[index+3]=alpha*255;
+  }
+  g.putImageData(pixels,0,0);const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;return texture;
+}
+function armorChipGeometry(){
+  const shape=new THREE.Shape();shape.moveTo(-.052,-.034);shape.lineTo(.019,-.048);shape.lineTo(.056,.012);shape.lineTo(.025,.039);shape.lineTo(-.043,.021);shape.closePath();
+  const geo=new THREE.ExtrudeGeometry(shape,{depth:.014,bevelEnabled:false});geo.translate(0,0,-.007);return geo;
+}
+
 export function createWorld(scene: THREE.Scene, renderer: THREE.WebGLRenderer) {
   scene.background = new THREE.Color('#101815'); scene.fog = new THREE.FogExp2('#101815', .019);
   const pmrem = new THREE.PMREMGenerator(renderer); const envScene = new RoomEnvironment();
@@ -60,6 +106,7 @@ export function createWorld(scene: THREE.Scene, renderer: THREE.WebGLRenderer) {
   const edge = new THREE.MeshStandardMaterial({ color:'#626657', roughness:.57, metalness:.2 });
   const black = new THREE.MeshStandardMaterial({ color:'#0e1412', roughness:.8 });
   const patina = new THREE.MeshStandardMaterial({color:'#587267',roughness:.78,metalness:.21});
+  const ashlar=new THREE.MeshStandardMaterial({color:'#a29b87',map:ashlarTexture(),roughness:.93,metalness:0});
   const batches = new Map<THREE.Material, THREE.BufferGeometry[]>();
   function add(geometry: THREE.BufferGeometry, material: THREE.Material, x=0,y=0,z=0, rx=0,ry=0,rz=0) {
     geometry.rotateX(rx); geometry.rotateY(ry); geometry.rotateZ(rz); geometry.translate(x,y,z);
@@ -139,8 +186,10 @@ export function createWorld(scene: THREE.Scene, renderer: THREE.WebGLRenderer) {
     const a=(slab+(ring%2)*.5)*Math.PI/16,r=11.25+ring*3.15;
     const seam=new THREE.BoxGeometry(.017,.009,2.9);seam.rotateY(a);seam.translate(Math.sin(a)*r,-1.279,Math.cos(a)*r);add(seam,black);
   }
-  const flameObjects: THREE.Mesh[]=[],braziers:THREE.PointLight[]=[];
-  const flames = new THREE.MeshBasicMaterial({color:'#ffbb58',transparent:true,opacity:.9,blending:THREE.AdditiveBlending,depthWrite:false});
+  const flameObjects: THREE.Object3D[]=[],braziers:THREE.PointLight[]=[];
+  const flames = new THREE.MeshBasicMaterial({color:'#ffffff',map:flameTexture(),transparent:true,opacity:.87,side:THREE.DoubleSide,blending:THREE.AdditiveBlending,depthWrite:false});flames.forceSinglePass=true;
+  const flameA=new THREE.PlaneGeometry(.83,1.28),flameB=flameA.clone();flameB.rotateY(Math.PI/2);const fireGeometry=mergeGeometries([flameA,flameB],false)!;flameA.dispose();flameB.dispose();
+  const firePool=new THREE.InstancedMesh(fireGeometry,flames,4);firePool.name='procedural-brazier-flames';firePool.frustumCulled=false;firePool.instanceMatrix.setUsage(THREE.DynamicDrawUsage);scene.add(firePool);
   for(const x of [-8.4,8.4]) for(const z of [-8.4,8.4]) {
     // Four architectonic braziers with claw crowns.
     box(1.25,.2,1.25,edge,x,-1.15,z); box(.95,.17,.95,bronze,x,-.99,z);
@@ -148,7 +197,7 @@ export function createWorld(scene: THREE.Scene, renderer: THREE.WebGLRenderer) {
     add(new THREE.CylinderGeometry(.7,.28,.35,12),bronze,x,.32,z);
     add(new THREE.TorusGeometry(.64,.038,6,24),bronze,x,.5,z,Math.PI/2);
     for(let j=0;j<8;j++){const a=j*Math.PI/4; add(new THREE.ConeGeometry(.045,.4,5),bronze,x+Math.cos(a)*.62,.65,z+Math.sin(a)*.62);}
-    const flame = new THREE.Mesh(new THREE.SphereGeometry(.32,10,10),flames); flame.scale.set(.85,2.5,.85); flame.position.set(x,.84,z); scene.add(flame); flameObjects.push(flame);
+    const flame=new THREE.Object3D();flame.position.set(x,1.07,z);flame.updateMatrix();firePool.setMatrixAt(flameObjects.length,flame.matrix);flameObjects.push(flame);
     const light=new THREE.PointLight('#ff9c47',12,9,2); light.position.set(x,1.15,z); scene.add(light);braziers.push(light);
   }
   // Paired fluted columns and lintels provide a real far layer for cinematic shots.
@@ -168,12 +217,42 @@ export function createWorld(scene: THREE.Scene, renderer: THREE.WebGLRenderer) {
     box(.043,.31,.024,bronze,x+.365,9.055,-15.96);
   }
   box(33,.6,1.9,stone,0,9.05,-17); box(33,.12,2.0,bronze,0,9.42,-17);
-  for(const s of [-1,1]) {
-    const bannerMat=new THREE.MeshStandardMaterial({color:s===1?'#50231e':'#667062',side:THREE.DoubleSide,roughness:.96});
-    const shape=new THREE.Shape(); shape.moveTo(-.72,2.4);shape.lineTo(.72,2.4);shape.lineTo(.72,-1.5);shape.lineTo(0,-2);shape.lineTo(-.72,-1.5);shape.closePath();
-    const banner=new THREE.Mesh(new THREE.ShapeGeometry(shape),bannerMat); banner.position.set(s*7.5,5,-16.7); scene.add(banner);
-    const crest=new THREE.Mesh(new THREE.RingGeometry(.35,.39,6),bronze);crest.position.set(s*7.5,5.6,-16.66);scene.add(crest);
-    add(new THREE.CylinderGeometry(.025,.025,1,6),bronze,s*7.5,5.6,-16.64);
+  // Woven legion standards hang from physical crossbars. A tiny vertex wave
+  // supplies fabric weight; its top stays anchored and reduced motion freezes it.
+  const bannerTime={value:0};
+  for(const side of[-1,1]){
+    const material=new THREE.MeshStandardMaterial({map:standardTexture(side>0),side:THREE.DoubleSide,roughness:.98});material.forceSinglePass=true;
+    material.onBeforeCompile=shader=>{shader.uniforms.uBannerTime=bannerTime;shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nuniform float uBannerTime;').replace('#include <begin_vertex>',`#include <begin_vertex>
+      float freedom=pow(1.0-uv.y,1.4);transformed.z+=freedom*(sin(position.y*2.4+uBannerTime*1.1)*.075+sin(position.x*3.7-uBannerTime*.8)*.045);`);};
+    material.customProgramCacheKey=()=> 'legion-cloth-v1';
+    const geo=new THREE.PlaneGeometry(1.7,4.5,10,18),position=geo.getAttribute('position');
+    for(let i=0;i<position.count;i++)if(position.getY(i)<-2)position.setY(i,position.getY(i)+Math.abs(position.getX(i))*.5);
+    const banner=new THREE.Mesh(geo,material);banner.name='woven-legion-standard';banner.position.set(side*7.5,5.1,-16.58);scene.add(banner);
+    add(new THREE.CylinderGeometry(.048,.048,2.2,8),bronze,side*7.5,7.43,-16.55,0,0,Math.PI/2);
+    for(const sign of[-1,1])add(new THREE.SphereGeometry(.083,8,5),bronze,side*7.5+sign*1.1,7.43,-16.55);
+  }
+  // A distant military gate, watchtowers and battered curtain walls give close
+  // camera shots a believable army setting. Shared materials are merged below.
+  const gate=new THREE.Shape();gate.moveTo(-6,-1.3);gate.lineTo(6,-1.3);gate.lineTo(6,10.7);gate.lineTo(-6,10.7);gate.closePath();
+  const opening=new THREE.Path();opening.moveTo(-2.55,-1.3);opening.lineTo(-2.55,4.2);opening.absarc(0,4.2,2.55,Math.PI,0,true);opening.lineTo(2.55,-1.3);opening.closePath();gate.holes.push(opening);
+  add(new THREE.ExtrudeGeometry(gate,{depth:1.3,bevelEnabled:true,bevelSegments:1,steps:1,bevelSize:.09,bevelThickness:.07}),ashlar,0,0,-25);
+  box(12.4,.36,1.75,edge,0,10.72,-24.38);box(12.7,.18,1.9,bronze,0,10.99,-24.38);
+  box(7.2,1.13,.15,darkMetal,0,8.65,-23.98);
+  for(let i=0;i<14;i++){const a=(i+.5)*Math.PI/14;const voussoir=new THREE.BoxGeometry(.52,.35,.2);voussoir.rotateZ(a-Math.PI/2);add(voussoir,edge,Math.cos(a)*2.83,4.2+Math.sin(a)*2.83,-23.57);}
+  for(const side of[-1,1]){
+    box(13,4.7,1.1,ashlar,side*12.5,1,-24.4);
+    for(let j=0;j<9;j++)box(.69,.7,1.2,edge,side*(6.5+j*1.52),3.68,-24.4);
+    const towerX=side*20;
+    box(3.2,9.2,3.2,ashlar,towerX,3.3,-23.6);box(3.5,.3,3.5,edge,towerX,7.88,-23.6);
+    for(let c=0;c<3;c++)for(const z of[-25.1,-22.1])box(.6,.82,.65,edge,towerX+(c-1)*1.18,8.43,z);
+    for(const y of[1.9,5.25]){box(.28,1.38,.05,black,towerX,y,-21.975);box(.51,.10,.12,edge,towerX,y-.73,-21.94);}
+    // Spear racks and shields at the entrance signal an occupied army camp.
+    for(let j=0;j<6;j++){
+      const x=side*(10.7+j*.42),z=-19.2;
+      add(new THREE.CylinderGeometry(.025,.025,3.4,5),darkMetal,x,.55,z);
+      add(new THREE.ConeGeometry(.09,.38,4),bronze,x,2.45,z,0,Math.PI/4);
+      if(j%2===0)add(new THREE.CylinderGeometry(.38,.38,.08,12),bronze,x,-.63,z+.11,Math.PI/2);
+    }
   }
   for(const [mat, geos] of batches) {
     const geo=mergeGeometries(geos,false)!; const mesh=new THREE.Mesh(geo,mat); mesh.receiveShadow=true; mesh.castShadow=false; scene.add(mesh); for(const g of geos) g.dispose();
@@ -187,7 +266,26 @@ export function createWorld(scene: THREE.Scene, renderer: THREE.WebGLRenderer) {
   dustGeo.setAttribute('position',new THREE.BufferAttribute(positions,3));
   const dust=new THREE.Points(dustGeo,new THREE.PointsMaterial({color:'#d9c498',size:.028,transparent:true,opacity:.45,depthWrite:false}));scene.add(dust);
   const atmosphere=new TurnAtmosphere({scene,renderer,stone,edge,darkMetal,hemi,sun,rim,flames,braziers,dust:dust.material});
-  return {setTurn:(side:'w'|'b',instant=false)=>atmosphere.setTurn(side,instant),theme:()=>atmosphere.state(),update(time:number,reduced=false){atmosphere.update(time,reduced);dust.rotation.y=time*.009;flameObjects.forEach((f,i)=>{f.scale.y=2.2+Math.sin(time*9+i*2)*.35;f.scale.x=.8+Math.sin(time*12+i)*.1;});}, shadowLight:sun};
+  const shaftMaterial=new THREE.ShaderMaterial({name:'side-lit-hall-dust',transparent:true,depthWrite:false,side:THREE.DoubleSide,
+    uniforms:{uGrain:{value:getSurfaceGrain()},uTime:{value:0},uNight:{value:0}},
+    vertexShader:`varying vec2 vShaft;varying vec3 vWorld;void main(){vShaft=uv;vec4 world=modelMatrix*instanceMatrix*vec4(position,1.0);vWorld=world.xyz;gl_Position=projectionMatrix*viewMatrix*world;}`,
+    fragmentShader:`uniform sampler2D uGrain;uniform float uTime;uniform float uNight;varying vec2 vShaft;varying vec3 vWorld;
+      void main(){float edge=pow(max(0.0,1.0-abs(vShaft.x*2.0-1.0)),2.5);float lengthFade=pow(sin(vShaft.y*3.14159),.7);
+        float dust=texture2D(uGrain,vWorld.xy*.011+vec2(uTime*.0008,0.0)).r;
+        vec3 tint=mix(vec3(.86,.65,.35),vec3(.33,.45,.69),uNight);
+        gl_FragColor=vec4(tint,edge*lengthFade*(.055+dust*.055)*(1.0-uNight*.3));
+        #include <tonemapping_fragment>
+        #include <colorspace_fragment>
+      }`});shaftMaterial.forceSinglePass=true;
+  const shafts=new THREE.InstancedMesh(new THREE.PlaneGeometry(2.1,14),shaftMaterial,3);shafts.name='architectural-sunshafts';
+  const shaftMatrix=new THREE.Object3D();for(let i=0;i<3;i++){shaftMatrix.position.set(-11.5+i*10.6,4.8,-10.8-i*1.7);shaftMatrix.rotation.set(0,-.37,-.52);shaftMatrix.scale.set(.8+i*.12,1,1);shaftMatrix.updateMatrix();shafts.setMatrixAt(i,shaftMatrix.matrix);}scene.add(shafts);
+  onGraphicsChange(mode=>{shafts.visible=mode==='enhanced';});
+  return {setTurn:(side:'w'|'b',instant=false)=>atmosphere.setTurn(side,instant),theme:()=>({...atmosphere.state(),shafts:shafts.visible?1:0,localArchitecture:true}),update(time:number,reduced=false){
+    atmosphere.update(time,reduced);bannerTime.value=reduced?0:time;shaftMaterial.uniforms.uTime.value=reduced?0:time;shaftMaterial.uniforms.uNight.value=atmosphere.state().blend;
+    // Warm combustion light remains warm at night; the moon changes the hall.
+    flames.color.set('#fff2db');braziers.forEach(light=>light.color.set('#ffad5b'));
+    dust.rotation.y=reduced?0:time*.009;flameObjects.forEach((f,i)=>{f.scale.y=1+(reduced?0:Math.sin(time*7+i*2)*.10);f.scale.x=.9+(reduced?0:Math.sin(time*5.6+i)*.07);f.scale.z=f.scale.x;f.rotation.y=reduced?0:Math.sin(time*.6+i)*.15;f.updateMatrix();firePool.setMatrixAt(i,f.matrix);});firePool.instanceMatrix.needsUpdate=true;
+  }, shadowLight:sun};
 }
 
 type Particle={velocity:THREE.Vector3,age:number,life:number,size:number};
@@ -199,7 +297,7 @@ export class BattleEffects {
   private geometry=new THREE.BufferGeometry();
   private cursor=0;
   private rings:{mesh:THREE.Mesh,age:number,life:number}[]=[];
-  private shards=new THREE.InstancedMesh(new THREE.BoxGeometry(.065,.065,.065),new THREE.MeshStandardMaterial({color:'#ddbc70',metalness:.7,roughness:.3}),96);
+  private shards=new THREE.InstancedMesh(armorChipGeometry(),new THREE.MeshStandardMaterial({color:'#ddbc70',metalness:.78,roughness:.31}),96);
   private debris:{pos:THREE.Vector3,velocity:THREE.Vector3,age:number,life:number,spin:number}[]=[];
   private dummy=new THREE.Object3D();
   private slashes:{mesh:THREE.Mesh,age:number,life:number}[]=[];
@@ -248,7 +346,7 @@ export class BattleEffects {
     this.bladeGeometry.setDrawRange(0,vertex);this.bladeGeometry.attributes.position.needsUpdate=true;this.bladeGeometry.attributes.color.needsUpdate=true;
     this.particles.forEach((p,i)=>{if(p.age>=p.life)return;p.age+=dt;const idx=i*3;if(p.age>=p.life){this.positions[idx+1]=-100;return;}p.velocity.y-=dt*5;this.positions[idx]+=p.velocity.x*dt;this.positions[idx+1]+=p.velocity.y*dt;this.positions[idx+2]+=p.velocity.z*dt;const fade=Math.max(0,1-p.age/p.life);this.colors[idx]*=1-dt*2;this.colors[idx+1]*=1-dt*2;this.colors[idx+2]*=1-dt*2;if(!fade)this.positions[idx+1]=-100;});
     this.geometry.attributes.position.needsUpdate=true;this.geometry.attributes.color.needsUpdate=true;
-    let alive=false;for(let i=0;i<this.debris.length;i++){const p=this.debris[i];if(p.age>=p.life)continue;alive=true;p.age+=dt;p.velocity.y-=dt*9;p.pos.addScaledVector(p.velocity,dt);this.dummy.position.copy(p.pos);this.dummy.rotation.set(p.age*p.spin,p.age*p.spin*.7,p.age*p.spin*1.3);this.dummy.scale.setScalar(p.age<p.life?Math.max(0,1-p.age/p.life):0);this.dummy.updateMatrix();this.shards.setMatrixAt(i,this.dummy.matrix);}if(alive)this.shards.instanceMatrix.needsUpdate=true;
+    let alive=false;for(let i=0;i<this.debris.length;i++){const p=this.debris[i];if(p.age>=p.life)continue;alive=true;p.age+=dt;p.velocity.y-=dt*9;p.pos.addScaledVector(p.velocity,dt);this.dummy.position.copy(p.pos);this.dummy.rotation.set(p.age*p.spin,p.age*p.spin*.7,p.age*p.spin*1.3);const scale=p.age<p.life?Math.max(0,1-p.age/p.life):0;this.dummy.scale.set(scale*(.65+i%3*.25),scale*(.6+i%4*.16),scale);this.dummy.updateMatrix();this.shards.setMatrixAt(i,this.dummy.matrix);}if(alive)this.shards.instanceMatrix.needsUpdate=true;
     for(let i=this.slashes.length-1;i>=0;i--){const s=this.slashes[i];s.age+=dt;const t=s.age/s.life;s.mesh.rotation.z+=dt*5;s.mesh.scale.setScalar(.65+t*.8);(s.mesh.material as THREE.MeshBasicMaterial).opacity=(1-t)*.7;if(t>=1){this.scene.remove(s.mesh);s.mesh.geometry.dispose();(s.mesh.material as THREE.Material).dispose();this.slashes.splice(i,1);}}
     for(let i=this.rings.length-1;i>=0;i--){const r=this.rings[i];r.age+=dt;const t=r.age/r.life;r.mesh.scale.setScalar(.15+t*3);(r.mesh.material as THREE.MeshBasicMaterial).opacity=(1-t)*.65;if(t>=1){this.scene.remove(r.mesh);r.mesh.geometry.dispose();(r.mesh.material as THREE.Material).dispose();this.rings.splice(i,1);}}
   }
