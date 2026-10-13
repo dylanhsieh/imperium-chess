@@ -1,0 +1,138 @@
+{
+  "url": "https://dylanhsieh.github.io/imperium-chess/",
+  "checks": [
+    "Public phone page loads new release without debug helpers; touch e4 and real Worker AI reply are legal and saved",
+    "Both shaders toggle on public site without changing game",
+    "Public candidate reasons and two-ply explained journal work through touch",
+    "Relative Pages subpath serves AI worker, bundled Three.js and all 12 local voice clips successfully"
+  ],
+  "errors": [],
+  "workers": [
+    "https://dylanhsieh.github.io/imperium-chess/assets/ai.worker-VyyvQGlH.js"
+  ],
+  "audio": [
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/audio/commander-fear.wav",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/audio/commander-check.wav",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/audio/commander-checkmate.wav",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/audio/male-attack-ha.wav",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/audio/commander-relief.wav",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/audio/male-attack-he.wav",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/audio/female-defeat.wav",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/audio/female-attack-ha.wav",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/audio/male-defeat.wav",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/audio/commander-begin.wav",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/audio/female-attack-he.wav",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/audio/commander-draw.wav",
+      "status": 200
+    }
+  ],
+  "resources": [
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/?v=2.0.0",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/assets/index-BXe5BRZ4.css",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/assets/index-CqHu1IdX.js",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/assets/rules-DX7QKCjj.js",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/assets/three-Bf8M5UX6.js",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/audio/commander-fear.wav",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/audio/commander-check.wav",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/audio/commander-checkmate.wav",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/audio/male-attack-ha.wav",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/audio/commander-relief.wav",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/audio/male-attack-he.wav",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/audio/female-defeat.wav",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/audio/female-attack-ha.wav",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/audio/male-defeat.wav",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/audio/commander-begin.wav",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/audio/female-attack-he.wav",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/audio/commander-draw.wav",
+      "status": 200
+    },
+    {
+      "url": "https://dylanhsieh.github.io/imperium-chess/assets/ai.worker-VyyvQGlH.js",
+      "status": 200
+    }
+  ],
+  "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"?\"]\n[Black \"?\"]\n[Result \"*\"]\n\n1. e4 Nc6 *"
+}

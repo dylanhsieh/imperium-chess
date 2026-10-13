@@ -20,7 +20,7 @@ try{
  const tap=async selector=>{await page.$eval(selector,e=>e.scrollIntoView({block:'center'}));const p=await page.$eval(selector,e=>{const r=e.getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height/2};});await page.touchscreen.tap(p.x,p.y);};
  await tap('#match-config');await page.select('#match-mode','ai');await page.select('#ai-difficulty','easy');await tap('#confirm-new');await wait(900);
  await page.touchscreen.tap(points.e2.x,points.e2.y);await wait(80);await page.touchscreen.tap(points.e4.x,points.e4.y);
- await page.waitForFunction(()=>/1\. e4 \S/.test(localStorage.getItem('imperium-pgn')||''),{timeout:20000});await wait(400);
+ await page.waitForFunction(()=>/1\. e4 (?!\*)\S/.test(localStorage.getItem('imperium-pgn')||''),{timeout:20000});await wait(400);
  const pgn=await page.evaluate(()=>localStorage.getItem('imperium-pgn'));const game=new Chess();game.loadPgn(pgn);assert.equal(game.history().length,2);assert.equal(game.turn(),'w');report.pgn=pgn;
  report.checks.push('Public phone page loads new release without debug helpers; touch e4 and real Worker AI reply are legal and saved');
  await page.screenshot({path:`${out}/public-ai-phone.png`});
