@@ -1,0 +1,143 @@
+{
+  "suite": "FIDE play rules, explanations and local worker engine",
+  "passed": 34,
+  "total": 34,
+  "results": [
+    {
+      "name": "Batched next-move claims match full validation without mutating history",
+      "passed": true
+    },
+    {
+      "name": "Initial board: 20 legal moves and no automatic/claimable draw",
+      "passed": true
+    },
+    {
+      "name": "Pawn double-step explains start rank and clear path",
+      "passed": true
+    },
+    {
+      "name": "Pawn cannot advance into enemy, diagonal empty or retreat",
+      "passed": true
+    },
+    {
+      "name": "Sliding path identifies first blocking piece",
+      "passed": true
+    },
+    {
+      "name": "Knight jumps while bishops cannot leave diagonal",
+      "passed": true
+    },
+    {
+      "name": "Pinned knight has zero legal moves and names attacking rook",
+      "passed": true
+    },
+    {
+      "name": "Pinned rook may stay on pin line and capture attacker",
+      "passed": true
+    },
+    {
+      "name": "Single legal check evasion is explicitly explained",
+      "passed": true
+    },
+    {
+      "name": "Multiple check evasions are each legal and explain king safety",
+      "passed": true
+    },
+    {
+      "name": "Blocking a check identifies it as the reason",
+      "passed": true
+    },
+    {
+      "name": "Double check only permits safe king moves",
+      "passed": true
+    },
+    {
+      "name": "King may not enter attacked squares or approach enemy king",
+      "passed": true
+    },
+    {
+      "name": "Castling clear path and preserved rights allow both sides",
+      "passed": true
+    },
+    {
+      "name": "Castling is forbidden through attack, while checked, or after rights lost",
+      "passed": true
+    },
+    {
+      "name": "En passant legal only immediately after double push",
+      "passed": true
+    },
+    {
+      "name": "En passant cannot uncover attack on king",
+      "passed": true
+    },
+    {
+      "name": "Promotion exposes all four choices, including underpromotion",
+      "passed": true
+    },
+    {
+      "name": "Stalemate is distinct from checkmate",
+      "passed": true
+    },
+    {
+      "name": "Dead positions recognized conservatively; two knights/opposite bishops are not automatically dead",
+      "passed": true
+    },
+    {
+      "name": "Threefold is claimable, not automatic; fivefold is automatic",
+      "passed": true
+    },
+    {
+      "name": "Intended next move can claim third repetition without changing board/history",
+      "passed": true
+    },
+    {
+      "name": "50 moves claim, intended 50th, 75 automatic; pawn/capture resets clock",
+      "passed": true
+    },
+    {
+      "name": "Checkmate on halfmove 150 overrides 75-move draw",
+      "passed": true
+    },
+    {
+      "name": "Repetition keys preserve side/castling rights and ignore clocks",
+      "passed": true
+    },
+    {
+      "name": "Repetition identity includes only legal en-passant, including pinned pawn",
+      "passed": true
+    },
+    {
+      "name": "PGN reload preserves repetition evidence and counting is nonmutating",
+      "passed": true
+    },
+    {
+      "name": "AI returns legal move at every difficulty, within a bounded deadline, without mutating state",
+      "passed": true
+    },
+    {
+      "name": "AI finds mate in one instead of a draw claim or 75-move rule",
+      "passed": true
+    },
+    {
+      "name": "AI captures hanging queen and handles promotion",
+      "passed": true
+    },
+    {
+      "name": "AI must escape check; terminal positions produce no move",
+      "passed": true
+    },
+    {
+      "name": "AI may claim threefold when losing, retaining original history",
+      "passed": true
+    },
+    {
+      "name": "AI can declare an intended repetition claim when current position is not claimable",
+      "passed": true
+    },
+    {
+      "name": "Queenside castling permits attacked rook and attacked B file when king path is safe",
+      "passed": true
+    }
+  ]
+}

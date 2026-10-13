@@ -1,0 +1,136 @@
+{
+  "url": "http://127.0.0.1:5194/?debug=1",
+  "mode": "desktop",
+  "state": "threat-preview",
+  "requestedState": "threat-preview",
+  "appliedState": "threat-preview",
+  "runId": "imperium-v2-final",
+  "seed": null,
+  "screenshotPath": "artifacts/v2-release/inspector/desktop-threat-preview.png",
+  "gpu": {
+    "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)",
+    "vendor": "Google Inc. (Apple)",
+    "softwareRendered": false
+  },
+  "result": {
+    "ok": true,
+    "reason": "nonblank",
+    "rect": {
+      "x": 0,
+      "y": 84,
+      "width": 1110,
+      "height": 821
+    },
+    "drawingBuffer": {
+      "width": 1110,
+      "height": 821
+    },
+    "alphaPixels": 4105,
+    "variance": 217,
+    "colorBuckets": 117,
+    "metrics": {
+      "colorBuckets": 226,
+      "colorEntropyBits": 4.98,
+      "edgeDensity": 0.297,
+      "luminance": {
+        "mean": 92.4,
+        "p5": 32.1,
+        "p95": 191.3,
+        "contrast": 159.2
+      },
+      "dominantColorShare": 0.14,
+      "nonBackgroundShare": 0.86
+    },
+    "renderBudget": {
+      "tier": "desktop",
+      "note": "starting-point budget; adjust per game and document overrides",
+      "rows": [
+        {
+          "metric": "calls",
+          "actual": 194,
+          "limit": 300,
+          "ok": true
+        },
+        {
+          "metric": "triangles",
+          "actual": 82452,
+          "limit": 750000,
+          "ok": true
+        },
+        {
+          "metric": "geometries",
+          "actual": 247,
+          "limit": 300,
+          "ok": true
+        },
+        {
+          "metric": "textures",
+          "actual": 8,
+          "limit": 60,
+          "ok": true
+        }
+      ],
+      "withinBudget": true
+    },
+    "diagnostics": {
+      "frame": 75,
+      "fps": 14,
+      "game": {
+        "fen": "4k3/8/3n4/8/1b1R2p1/8/8/7K w - - 0 1",
+        "turn": "w",
+        "moves": 0,
+        "selected": "d4",
+        "legal": [
+          "d5",
+          "d6",
+          "e4",
+          "f4",
+          "g4",
+          "d3",
+          "d2",
+          "d1",
+          "c4",
+          "b4"
+        ],
+        "fear": [
+          "d6",
+          "g4",
+          "b4"
+        ],
+        "animating": false,
+        "actionProgress": 0,
+        "gameOver": false
+      },
+      "renderer": {
+        "calls": 194,
+        "triangles": 82452,
+        "geometries": 247,
+        "textures": 8
+      },
+      "render": {
+        "calls": 194,
+        "triangles": 82452
+      },
+      "memory": {
+        "geometries": 247,
+        "textures": 8
+      },
+      "quality": {
+        "atmosphere": {
+          "side": "w",
+          "blend": 0,
+          "enhanced": true,
+          "mistDraws": 1
+        },
+        "graphics": "enhanced",
+        "dpr": 1,
+        "shadowMapSize": 2048,
+        "shadowLights": 1,
+        "postPasses": 0
+      },
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+    }
+  },
+  "consoleErrors": [],
+  "pageErrors": []
+}

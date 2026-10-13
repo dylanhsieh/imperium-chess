@@ -17,14 +17,14 @@ function palette(color: Faction): Palette {
   const make = (name: string, value: number, metalness: number, roughness: number) => {
     const m = new THREE.MeshStandardMaterial({ color: value, metalness, roughness });
     m.name = `${color}-${name}`;
-    return finishMaterial(m,{scale:4,grain:.06,roughness:.16,shade:.32});
+    return finishMaterial(m,{scale:4,grain:metalness>.4?.055:.09,roughness:metalness>.4?.12:.06,shade:.30,edge:metalness>.4?.065:0});
   };
   const p = {
-    armor: make('enamel-and-plate', light ? 0xf0dfb7 : 0x394755, .5, .41),
-    gold: make('antique-trim', light ? 0xd8a74e : 0xbc704b, .85, .28),
+    armor: make('enamel-and-plate', light ? 0xd2d8c8 : 0x364a60, .62, .32),
+    gold: make('antique-trim', light ? 0xb98c35 : 0xb66943, .84, .3),
     dark: make('leather-and-recesses', light ? 0x332d24 : 0x161b22, .22, .65),
-    cloth: make('ceremonial-cloth', light ? 0xb1a687 : 0x761e32, .02, .87),
-    steel: make('blade-edges', light ? 0xd8e1df : 0xa8b5bf, .92, .2),
+    cloth: make('ceremonial-cloth', light ? 0x176b6b : 0x7e203b, .02, .87),
+    steel: make('blade-edges', light ? 0xd2e4e7 : 0xb8c7d7, .94, .17),
     skin: make('skin', light ? 0xd2a07b : 0xbb8464, .01, .85),
     horse: make('warhorse', light ? 0x9c9483 : 0x3c3030, .07, .87),
   };
@@ -50,42 +50,67 @@ class Sculpt {
   box(size: V3, at: V3, m: THREE.Material, rotation: V3 = ZERO, _bevel = .018) {
     return this.add(new THREE.BoxGeometry(...size), m, at, rotation);
   }
-  // Voxel columns retain a fine 3–5 cm block silhouette at cinematic distance.
-  ellipsoid(size: V3, at: V3, m: THREE.Material, rotation: V3 = ZERO, _segments = 12) {
-    const max = Math.max(...size);
-    const cell = max < .06 ? .022 : .044;
-    const nx = Math.max(1, Math.ceil(size[0] * 2 / cell));
-    const ny = Math.max(1, Math.ceil(size[1] * 2 / cell));
-    const dx = size[0] * 2 / nx, dy = size[1] * 2 / ny;
-    const transform = new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(...rotation));
-    for (let iy = 0; iy < ny; iy++) for (let ix = 0; ix < nx; ix++) {
-      const x = (ix + .5) * dx - size[0], y = (iy + .5) * dy - size[1];
-      const radial = 1 - (x / size[0]) ** 2 - (y / size[1]) ** 2;
-      if (radial <= .04) continue;
-      const depth = Math.max(cell, Math.round(Math.sqrt(radial) * size[2] * 2 / cell) * cell);
-      const local = new THREE.Vector3(x, y, 0).applyMatrix4(transform);
-      this.box([dx * .987, dy * .987, depth], [at[0] + local.x, at[1] + local.y, at[2] + local.z], m, rotation);
-    }
-    return this;
-  }
-  cone(top: number, bottom: number, height: number, at: V3, m: THREE.Material, _segments = 10, rotation: V3 = ZERO) {
-    const rows = Math.max(1, Math.ceil(height / .045));
-    const transform = new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(...rotation));
-    for (let i = 0; i < rows; i++) {
-      const t = (i + .5) / rows, radius = bottom + (top - bottom) * t;
-      const count = Math.max(1, Math.ceil(radius * 2 / .05));
-      const step = radius * 2 / count;
-      for (let j = 0; j < count; j++) {
-        const x = (j + .5) * step - radius;
-        const depth = Math.sqrt(Math.max(.01, 1 - (x / radius) ** 2)) * radius * 2;
-        const local = new THREE.Vector3(x, (t - .5) * height, 0).applyMatrix4(transform);
-        this.box([Math.max(.005, step), height / rows, Math.max(.006, Math.round(depth / .026) * .026)], [at[0] + local.x, at[1] + local.y, at[2] + local.z], m, rotation);
+  /** Emit only exposed faces of a stepped solid. Hidden interior cube walls
+   * never reach the GPU; the authored voxel silhouette stays identical. */
+  columns(depths: number[][], dx: number, dy: number, at: V3, m: THREE.Material, rotation: V3) {
+    const rows=depths.length, cols=depths[0].length, positions:number[]=[], normals:number[]=[], uvs:number[]=[];
+    const quad=(a:V3,b:V3,c:V3,d:V3,n:V3)=>{
+      for(const [v,u] of [[a,[0,0]],[b,[1,0]],[c,[1,1]],[a,[0,0]],[c,[1,1]],[d,[0,1]]] as [V3,number[]][]){positions.push(...v);normals.push(...n);uvs.push(...u);}
+    };
+    for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){
+      const depth=depths[y][x];if(!depth)continue;
+      const x0=(x-cols/2)*dx,x1=x0+dx,y0=(y-rows/2)*dy,y1=y0+dy;
+      quad([x0,y0,depth],[x1,y0,depth],[x1,y1,depth],[x0,y1,depth],[0,0,1]);
+      quad([x1,y0,-depth],[x0,y0,-depth],[x0,y1,-depth],[x1,y1,-depth],[0,0,-1]);
+      for(const sign of [-1,1]){
+        const neighborX=depths[y][x+sign]||0, xx=sign<0?x0:x1;
+        if(neighborX<depth){
+          for(const [z0,z1] of neighborX?[[neighborX,depth],[-depth,-neighborX]]:[[-depth,depth]]){
+            if(sign<0)quad([xx,y0,z0],[xx,y0,z1],[xx,y1,z1],[xx,y1,z0],[-1,0,0]);
+            else quad([xx,y0,z1],[xx,y0,z0],[xx,y1,z0],[xx,y1,z1],[1,0,0]);
+          }
+        }
+        const neighborY=depths[y+sign]?.[x]||0, yy=sign<0?y0:y1;
+        if(neighborY<depth){
+          for(const [z0,z1] of neighborY?[[neighborY,depth],[-depth,-neighborY]]:[[-depth,depth]]){
+            if(sign<0)quad([x0,yy,z0],[x1,yy,z0],[x1,yy,z1],[x0,yy,z1],[0,-1,0]);
+            else quad([x0,yy,z1],[x1,yy,z1],[x1,yy,z0],[x0,yy,z0],[0,1,0]);
+          }
+        }
       }
     }
-    return this;
+    const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geo.setAttribute('normal',new THREE.Float32BufferAttribute(normals,3));geo.setAttribute('uv',new THREE.Float32BufferAttribute(uvs,2));
+    return this.add(geo,m,at,rotation);
+  }
+  // Fine 3–5 cm stepped hulls, without thousands of invisible internal faces.
+  ellipsoid(size: V3, at: V3, m: THREE.Material, rotation: V3 = ZERO, _segments = 12) {
+    const cell=Math.max(...size)<.06?.022:.044;
+    const nx=Math.max(1,Math.ceil(size[0]*2/cell)),ny=Math.max(1,Math.ceil(size[1]*2/cell));
+    const dx=size[0]*2/nx,dy=size[1]*2/ny;
+    const depths=Array.from({length:ny},(_,iy)=>Array.from({length:nx},(_,ix)=>{
+      const x=(ix+.5)*dx-size[0],y=(iy+.5)*dy-size[1],radial=1-(x/size[0])**2-(y/size[1])**2;
+      return radial<=.04?0:Math.max(cell,Math.round(Math.sqrt(radial)*size[2]*2/cell)*cell)*.5;
+    }));
+    return this.columns(depths,dx,dy,at,m,rotation);
+  }
+  cone(top:number,bottom:number,height:number,at:V3,m:THREE.Material,_segments=10,rotation:V3=ZERO){
+    const radius=Math.max(top,bottom),nx=Math.max(1,Math.ceil(radius*2/.05)),ny=Math.max(1,Math.ceil(height/.045));
+    const dx=radius*2/nx,dy=height/ny;
+    const depths=Array.from({length:ny},(_,y)=>Array.from({length:nx},(_,x)=>{
+      const r=bottom+(top-bottom)*(y+.5)/ny,xx=(x+.5)*dx-radius;
+      return Math.abs(xx)>=r?0:Math.max(.008,Math.round(Math.sqrt(r*r-xx*xx)/.018)*.018);
+    }));
+    return this.columns(depths,dx,dy,at,m,rotation);
   }
   rod(a: V3, b: V3, radius: number, m: THREE.Material, radius2 = radius, _sides = 8) {
     const start = new THREE.Vector3(...a), end = new THREE.Vector3(...b);
+    const delta=end.clone().sub(start), axes=delta.toArray().filter(v=>Math.abs(v)>.00001);
+    if(axes.length===1&&radius===radius2){
+      // Straight shafts were overlapping identical voxel cubes. One cuboid has
+      // the exact same silhouette and removes all those hidden interior faces.
+      const dimensions=delta.toArray().map(v=>Math.abs(v)+radius*2) as V3;
+      return this.box(dimensions,start.clone().lerp(end,.5).toArray() as V3,m);
+    }
     const count = Math.max(1, Math.ceil(start.distanceTo(end) / .04));
     for (let i = 0; i <= count; i++) {
       const t = i / count, center = start.clone().lerp(end, t), r = radius + (radius2 - radius) * t;
@@ -172,11 +197,20 @@ function helmet(s: Sculpt, type: string, at: V3, scale = 1) {
   block([.039, .057, .052], [0, -.051, .153], s.p.skin);
   for (const side of [-1, 1]) {
     block([.063, .066, .016], [side * .077, .006, .143], s.p.dark);
-    block([.022, .025, .019], [side * .077 - .012, .022, .155], s.p.armor);
+    block([.043, .039, .019], [side * .077, .009, .155], s.p.steel);
+    block([.021, .032, .022], [side * .077 - .006, .007, .162], s.p.dark);
+    block([.008, .010, .025], [side * .077 - .010, .02, .163], s.p.armor);
     block([.075, .018, .02], [side * .077, .065, .15], s.p.dark);
     block([.036, .045, .086], [side * .155, -.04, .01], s.p.skin);
   }
-  block([.063, .015, .01], [0, -.121, .131], s.p.dark);
+  block([.063, .012, .014], [0, -.121, .132], s.p.dark);
+  block([.082, .019, .016], [0, -.144, .125], s.p.skin);
+  // Raised temple ribs, cheek hinges, and punched ventilation on the jaw guards.
+  for(const side of [-1,1]){
+    block([.018,.15,.024],[side*.113,.149,.126],s.p.gold);
+    block([.055,.035,.023],[side*.151,-.003,.103],s.p.gold);
+    for(let vent=0;vent<3;vent++)block([.02,.008,.013],[side*.165,-.061-vent*.026,.092],s.p.dark);
+  }
   // Pixel-built helmet shell: no spheres or smoothly rounded head primitives.
   block([.34, .077, .27], [0, .113, 0], s.p.armor);
   block([.28, .052, .22], [0, .177, -.012], s.p.armor);
@@ -192,7 +226,8 @@ function helmet(s: Sculpt, type: string, at: V3, scale = 1) {
     for (let i = 0; i < 8; i++) {
       const dz = (i - 3.5) * .041;
       const rise = Math.round((.075 + Math.sin(i / 7 * Math.PI) * .07) / .023) * .023;
-      block([.057, rise, .043], [0, .213 + rise / 2, dz - .016], s.p.cloth);
+      block([type==='n'?.082:.057, rise, .043], [0, .213 + rise / 2, dz - .016], s.p.cloth);
+      if(i%2===0)block([.025,rise*.7,.044],[.019,.245+rise/2,dz-.016],s.p.dark);
       block([.065, .02, .045], [0, .216, dz - .016], s.p.gold);
     }
   }
@@ -206,11 +241,18 @@ function helmet(s: Sculpt, type: string, at: V3, scale = 1) {
     block([.056, .13, .044], [0, .242, .124], s.p.gold);
     block([.028, .036, .01], [0, .217, .153], s.p.cloth);
     if (type === 'k') {
+      block([.05,.125,.042],[0,.352,.012],s.p.gold);
+      block([.145,.035,.04],[0,.371,.012],s.p.gold);
+      block([.028,.036,.021],[0,.308,.155],s.p.cloth);
       // Three stepped beard tiers distinguish the broad commander.
       block([.21, .062, .052], [0, -.15, .114], s.p.dark);
       block([.146, .05, .04], [0, -.199, .119], s.p.dark);
       block([.081, .035, .031], [0, -.236, .119], s.p.dark);
     } else {
+      for(const side of [-1,1]){
+        block([.032,.155,.035],[side*.115,.279,.016],s.p.gold);
+        block([.053,.053,.038],[side*.115,.352,.016],s.p.steel);
+      }
       // Individually stacked long hair locks, offset to create a sculpted block fall.
       for (const side of [-1, 1]) for (let i = 0; i < 7; i++) {
         block([.053 + i % 2 * .015, .063, .11], [side * (.163 + Math.floor(i / 3) * .016), .073 - i * .055, -.006 - i % 2 * .027], s.p.dark);
@@ -223,7 +265,10 @@ function helmet(s: Sculpt, type: string, at: V3, scale = 1) {
       block([.3 - i * .038, .046, .18 - i * .018], [0, .15 + i * .041, -.006], s.p.armor);
       block([.025, .046, .021], [0, .15 + i * .041, .094 - i * .009], s.p.gold);
     }
+    // The bishop's diagonal cleft is a visible dark inset, not an undifferentiated crown.
+    for(let cut=0;cut<5;cut++)block([.033,.035,.024],[-.061+cut*.024,.302+cut*.025,.079-cut*.008],s.p.dark);
     block([.134, .025, .022], [0, .222, .092], s.p.gold);
+    for(const side of [-1,1])block([.065,.21,.021],[side*.071,-.06,-.147],s.p.cloth);
   }
 }
 
@@ -237,12 +282,20 @@ function sword(s: Sculpt, at: V3, length: number, broad = false) {
   s.plate([[-.009, 0], [0, length * .92], [.009, 0]], .008, [x, y + .095, z + .022], s.p.gold, ZERO, .001);
 }
 
-function shield(s: Sculpt, at: V3, scale = 1) {
-  const points = shieldShape.map(([x, y]) => [x * scale, y * scale]);
+function shield(s: Sculpt, at: V3, scale = 1, infantry = false) {
+  const form=infantry?[[-.18,.32],[.18,.32],[.22,.23],[.22,-.27],[.16,-.35],[-.16,-.35],[-.22,-.27],[-.22,.23]]:shieldShape;
+  const points = form.map(([x, y]) => [x * scale, y * scale]);
   s.plate(points, .038, at, s.p.gold, [0, -.13, 0], .015);
   s.plate(points.map(([x, y]) => [x * .88, y * .89]), .025, [at[0], at[1], at[2] + .027], s.p.armor, [0, -.13, 0]);
   s.box([.027, .34 * scale, .025], [at[0], at[1] - .01, at[2] + .05], s.p.gold);
   emblem(s, [at[0], at[1] + .025, at[2] + .07], .72 * scale);
+  if(infantry){
+    for(const side of [-1,1])for(const row of [-1,1]){
+      s.plate([[0,0],[side*.08,row*.08],[side*.035,row*.08],[side*.10,row*.20]],.014,[at[0]+side*.045,at[1]+row*.045,at[2]+.056],s.p.cloth);
+    }
+    s.box([.10,.10,.037],[at[0],at[1],at[2]+.079],s.p.gold);
+    s.box([.045,.05,.023],[at[0],at[1],at[2]+.108],s.p.steel);
+  }
   for (const side of [-1, 1]) for (const y of [-.02, .135]) s.ellipsoid([.01, .01, .01], [at[0] + side * .12 * scale, at[1] + y * scale, at[2] + .063], s.p.gold, ZERO, 6);
 }
 
@@ -281,6 +334,12 @@ function soldier(parent: THREE.Group, type: string, p: Palette, at: V3 = ZERO, s
     s.box([.054, .19, .033], [Math.sin(a) * .143, .558, Math.cos(a) * .105], p.dark, [0, a, -Math.sin(a) * .13]);
     s.box([.057, .05, .035], [Math.sin(a) * .156, .48, Math.cos(a) * .113], p.gold, [0, a, -Math.sin(a) * .13]);
   }
+  // Collar straps, abdominal seams and two rows of tiny shoulder fasteners.
+  for(const side of [-1,1]){
+    s.box([.039,.17,.021],[side*.137,1.031,.157],p.dark,[0,0,side*.23]);
+    for(let stud=0;stud<3;stud++)s.box([.015,.015,.016],[side*.151,1.011-stud*.052,.158],p.gold);
+    for(let row=0;row<2;row++)s.box([.061,.025,.013],[side*.07,.791-row*.052,.112],p.dark);
+  }
   s.cone(.085, .097, .1, [0, 1.13, 0], p.dark);
   const head = joint(torso, 'head', [0, 1.265 - .67, .006]);
   const hs = new Sculpt(head, p);
@@ -311,6 +370,7 @@ function soldier(parent: THREE.Group, type: string, p: Palette, at: V3 = ZERO, s
     l.rod([0, -.245, .065], [0, -.439, .06], .013, p.gold);
     l.box([.14, .078, .225], [0, -.49, .038], p.dark, ZERO, .022);
     l.box([.135, .037, .15], [0, -.467, .085], p.armor, [-.09, 0, 0], .015);
+    for(let tier=0;tier<3;tier++)l.box([.128-tier*.011,.018,.042],[0,-.448-tier*.015,.056+tier*.055],p.gold);
     l.finish();
     if (mounted) { leg.rotation.z = side * .24; leg.rotation.x = -.26; }
   }
@@ -319,6 +379,10 @@ function soldier(parent: THREE.Group, type: string, p: Palette, at: V3 = ZERO, s
     const upper = new Sculpt(arm, p);
     upper.ellipsoid([.104, .088, .115], [side * .012, -.004, 0], p.gold);
     upper.ellipsoid([.107, .06, .098], [side * .022, .024, .008], p.armor);
+    for(let plate=0;plate<3;plate++){
+      upper.box([.127-plate*.017,.036,.19-plate*.019],[side*(.06+plate*.018),-.015-plate*.033,.006],p.armor,[0,0,side*-.14]);
+      upper.box([.023,.022,.024],[side*(.105+plate*.011),-.013-plate*.033,.097-plate*.01],p.gold);
+    }
     upper.cone(.061, .055, .175, [side * .019, -.143, .015], p.dark, 8, [0, 0, side * -.08]);
     upper.finish();
     const elbow = joint(arm, side < 0 ? 'weapon-elbow' : 'shield-elbow', [side * .025, -.222, .025]);
@@ -362,7 +426,7 @@ function soldier(parent: THREE.Group, type: string, p: Palette, at: V3 = ZERO, s
       weapon.finish();
     } else {
       const equipment = new Sculpt(wrist, p);
-      if (type !== 'b' && type !== 'q') shield(equipment, [0, .158, .055], type === 'k' ? 1.05 : .88);
+      if (type !== 'b' && type !== 'q') shield(equipment, [0, .158, .055], type === 'k' ? 1.05 : .88, type==='p');
       else equipment.ellipsoid([.057, .071, .055], [.056, .078, .031], p.gold, ZERO, 8);
       equipment.finish();
     }
@@ -387,6 +451,16 @@ function warhorse(parent: THREE.Group, p: Palette) {
     }
     s.curve([[side * .107, 1.095, .49], [side * .17, .95, .19], [side * .19, .97, -.035]], .009, p.dark, 10);
     s.box([.033, .025, .26], [side * .107, 1.115, .37], p.gold, [-.4, 0, 0], .005);
+  }
+  for(const side of [-1,1]){
+    s.box([.03,.026,.031],[side*.077,1.04,.602],p.dark);
+    s.box([.018,.075,.075],[side*.122,1.13,.35],p.gold,[0,0,side*.2]);
+    for(let stitch=0;stitch<6;stitch++)s.box([.019,.025,.023],[side*.231,.43,-.32+stitch*.097],p.gold);
+    for(let tier=0;tier<3;tier++){
+      s.box([.027,.044,.19-tier*.018],[side*(.215+tier*.008),.55-tier*.038,-.09],p.cloth);
+      s.box([.032,.018,.19-tier*.018],[side*(.215+tier*.008),.525-tier*.038,-.09],p.gold);
+    }
+    s.curve([[side*.19,.84,-.045],[side*.26,.61,-.1],[side*.27,.51,-.04]],.013,p.gold,7);
   }
   s.box([.24, .032, .035], [0, 1.044, .495], p.gold, [-.4, 0, 0]);
   s.plate([[-.088, -.06], [0, .18], [.088, -.06], [0, -.17]], .028, [0, 1.124, .409], p.armor, [-.5, 0, 0]);
@@ -414,6 +488,7 @@ function chariot(parent: THREE.Group, p: Palette) {
   const vehicle = joint(parent, 'chariot', ZERO); const s = new Sculpt(vehicle, p);
   // A fortified ancient scythed war-carriage: axle, spoked wheels and riveted prow.
   s.box([.74, .13, .65], [0, .275, -.005], p.dark, ZERO, .045);
+  for(let plank=0;plank<7;plank++)s.box([.082,.026,.58],[(plank-3)*.09,.375,-.005],plank%2?p.horse:p.dark);
   s.box([.76, .05, .67], [0, .35, -.005], p.gold);
   s.rod([-.51, .28, -.08], [.51, .28, -.08], .041, p.dark);
   s.plate([[-.38, -.125], [-.36, .18], [-.22, .23], [0, .2], [.22, .23], [.36, .18], [.38, -.125]], .095, [0, .51, .285], p.gold, [-.12, 0, 0], .02);
@@ -425,6 +500,17 @@ function chariot(parent: THREE.Group, p: Palette) {
     for (const z of [-.26, -.075, .11]) s.box([.067, .06, .095], [side * .34, .702, z], p.gold);
     for (let i = 0; i < 4; i++) s.ellipsoid([.013, .012, .014], [side * (.14 + .051 * i), .6, .377], p.gold, ZERO, 6);
     s.plate([[-.05, -.02], [0, .2], [.05, -.02]], .022, [side * .39, .33, .38], p.steel, [Math.PI / 2, 0, 0]);
+  }
+  // Heavy frontal battering head and corner rivets read in the charge close-up.
+  s.box([.61,.10,.085],[0,.33,.416],p.dark);
+  s.box([.39,.075,.07],[0,.34,.481],p.gold);
+  s.box([.18,.11,.10],[0,.35,.54],p.steel);
+  for(const side of [-1,1]){
+    s.box([.067,.20,.074],[side*.3,.45,.4],p.gold);
+    for(let bolt=0;bolt<3;bolt++)s.box([.027,.027,.02],[side*.3,.397+bolt*.055,.446],p.steel);
+    for(let arc=0;arc<7;arc++){const a=(arc/6)*Math.PI;
+      s.box([.12,.055,.09],[side*.434,.28+Math.sin(a)*.278,-.08+Math.cos(a)*.278],p.armor);
+    }
   }
   // Driver and tall command standard make the rook unmistakable from above.
   const driver = joint(vehicle, 'figure', ZERO);
@@ -446,6 +532,7 @@ function chariot(parent: THREE.Group, p: Palette) {
   s.rod([-.17, .67, .17], [.17, .67, .17], .015, p.dark);
   s.rod([.245, .33, -.22], [.245, 1.5, -.22], .016, p.gold);
   s.plate([[-.17, 0], [.17, 0], [.15, -.33], [0, -.39], [-.15, -.33]], .013, [.245, 1.42, -.225], p.cloth, ZERO, .002);
+  for(let seam=0;seam<4;seam++)s.box([.23,.011,.008],[.245,1.13+seam*.062,-.238],p.gold);
   s.box([.38, .025, .03], [.245, 1.445, -.218], p.gold);
   emblem(s, [.245, 1.25, -.207], .85);
   s.plate([[-.07, -.05], [0, .07], [.07, -.05]], .025, [.245, 1.515, -.22], p.gold);
@@ -459,6 +546,7 @@ function chariot(parent: THREE.Group, p: Palette) {
       w.rod([0, 0, 0], [0, Math.cos(a) * .218, Math.sin(a) * .218], .015, p.gold);
       w.ellipsoid([.009, .011, .011], [side * .041, Math.cos(a) * .237, Math.sin(a) * .237], p.steel, ZERO, 5);
     }
+    w.cone(.085,.085,.024,[side*.054,0,0],p.armor,10,[0,0,Math.PI/2]);
     w.cone(.049, .064, .1, ZERO, p.gold, 10, [0, 0, Math.PI / 2]);
     w.cone(0, .047, .1, [side * .093, 0, 0], p.steel, 5, [0, 0, side * -Math.PI / 2]);
     w.finish();
@@ -485,7 +573,7 @@ export function createPiece(type: string, color: Faction): THREE.Group {
     const p = palette(color), rig = new THREE.Group(); rig.name = 'articulated';
     if (type === 'r') { const vehicle = chariot(rig, p); vehicle.scale.setScalar(.98); vehicle.position.y = .006; }
     else if (type === 'n') warhorse(rig, p).scale.setScalar(.95);
-    else soldier(rig, type, p, [0, 0, 0], type === 'p' ? .9 : type === 'k' ? 1.055 : type === 'q' ? 1.015 : 1);
+    else soldier(rig, type, p, [0, 0, 0], type === 'p' ? .9 : type === 'k' ? 1.04 : type === 'q' ? 1.015 : 1);
     // All archetypes have a tiny shared oval footplate, helping clicks and grounding.
     const base = new Sculpt(rig, p);
     base.cone(.43, .45, .048, [0, .026, 0], p.dark, 32);

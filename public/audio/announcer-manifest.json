@@ -1,0 +1,55 @@
+{
+  "generator": "local macOS say + afconvert + Python PCM processing",
+  "networkServices": [],
+  "date": "2026-10-13",
+  "clips": [
+    {
+      "file": "commander-begin.wav",
+      "text": "軍團，前進！",
+      "voice": "Eddy (Chinese (Taiwan))",
+      "seconds": 1.183,
+      "sha256": "f18a16845c75f2fbb0b24116f276f5ac0f228a1d17865377850b14b5738d1310",
+      "peak": 0.82
+    },
+    {
+      "file": "commander-check.wav",
+      "text": "將軍！保護國王！",
+      "voice": "Reed (Chinese (Taiwan))",
+      "seconds": 1.406,
+      "sha256": "a2ff5a66b0455dd6ae06cfb5bec321ffe59f53eb69542dee9b0e1a9c71002f38",
+      "peak": 0.82
+    },
+    {
+      "file": "commander-checkmate.wav",
+      "text": "將死！勝負已定！",
+      "voice": "Eddy (Chinese (Taiwan))",
+      "seconds": 1.706,
+      "sha256": "e45726728803731a8ac000047369d0b72ac576875b10e70ce1d90b093ea4e103",
+      "peak": 0.82
+    },
+    {
+      "file": "commander-draw.wav",
+      "text": "和局。整軍，再戰！",
+      "voice": "Eddy (Chinese (Taiwan))",
+      "seconds": 1.898,
+      "sha256": "b72dc9d38b32a3eae6e21b57628f1d278a2481ada8294fabefcc42270fe8bd5b",
+      "peak": 0.82
+    },
+    {
+      "file": "commander-fear.wav",
+      "text": "不要選我！",
+      "voice": "Meijia (Chinese (Taiwan))",
+      "seconds": 0.695,
+      "sha256": "c9de2b5303a5d044d85479ecbf2d5e94e09d5244cf9c40f52cf56ccf0a50e3d3",
+      "peak": 0.8199999999999998
+    },
+    {
+      "file": "commander-relief.wav",
+      "text": "呼！逃過一劫！",
+      "voice": "Reed (Chinese (Taiwan))",
+      "seconds": 1.221,
+      "sha256": "048053ea0d17ce45aebd1221a9b991ca90b331a4c5ef07b82b75069fb6fda238",
+      "peak": 0.82
+    }
+  ]
+}

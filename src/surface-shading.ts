@@ -32,17 +32,18 @@ export function getSurfaceGrain(){
  grain=new THREE.DataTexture(data,size,size);grain.name='local-surface-grain';grain.wrapS=grain.wrapT=THREE.RepeatWrapping;grain.minFilter=THREE.LinearMipmapLinearFilter;grain.magFilter=THREE.LinearFilter;grain.generateMipmaps=true;grain.needsUpdate=true;return grain;
 }
 /** Original lightweight surface treatment; no screen-space passes or reflection render. */
-export function finishMaterial<T extends THREE.MeshStandardMaterial>(material:T,options:{scale?:number;grain?:number;roughness?:number;shade?:number}={}):T{
+export function finishMaterial<T extends THREE.MeshStandardMaterial>(material:T,options:{scale?:number;grain?:number;roughness?:number;shade?:number;edge?:number}={}):T{
  if(materials.has(material))return material;materials.add(material);
  const previous=material.onBeforeCompile,cacheKey=material.customProgramCacheKey();
  const config=new THREE.Vector4(options.scale??1.8,options.grain??.045,options.roughness??.12,options.shade??.24);
  material.onBeforeCompile=(shader,renderer)=>{
   previous.call(material,shader,renderer);if(mode==='basic')return;
   shader.uniforms.uSurfaceMood=surfaceMood;
+  shader.uniforms.uSurfaceEdge={value:options.edge??0};
   shader.uniforms.uSurfaceGrain={value:getSurfaceGrain()};shader.uniforms.uSurfaceFinish={value:config};
-  shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vFinishPosition;\nvarying float vFinishUp;')
-   .replace('#include <begin_vertex>','#include <begin_vertex>\nvFinishPosition=position;\nvFinishUp=clamp(normal.y*.5+.5,0.0,1.0);');
-  shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nuniform sampler2D uSurfaceGrain;\nuniform vec4 uSurfaceFinish;\nuniform float uSurfaceMood;\nvarying vec3 vFinishPosition;\nvarying float vFinishUp;')
+  shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vFinishPosition;\nvarying vec2 vFinishUv;\nvarying float vFinishUp;')
+   .replace('#include <begin_vertex>','#include <begin_vertex>\nvFinishPosition=position;\nvFinishUv=uv;\nvFinishUp=clamp(normal.y*.5+.5,0.0,1.0);');
+  shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nuniform sampler2D uSurfaceGrain;\nuniform vec4 uSurfaceFinish;\nuniform float uSurfaceMood;\nuniform float uSurfaceEdge;\nvarying vec3 vFinishPosition;\nvarying vec2 vFinishUv;\nvarying float vFinishUp;')
    .replace('#include <color_fragment>',`#include <color_fragment>
     vec2 finishUv=vec2(vFinishPosition.x+vFinishPosition.y*.37,vFinishPosition.z+vFinishPosition.y*.73)*uSurfaceFinish.x;
     float finishGrain=texture2D(uSurfaceGrain,finishUv).r-.5;
@@ -53,11 +54,17 @@ export function finishMaterial<T extends THREE.MeshStandardMaterial>(material:T,
     vec3 shadowTint=mix(vec3(.80,.84,.97),vec3(.67,.79,1.13),uSurfaceMood);
     vec3 highlightTint=mix(vec3(1.12,1.02,.83),vec3(.96,1.04,1.12),uSurfaceMood);
     outgoingLight*=mix(shadowTint,highlightTint,smoothstep(.02,.85,finishLight));
+    // Sub-pixel bevel glints on authored box faces. One derivative pair,
+    // no normal-map lookup and no additional render target.
+    vec2 edgeDistance=min(vFinishUv,1.0-vFinishUv);
+    vec2 edgeWidth=max(fwidth(vFinishUv)*.85,vec2(.016));
+    float forgedEdge=1.0-smoothstep(0.0,min(edgeWidth.x,edgeWidth.y),min(edgeDistance.x,edgeDistance.y));
+    outgoingLight+=diffuseColor.rgb*forgedEdge*uSurfaceEdge*(.45+.55*vFinishUp)*metalnessFactor;
     float edgeLight=pow(1.0-clamp(dot(normal,normalize(vViewPosition)),0.0,1.0),3.0);
     outgoingLight+=mix(vec3(.20,.16,.10),vec3(.10,.15,.28),uSurfaceMood)*edgeLight*metalnessFactor*.28;
     #include <opaque_fragment>`);
  };
- material.customProgramCacheKey=()=>cacheKey+(mode==='enhanced'?'|cinematic-finish-v2':'|basic');
+ material.customProgramCacheKey=()=>cacheKey+(mode==='enhanced'?'|forged-finish-v3':'|basic');
  return material;
 }
 export interface ContactSpot{x:number;y:number;z:number;rx:number;rz:number;yaw?:number;height?:number;}

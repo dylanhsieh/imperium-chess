@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "runId": "imperium-v2-final",
+  "captures": [
+    {
+      "mode": "desktop",
+      "state": "active-play",
+      "report": "artifacts/v2-release/inspector/desktop-active-play.json"
+    },
+    {
+      "mode": "desktop",
+      "state": "threat-preview",
+      "report": "artifacts/v2-release/inspector/desktop-threat-preview.json"
+    },
+    {
+      "mode": "desktop",
+      "state": "checkmate",
+      "report": "artifacts/v2-release/inspector/desktop-checkmate.json"
+    },
+    {
+      "mode": "mobile",
+      "state": "active-play",
+      "report": "artifacts/v2-release/inspector/mobile-active-play.json"
+    }
+  ],
+  "artifacts": [
+    "artifacts/v2-release/motion/report.json",
+    "artifacts/v2-release/browser-report.json",
+    "artifacts/v2-release/bot-report.json",
+    "dist/assets/ai.worker-VyyvQGlH.js",
+    "public/audio/commander-check.wav"
+  ]
+}

@@ -1,4 +1,5 @@
-export type BattleSound = 'select' | 'move' | 'charge' | 'impact' | 'capture' | 'check' | 'victory' | 'land' | 'step' | 'undo';
+export type BattleSound = 'select' | 'move' | 'charge' | 'impact' | 'capture' | 'check' | 'victory' | 'land' | 'step' | 'undo' | 'invalid';
+export type Announcement='begin'|'check'|'checkmate'|'draw'|'fear'|'relief';
 
 type AudioSource = AudioBufferSourceNode | OscillatorNode;
 type Voice = { source: AudioSource; nodes: AudioNode[]; gain: GainNode; end: number };
@@ -33,6 +34,10 @@ export class BattleAudio {
   private criesPlayed = 0;
   private lastCry: string | null = null;
   private cryVariant = 0;
+  private battlePan = 0;
+  private announcer = true;
+  private lastAnnouncement = -100;
+  private announcementsPlayed = 0;
   private cryTimes = new Map<string, number>();
 
   private readonly onVisibility = () => {
@@ -84,7 +89,7 @@ export class BattleAudio {
     this.voiceAbort = new AbortController();
     const signal = this.voiceAbort.signal;
     const base = (import.meta as ImportMeta & { env: { BASE_URL: string } }).env.BASE_URL;
-    const names = ['male-attack-ha', 'male-attack-he', 'female-attack-ha', 'female-attack-he', 'male-defeat', 'female-defeat'];
+    const names = ['male-attack-ha', 'male-attack-he', 'female-attack-ha', 'female-attack-he', 'male-defeat', 'female-defeat', 'commander-begin', 'commander-check', 'commander-checkmate', 'commander-draw', 'commander-fear', 'commander-relief'];
     this.voiceLoading = Promise.all(names.map(async name => {
       try {
         const response = await fetch(new URL(`${base}audio/${name}.wav`, document.baseURI), { signal });
@@ -96,8 +101,22 @@ export class BattleAudio {
     return this.voiceLoading;
   }
 
-  voiceStatus(): { loaded: number; played: number; last: string | null } {
-    return { loaded: this.voiceBuffers.size, played: this.criesPlayed, last: this.lastCry };
+  voiceStatus(): { loaded: number; played: number; last: string | null; announcements:number; active:number } {
+    return { loaded: this.voiceBuffers.size, played: this.criesPlayed, last: this.lastCry,announcements:this.announcementsPlayed,active:this.voices.length };
+  }
+
+  setBattlePosition(pan:number):void {this.battlePan=Math.max(-.75,Math.min(.75,pan*.65));}
+  setAnnouncer(enabled:boolean):void {this.announcer=enabled;}
+  announce(event:Announcement):void {
+    const ctx=this.ctx;if(!ctx||!this.unlocked||this.disposed||this.muted||!this.announcer||ctx.state!=='running'||document.hidden)return;
+    const comic=event==='fear'||event==='relief';if(comic&&ctx.currentTime-this.lastAnnouncement<1.3)return;
+    const buffer=this.voiceBuffers.get('commander-'+event);if(!buffer)return;
+    this.lastAnnouncement=ctx.currentTime;this.announcementsPlayed++;
+    const source=ctx.createBufferSource();source.buffer=buffer;source.playbackRate.value=1;
+    const at=ctx.currentTime+.012,duration=buffer.duration,filter=ctx.createBiquadFilter();filter.type='highpass';filter.frequency.value=100;
+    this.prepareVoice(source,filter,{at,duration:duration+.03,frequency:1,volume:comic?.46:.61,attack:.008,wet:comic?.11:.22,pan:comic?this.battlePan:0});
+    const voice=this.voices[this.voices.length-1];voice.gain.gain.cancelScheduledValues(at);voice.gain.gain.setValueAtTime(0,at);voice.gain.gain.linearRampToValueAtTime(comic?.46:.61,at+.01);voice.gain.gain.setValueAtTime(comic?.46:.61,at+Math.max(.02,duration-.06));voice.gain.gain.linearRampToValueAtTime(0,at+duration+.015);
+    source.start(at);source.stop(at+duration+.04);
   }
 
   battleCry(event: 'attack' | 'defeat', piece: string): void {
@@ -129,7 +148,7 @@ export class BattleAudio {
     filter.type = 'highpass';
     filter.frequency.value = 95;
     filter.Q.value = 0.5;
-    this.prepareVoice(source, filter, { at, duration: duration + 0.025, frequency: 1, volume: 0.64, attack: 0.005, wet: 0.2 });
+    this.prepareVoice(source, filter, { at, duration: duration + 0.025, frequency: 1, volume: 0.64, attack: 0.005, wet: 0.2, pan:this.battlePan });
     // Voice clips already carry a deliberate envelope: preserve the full phrase.
     const voice = this.voices[this.voices.length - 1];
     voice.gain.gain.cancelScheduledValues(at);
@@ -351,9 +370,13 @@ export class BattleAudio {
     const rook = kind === 'r' || kind === 'rook' || kind === 'chariot';
     const knight = kind === 'n' || kind === 'knight';
     const caster = kind === 'b' || kind === 'bishop' || kind === 'q' || kind === 'queen';
-    const pan = ((this.variant % 5) - 2) * 0.065;
+    const pan = this.battlePan + ((this.variant % 5) - 2) * 0.035;
 
     switch (event) {
+      case 'invalid':
+        this.tone({at,duration:.14,frequency:180,endFrequency:130,volume:.055,wave:'triangle',ui:true,wet:.04});
+        this.noise({at,duration:.055,frequency:550,volume:.035,ui:true,wet:.03});
+        break;
       case 'select':
         this.noise({ at, duration: 0.047, frequency: 1150, volume: 0.065, ui: true, wet: 0.13 });
         this.tone({ at, duration: 0.22, frequency: 420, endFrequency: 415, volume: 0.043, wave: 'triangle', cutoff: 1400, ui: true, wet: 0.25 });
@@ -398,6 +421,10 @@ export class BattleAudio {
         }
         break;
       case 'impact':
+        if(this.ambience){this.ambience.gain.cancelScheduledValues(at);this.ambience.gain.setValueAtTime(.05,at);this.ambience.gain.linearRampToValueAtTime(.14,at+.6);}
+        if(rook){for(let i=0;i<4;i++)this.noise({at:at+i*.07,duration:.2,frequency:280+i*210,volume:.12-i*.02,filter:'lowpass',pan:i%2?.5:-.5,wet:.28});this.tone({at,duration:.65,frequency:53,endFrequency:24,volume:.16,pan,wet:.25});}
+        else if(caster){for(const [i,f]of[440,660,880,1320].entries())this.tone({at:at+i*.025,duration:.48-i*.065,frequency:f,endFrequency:f*.91,volume:.025,pan,wet:.43});}
+        else{this.noise({at,duration:.045,frequency:6500,endFrequency:2300,volume:.16,pan,wet:.1});this.tone({at,duration:.3,frequency:knight?970:1511,endFrequency:knight?760:1470,volume:.038,pan,wet:.3});}
         this.tone({ at, duration: 0.48, frequency: 145, endFrequency: 36, volume: 0.39, wet: 0.13 });
         this.noise({ at, duration: 0.23, frequency: 750, endFrequency: 130, filter: 'lowpass', volume: 0.43, wet: 0.32 });
         this.metal(at + 0.005, 1.3);

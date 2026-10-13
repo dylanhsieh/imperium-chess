@@ -1,0 +1,734 @@
+{
+  "results": [
+    {
+      "graphics": "basic",
+      "state": "active-play",
+      "diagnostics": {
+        "frame": 102,
+        "fps": 60,
+        "game": {
+          "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+          "turn": "w",
+          "moves": 2,
+          "selected": "g1",
+          "legal": [
+            "e2",
+            "f3",
+            "h3"
+          ],
+          "fear": [],
+          "animating": false,
+          "actionProgress": 0,
+          "gameOver": false
+        },
+        "renderer": {
+          "calls": 101,
+          "triangles": 316592,
+          "geometries": 101,
+          "textures": 7
+        },
+        "render": {
+          "calls": 101,
+          "triangles": 316592
+        },
+        "memory": {
+          "geometries": 101,
+          "textures": 7
+        },
+        "quality": {
+          "atmosphere": {
+            "side": "w",
+            "blend": 0,
+            "enhanced": false,
+            "mistDraws": 0
+          },
+          "graphics": "basic",
+          "dpr": 1,
+          "shadowMapSize": 2048,
+          "shadowLights": 1,
+          "postPasses": 0
+        },
+        "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+      },
+      "benchmark": {
+        "mode": "basic",
+        "method": "synchronous-render-completion-cpu-and-gpu",
+        "samples": 40,
+        "medianMs": 0.3999999761581421,
+        "p95Ms": 0.5,
+        "calls": 101,
+        "triangles": 316592,
+        "geometries": 101,
+        "textures": 7,
+        "extraPostPasses": 0
+      }
+    },
+    {
+      "graphics": "enhanced",
+      "state": "active-play",
+      "diagnostics": {
+        "frame": 155,
+        "fps": 61,
+        "game": {
+          "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+          "turn": "w",
+          "moves": 2,
+          "selected": "g1",
+          "legal": [
+            "e2",
+            "f3",
+            "h3"
+          ],
+          "fear": [],
+          "animating": false,
+          "actionProgress": 0,
+          "gameOver": false
+        },
+        "renderer": {
+          "calls": 103,
+          "triangles": 316660,
+          "geometries": 101,
+          "textures": 7
+        },
+        "render": {
+          "calls": 103,
+          "triangles": 316660
+        },
+        "memory": {
+          "geometries": 101,
+          "textures": 7
+        },
+        "quality": {
+          "atmosphere": {
+            "side": "w",
+            "blend": 0,
+            "enhanced": true,
+            "mistDraws": 1
+          },
+          "graphics": "enhanced",
+          "dpr": 1,
+          "shadowMapSize": 2048,
+          "shadowLights": 1,
+          "postPasses": 0
+        },
+        "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+      },
+      "benchmark": {
+        "mode": "enhanced",
+        "method": "synchronous-render-completion-cpu-and-gpu",
+        "samples": 40,
+        "medianMs": 0.3999999761581421,
+        "p95Ms": 0.5,
+        "calls": 103,
+        "triangles": 316660,
+        "geometries": 101,
+        "textures": 7,
+        "extraPostPasses": 0
+      }
+    },
+    {
+      "type": "pawn",
+      "state": {
+        "progress": 0.3814888888862392,
+        "hit": false,
+        "root": [
+          0.11058468509376884,
+          0.19270599836858412,
+          0.10490884656181876
+        ],
+        "target": [
+          -0.7285797864952592,
+          0.16,
+          -0.71
+        ],
+        "impact": [
+          -0.71,
+          0.16,
+          -0.71
+        ],
+        "weapon": {
+          "base": [
+            0.13229795235892963,
+            0.912932971863508,
+            -0.19573853363080707
+          ],
+          "tip": [
+            0.16900604538578978,
+            1.3453843226676918,
+            -0.11751229063034088
+          ]
+        },
+        "joints": [
+          {
+            "name": "torso",
+            "rotation": [
+              0,
+              0,
+              0,
+              "XYZ"
+            ]
+          },
+          {
+            "name": "weapon-arm",
+            "rotation": [
+              -0.060310523537196695,
+              0,
+              -0.0542191588265836,
+              "XYZ"
+            ]
+          },
+          {
+            "name": "weapon-elbow",
+            "rotation": [
+              -0.40961900913830784,
+              0,
+              0,
+              "XYZ"
+            ]
+          },
+          {
+            "name": "weapon-wrist",
+            "rotation": [
+              0.2168766353063344,
+              0,
+              0,
+              "XYZ"
+            ]
+          }
+        ]
+      },
+      "diagnostics": {
+        "frame": 300,
+        "fps": 60,
+        "game": {
+          "fen": "k7/7p/8/3P4/8/8/8/7K b - - 0 1",
+          "turn": "b",
+          "moves": 1,
+          "selected": null,
+          "legal": [],
+          "fear": [
+            "d5"
+          ],
+          "animating": true,
+          "actionProgress": 0.3814888888862392,
+          "gameOver": false
+        },
+        "renderer": {
+          "calls": 120,
+          "triangles": 66484,
+          "geometries": 181,
+          "textures": 8
+        },
+        "render": {
+          "calls": 120,
+          "triangles": 66484
+        },
+        "memory": {
+          "geometries": 181,
+          "textures": 8
+        },
+        "quality": {
+          "atmosphere": {
+            "side": "w",
+            "blend": 0,
+            "enhanced": true,
+            "mistDraws": 1
+          },
+          "graphics": "enhanced",
+          "dpr": 1,
+          "shadowMapSize": 2048,
+          "shadowLights": 1,
+          "postPasses": 0
+        },
+        "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+      }
+    },
+    {
+      "type": "rook",
+      "state": {
+        "progress": 0.381466666658719,
+        "hit": false,
+        "root": [
+          0.6027026488085674,
+          0.16,
+          0.71
+        ],
+        "target": [
+          3.5722762758008493,
+          0.16,
+          0.71
+        ],
+        "impact": [
+          3.55,
+          0.16,
+          0.71
+        ],
+        "weapon": null,
+        "joints": [
+          {
+            "name": "torso"
+          },
+          {
+            "name": "weapon-arm",
+            "rotation": [
+              -0.2801683650692911,
+              0,
+              -0.05743916985109135,
+              "XYZ"
+            ]
+          },
+          {
+            "name": "weapon-elbow"
+          },
+          {
+            "name": "weapon-wrist"
+          }
+        ]
+      },
+      "diagnostics": {
+        "frame": 441,
+        "fps": 60,
+        "game": {
+          "fen": "k7/7p/8/8/6R1/8/8/7K b - - 0 1",
+          "turn": "b",
+          "moves": 1,
+          "selected": null,
+          "legal": [],
+          "fear": [
+            "g4"
+          ],
+          "animating": true,
+          "actionProgress": 0.381466666658719,
+          "gameOver": false
+        },
+        "renderer": {
+          "calls": 91,
+          "triangles": 63887,
+          "geometries": 210,
+          "textures": 8
+        },
+        "render": {
+          "calls": 91,
+          "triangles": 63887
+        },
+        "memory": {
+          "geometries": 210,
+          "textures": 8
+        },
+        "quality": {
+          "atmosphere": {
+            "side": "w",
+            "blend": 0,
+            "enhanced": true,
+            "mistDraws": 1
+          },
+          "graphics": "enhanced",
+          "dpr": 1,
+          "shadowMapSize": 2048,
+          "shadowLights": 1,
+          "postPasses": 0
+        },
+        "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+      }
+    },
+    {
+      "type": "knight",
+      "state": {
+        "progress": 0.3814444444444443,
+        "hit": false,
+        "root": [
+          0.6347339120284621,
+          1.5609423434202077,
+          0.08199675130290074
+        ],
+        "target": [
+          2.116621294108227,
+          0.16,
+          -0.71
+        ],
+        "impact": [
+          2.13,
+          0.16,
+          -0.71
+        ],
+        "weapon": {
+          "base": [
+            0.7081370431955671,
+            3.2976710822179083,
+            0.24573725019428755
+          ],
+          "tip": [
+            0.6670536857849411,
+            3.458342496473996,
+            0.25984852174647066
+          ]
+        },
+        "joints": [
+          {
+            "name": "torso",
+            "rotation": [
+              0,
+              0,
+              0,
+              "XYZ"
+            ]
+          },
+          {
+            "name": "weapon-arm",
+            "rotation": [
+              -0.3613377577111412,
+              0,
+              -0.05423002619691126,
+              "XYZ"
+            ]
+          },
+          {
+            "name": "weapon-elbow",
+            "rotation": [
+              -0.24414278053364769,
+              0,
+              0,
+              "XYZ"
+            ]
+          },
+          {
+            "name": "weapon-wrist",
+            "rotation": [
+              0.21692010478764504,
+              0,
+              0,
+              "XYZ"
+            ]
+          }
+        ]
+      },
+      "diagnostics": {
+        "frame": 580,
+        "fps": 61,
+        "game": {
+          "fen": "k7/7p/8/5N2/8/8/8/7K b - - 0 1",
+          "turn": "b",
+          "moves": 1,
+          "selected": null,
+          "legal": [],
+          "fear": [
+            "f5"
+          ],
+          "animating": true,
+          "actionProgress": 0.3814444444444443,
+          "gameOver": false
+        },
+        "renderer": {
+          "calls": 141,
+          "triangles": 73139,
+          "geometries": 271,
+          "textures": 8
+        },
+        "render": {
+          "calls": 141,
+          "triangles": 73139
+        },
+        "memory": {
+          "geometries": 271,
+          "textures": 8
+        },
+        "quality": {
+          "atmosphere": {
+            "side": "w",
+            "blend": 0,
+            "enhanced": true,
+            "mistDraws": 1
+          },
+          "graphics": "enhanced",
+          "dpr": 1,
+          "shadowMapSize": 2048,
+          "shadowLights": 1,
+          "postPasses": 0
+        },
+        "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+      }
+    },
+    {
+      "type": "bishop",
+      "state": {
+        "progress": 0.38144444444444403,
+        "hit": false,
+        "root": [
+          0.6424439350262272,
+          0.2286350347029188,
+          -0.6615157661878404
+        ],
+        "target": [
+          2.1483893052596565,
+          0.16,
+          -2.13
+        ],
+        "impact": [
+          2.13,
+          0.16,
+          -2.13
+        ],
+        "weapon": {
+          "base": [
+            0.8922918344709797,
+            1.6402557501840391,
+            -0.5421510729640246
+          ],
+          "tip": [
+            0.8309507197289734,
+            1.8754859925980623,
+            -0.4930796892862854
+          ]
+        },
+        "joints": [
+          {
+            "name": "torso",
+            "rotation": [
+              0,
+              0,
+              0,
+              "XYZ"
+            ]
+          },
+          {
+            "name": "weapon-arm",
+            "rotation": [
+              -0.3613377577111415,
+              0,
+              -0.05423002619691134,
+              "XYZ"
+            ]
+          },
+          {
+            "name": "weapon-elbow",
+            "rotation": [
+              -0.24414278053364813,
+              0,
+              0,
+              "XYZ"
+            ]
+          },
+          {
+            "name": "weapon-wrist",
+            "rotation": [
+              0.21692010478764537,
+              0,
+              0,
+              "XYZ"
+            ]
+          }
+        ]
+      },
+      "diagnostics": {
+        "frame": 721,
+        "fps": 60,
+        "game": {
+          "fen": "k7/7p/5B2/8/8/8/8/7K b - - 0 1",
+          "turn": "b",
+          "moves": 1,
+          "selected": null,
+          "legal": [],
+          "fear": [
+            "f6"
+          ],
+          "animating": true,
+          "actionProgress": 0.38144444444444403,
+          "gameOver": false
+        },
+        "renderer": {
+          "calls": 118,
+          "triangles": 67304,
+          "geometries": 311,
+          "textures": 8
+        },
+        "render": {
+          "calls": 118,
+          "triangles": 67304
+        },
+        "memory": {
+          "geometries": 311,
+          "textures": 8
+        },
+        "quality": {
+          "atmosphere": {
+            "side": "w",
+            "blend": 0,
+            "enhanced": true,
+            "mistDraws": 1
+          },
+          "graphics": "enhanced",
+          "dpr": 1,
+          "shadowMapSize": 2048,
+          "shadowLights": 1,
+          "postPasses": 0
+        },
+        "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+      }
+    },
+    {
+      "type": "queen",
+      "state": {
+        "progress": 0.38146666665871903,
+        "hit": false,
+        "root": [
+          1.633522739034488,
+          0.2286233693907833,
+          0.7967380625146075
+        ],
+        "target": [
+          3.5428143418118836,
+          0.16,
+          0.71
+        ],
+        "impact": [
+          3.55,
+          0.16,
+          0.71
+        ],
+        "weapon": {
+          "base": [
+            1.9227146529785308,
+            1.071835796584744,
+            1.0834561640801483
+          ],
+          "tip": [
+            1.724619151616797,
+            1.6687379038365635,
+            1.0614439697647071
+          ]
+        },
+        "joints": [
+          {
+            "name": "torso",
+            "rotation": [
+              0,
+              0,
+              0,
+              "XYZ"
+            ]
+          },
+          {
+            "name": "weapon-arm",
+            "rotation": [
+              -0.3613138162047346,
+              0,
+              -0.05422459372679223,
+              "XYZ"
+            ]
+          },
+          {
+            "name": "weapon-elbow",
+            "rotation": [
+              -0.2441115831895326,
+              0,
+              0,
+              "XYZ"
+            ]
+          },
+          {
+            "name": "weapon-wrist",
+            "rotation": [
+              0.21689837490716893,
+              0,
+              0,
+              "XYZ"
+            ]
+          }
+        ]
+      },
+      "diagnostics": {
+        "frame": 861,
+        "fps": 60,
+        "game": {
+          "fen": "k7/7p/8/8/6Q1/8/8/7K b - - 0 1",
+          "turn": "b",
+          "moves": 1,
+          "selected": null,
+          "legal": [],
+          "fear": [
+            "g4"
+          ],
+          "animating": true,
+          "actionProgress": 0.38146666665871903,
+          "gameOver": false
+        },
+        "renderer": {
+          "calls": 120,
+          "triangles": 69627,
+          "geometries": 351,
+          "textures": 8
+        },
+        "render": {
+          "calls": 120,
+          "triangles": 69627
+        },
+        "memory": {
+          "geometries": 351,
+          "textures": 8
+        },
+        "quality": {
+          "atmosphere": {
+            "side": "w",
+            "blend": 0,
+            "enhanced": true,
+            "mistDraws": 1
+          },
+          "graphics": "enhanced",
+          "dpr": 1,
+          "shadowMapSize": 2048,
+          "shadowLights": 1,
+          "postPasses": 0
+        },
+        "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+      }
+    },
+    {
+      "type": "king",
+      "state": null,
+      "diagnostics": {
+        "frame": 15,
+        "fps": 60,
+        "game": {
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+          "turn": "w",
+          "moves": 0,
+          "selected": null,
+          "legal": [],
+          "fear": [],
+          "animating": false,
+          "actionProgress": 0,
+          "gameOver": false
+        },
+        "renderer": {
+          "calls": 98,
+          "triangles": 316186,
+          "geometries": 96,
+          "textures": 7
+        },
+        "render": {
+          "calls": 98,
+          "triangles": 316186
+        },
+        "memory": {
+          "geometries": 96,
+          "textures": 7
+        },
+        "quality": {
+          "atmosphere": {
+            "side": "w",
+            "blend": 0,
+            "enhanced": true,
+            "mistDraws": 1
+          },
+          "graphics": "enhanced",
+          "dpr": 1,
+          "shadowMapSize": 2048,
+          "shadowLights": 1,
+          "postPasses": 0
+        },
+        "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+      }
+    }
+  ],
+  "errors": []
+}

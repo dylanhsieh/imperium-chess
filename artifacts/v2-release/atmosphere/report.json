@@ -1,0 +1,735 @@
+{
+  "url": "http://127.0.0.1:5194",
+  "captures": [
+    {
+      "name": "desktop",
+      "side": "w",
+      "mode": "basic",
+      "diagnostic": {
+        "frame": 164,
+        "fps": 61,
+        "game": {
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+          "turn": "w",
+          "moves": 0,
+          "selected": null,
+          "legal": [],
+          "fear": [],
+          "animating": false,
+          "actionProgress": 0,
+          "gameOver": false
+        },
+        "renderer": {
+          "calls": 97,
+          "triangles": 316130,
+          "geometries": 97,
+          "textures": 7
+        },
+        "render": {
+          "calls": 97,
+          "triangles": 316130
+        },
+        "memory": {
+          "geometries": 97,
+          "textures": 7
+        },
+        "quality": {
+          "atmosphere": {
+            "side": "w",
+            "blend": 0,
+            "enhanced": false,
+            "mistDraws": 0
+          },
+          "graphics": "basic",
+          "dpr": 1,
+          "shadowMapSize": 2048,
+          "shadowLights": 1,
+          "postPasses": 0
+        },
+        "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+      },
+      "performance": {
+        "mode": "basic",
+        "method": "synchronous-render-completion-cpu-and-gpu",
+        "samples": 60,
+        "medianMs": 0.30000001192092896,
+        "p95Ms": 0.40000003576278687,
+        "calls": 97,
+        "triangles": 316130,
+        "geometries": 97,
+        "textures": 7,
+        "extraPostPasses": 0
+      }
+    },
+    {
+      "name": "desktop",
+      "side": "w",
+      "mode": "enhanced",
+      "diagnostic": {
+        "frame": 203,
+        "fps": 60,
+        "game": {
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+          "turn": "w",
+          "moves": 0,
+          "selected": null,
+          "legal": [],
+          "fear": [],
+          "animating": false,
+          "actionProgress": 0,
+          "gameOver": false
+        },
+        "renderer": {
+          "calls": 99,
+          "triangles": 316198,
+          "geometries": 97,
+          "textures": 7
+        },
+        "render": {
+          "calls": 99,
+          "triangles": 316198
+        },
+        "memory": {
+          "geometries": 97,
+          "textures": 7
+        },
+        "quality": {
+          "atmosphere": {
+            "side": "w",
+            "blend": 0,
+            "enhanced": true,
+            "mistDraws": 1
+          },
+          "graphics": "enhanced",
+          "dpr": 1,
+          "shadowMapSize": 2048,
+          "shadowLights": 1,
+          "postPasses": 0
+        },
+        "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+      },
+      "performance": {
+        "mode": "enhanced",
+        "method": "synchronous-render-completion-cpu-and-gpu",
+        "samples": 60,
+        "medianMs": 0.3999999761581421,
+        "p95Ms": 0.5,
+        "calls": 99,
+        "triangles": 316198,
+        "geometries": 97,
+        "textures": 7,
+        "extraPostPasses": 0
+      }
+    },
+    {
+      "name": "desktop",
+      "side": "b",
+      "mode": "basic",
+      "diagnostic": {
+        "frame": 317,
+        "fps": 63,
+        "game": {
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1",
+          "turn": "b",
+          "moves": 0,
+          "selected": null,
+          "legal": [],
+          "fear": [],
+          "animating": false,
+          "actionProgress": 0,
+          "gameOver": false
+        },
+        "renderer": {
+          "calls": 97,
+          "triangles": 316130,
+          "geometries": 97,
+          "textures": 7
+        },
+        "render": {
+          "calls": 97,
+          "triangles": 316130
+        },
+        "memory": {
+          "geometries": 97,
+          "textures": 7
+        },
+        "quality": {
+          "atmosphere": {
+            "side": "b",
+            "blend": 1,
+            "enhanced": false,
+            "mistDraws": 0
+          },
+          "graphics": "basic",
+          "dpr": 1,
+          "shadowMapSize": 2048,
+          "shadowLights": 1,
+          "postPasses": 0
+        },
+        "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+      },
+      "performance": {
+        "mode": "basic",
+        "method": "synchronous-render-completion-cpu-and-gpu",
+        "samples": 60,
+        "medianMs": 0.3999999761581421,
+        "p95Ms": 0.5,
+        "calls": 97,
+        "triangles": 316130,
+        "geometries": 97,
+        "textures": 7,
+        "extraPostPasses": 0
+      }
+    },
+    {
+      "name": "desktop",
+      "side": "b",
+      "mode": "enhanced",
+      "diagnostic": {
+        "frame": 357,
+        "fps": 61,
+        "game": {
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1",
+          "turn": "b",
+          "moves": 0,
+          "selected": null,
+          "legal": [],
+          "fear": [],
+          "animating": false,
+          "actionProgress": 0,
+          "gameOver": false
+        },
+        "renderer": {
+          "calls": 99,
+          "triangles": 316198,
+          "geometries": 97,
+          "textures": 7
+        },
+        "render": {
+          "calls": 99,
+          "triangles": 316198
+        },
+        "memory": {
+          "geometries": 97,
+          "textures": 7
+        },
+        "quality": {
+          "atmosphere": {
+            "side": "b",
+            "blend": 1,
+            "enhanced": true,
+            "mistDraws": 1
+          },
+          "graphics": "enhanced",
+          "dpr": 1,
+          "shadowMapSize": 2048,
+          "shadowLights": 1,
+          "postPasses": 0
+        },
+        "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+      },
+      "performance": {
+        "mode": "enhanced",
+        "method": "synchronous-render-completion-cpu-and-gpu",
+        "samples": 60,
+        "medianMs": 0.30000001192092896,
+        "p95Ms": 0.40000003576278687,
+        "calls": 99,
+        "triangles": 316198,
+        "geometries": 97,
+        "textures": 7,
+        "extraPostPasses": 0
+      }
+    },
+    {
+      "name": "ipad",
+      "side": "w",
+      "mode": "basic",
+      "diagnostic": {
+        "frame": 163,
+        "fps": 60,
+        "game": {
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+          "turn": "w",
+          "moves": 0,
+          "selected": null,
+          "legal": [],
+          "fear": [],
+          "animating": false,
+          "actionProgress": 0,
+          "gameOver": false
+        },
+        "renderer": {
+          "calls": 94,
+          "triangles": 315758,
+          "geometries": 94,
+          "textures": 7
+        },
+        "render": {
+          "calls": 94,
+          "triangles": 315758
+        },
+        "memory": {
+          "geometries": 94,
+          "textures": 7
+        },
+        "quality": {
+          "atmosphere": {
+            "side": "w",
+            "blend": 0,
+            "enhanced": false,
+            "mistDraws": 0
+          },
+          "graphics": "basic",
+          "dpr": 1,
+          "shadowMapSize": 1024,
+          "shadowLights": 1,
+          "postPasses": 0
+        },
+        "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+      },
+      "performance": {
+        "mode": "basic",
+        "method": "synchronous-render-completion-cpu-and-gpu",
+        "samples": 60,
+        "medianMs": 0.3999999761581421,
+        "p95Ms": 0.5,
+        "calls": 94,
+        "triangles": 315758,
+        "geometries": 94,
+        "textures": 7,
+        "extraPostPasses": 0
+      }
+    },
+    {
+      "name": "ipad",
+      "side": "w",
+      "mode": "enhanced",
+      "diagnostic": {
+        "frame": 200,
+        "fps": 60,
+        "game": {
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+          "turn": "w",
+          "moves": 0,
+          "selected": null,
+          "legal": [],
+          "fear": [],
+          "animating": false,
+          "actionProgress": 0,
+          "gameOver": false
+        },
+        "renderer": {
+          "calls": 96,
+          "triangles": 315826,
+          "geometries": 94,
+          "textures": 7
+        },
+        "render": {
+          "calls": 96,
+          "triangles": 315826
+        },
+        "memory": {
+          "geometries": 94,
+          "textures": 7
+        },
+        "quality": {
+          "atmosphere": {
+            "side": "w",
+            "blend": 0,
+            "enhanced": true,
+            "mistDraws": 1
+          },
+          "graphics": "enhanced",
+          "dpr": 1,
+          "shadowMapSize": 1024,
+          "shadowLights": 1,
+          "postPasses": 0
+        },
+        "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+      },
+      "performance": {
+        "mode": "enhanced",
+        "method": "synchronous-render-completion-cpu-and-gpu",
+        "samples": 60,
+        "medianMs": 0.30000001192092896,
+        "p95Ms": 0.5,
+        "calls": 96,
+        "triangles": 315826,
+        "geometries": 94,
+        "textures": 7,
+        "extraPostPasses": 0
+      }
+    },
+    {
+      "name": "ipad",
+      "side": "b",
+      "mode": "basic",
+      "diagnostic": {
+        "frame": 313,
+        "fps": 60,
+        "game": {
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1",
+          "turn": "b",
+          "moves": 0,
+          "selected": null,
+          "legal": [],
+          "fear": [],
+          "animating": false,
+          "actionProgress": 0,
+          "gameOver": false
+        },
+        "renderer": {
+          "calls": 94,
+          "triangles": 315758,
+          "geometries": 94,
+          "textures": 7
+        },
+        "render": {
+          "calls": 94,
+          "triangles": 315758
+        },
+        "memory": {
+          "geometries": 94,
+          "textures": 7
+        },
+        "quality": {
+          "atmosphere": {
+            "side": "b",
+            "blend": 1,
+            "enhanced": false,
+            "mistDraws": 0
+          },
+          "graphics": "basic",
+          "dpr": 1,
+          "shadowMapSize": 1024,
+          "shadowLights": 1,
+          "postPasses": 0
+        },
+        "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+      },
+      "performance": {
+        "mode": "basic",
+        "method": "synchronous-render-completion-cpu-and-gpu",
+        "samples": 60,
+        "medianMs": 0.3999999761581421,
+        "p95Ms": 0.5,
+        "calls": 94,
+        "triangles": 315758,
+        "geometries": 94,
+        "textures": 7,
+        "extraPostPasses": 0
+      }
+    },
+    {
+      "name": "ipad",
+      "side": "b",
+      "mode": "enhanced",
+      "diagnostic": {
+        "frame": 350,
+        "fps": 57,
+        "game": {
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1",
+          "turn": "b",
+          "moves": 0,
+          "selected": null,
+          "legal": [],
+          "fear": [],
+          "animating": false,
+          "actionProgress": 0,
+          "gameOver": false
+        },
+        "renderer": {
+          "calls": 96,
+          "triangles": 315826,
+          "geometries": 94,
+          "textures": 7
+        },
+        "render": {
+          "calls": 96,
+          "triangles": 315826
+        },
+        "memory": {
+          "geometries": 94,
+          "textures": 7
+        },
+        "quality": {
+          "atmosphere": {
+            "side": "b",
+            "blend": 1,
+            "enhanced": true,
+            "mistDraws": 1
+          },
+          "graphics": "enhanced",
+          "dpr": 1,
+          "shadowMapSize": 1024,
+          "shadowLights": 1,
+          "postPasses": 0
+        },
+        "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+      },
+      "performance": {
+        "mode": "enhanced",
+        "method": "synchronous-render-completion-cpu-and-gpu",
+        "samples": 60,
+        "medianMs": 0.30000001192092896,
+        "p95Ms": 0.40000003576278687,
+        "calls": 96,
+        "triangles": 315826,
+        "geometries": 94,
+        "textures": 7,
+        "extraPostPasses": 0
+      }
+    },
+    {
+      "name": "phone",
+      "side": "w",
+      "mode": "basic",
+      "diagnostic": {
+        "frame": 159,
+        "fps": 62,
+        "game": {
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+          "turn": "w",
+          "moves": 0,
+          "selected": null,
+          "legal": [],
+          "fear": [],
+          "animating": false,
+          "actionProgress": 0,
+          "gameOver": false
+        },
+        "renderer": {
+          "calls": 92,
+          "triangles": 315752,
+          "geometries": 92,
+          "textures": 7
+        },
+        "render": {
+          "calls": 92,
+          "triangles": 315752
+        },
+        "memory": {
+          "geometries": 92,
+          "textures": 7
+        },
+        "quality": {
+          "atmosphere": {
+            "side": "w",
+            "blend": 0,
+            "enhanced": false,
+            "mistDraws": 0
+          },
+          "graphics": "basic",
+          "dpr": 1,
+          "shadowMapSize": 1024,
+          "shadowLights": 1,
+          "postPasses": 0
+        },
+        "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+      },
+      "performance": {
+        "mode": "basic",
+        "method": "synchronous-render-completion-cpu-and-gpu",
+        "samples": 60,
+        "medianMs": 0.30000001192092896,
+        "p95Ms": 0.5,
+        "calls": 92,
+        "triangles": 315752,
+        "geometries": 92,
+        "textures": 7,
+        "extraPostPasses": 0
+      }
+    },
+    {
+      "name": "phone",
+      "side": "w",
+      "mode": "enhanced",
+      "diagnostic": {
+        "frame": 192,
+        "fps": 60,
+        "game": {
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+          "turn": "w",
+          "moves": 0,
+          "selected": null,
+          "legal": [],
+          "fear": [],
+          "animating": false,
+          "actionProgress": 0,
+          "gameOver": false
+        },
+        "renderer": {
+          "calls": 94,
+          "triangles": 315820,
+          "geometries": 92,
+          "textures": 7
+        },
+        "render": {
+          "calls": 94,
+          "triangles": 315820
+        },
+        "memory": {
+          "geometries": 92,
+          "textures": 7
+        },
+        "quality": {
+          "atmosphere": {
+            "side": "w",
+            "blend": 0,
+            "enhanced": true,
+            "mistDraws": 1
+          },
+          "graphics": "enhanced",
+          "dpr": 1,
+          "shadowMapSize": 1024,
+          "shadowLights": 1,
+          "postPasses": 0
+        },
+        "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+      },
+      "performance": {
+        "mode": "enhanced",
+        "method": "synchronous-render-completion-cpu-and-gpu",
+        "samples": 60,
+        "medianMs": 0.3999999761581421,
+        "p95Ms": 0.5,
+        "calls": 94,
+        "triangles": 315820,
+        "geometries": 92,
+        "textures": 7,
+        "extraPostPasses": 0
+      }
+    },
+    {
+      "name": "phone",
+      "side": "b",
+      "mode": "basic",
+      "diagnostic": {
+        "frame": 302,
+        "fps": 64,
+        "game": {
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1",
+          "turn": "b",
+          "moves": 0,
+          "selected": null,
+          "legal": [],
+          "fear": [],
+          "animating": false,
+          "actionProgress": 0,
+          "gameOver": false
+        },
+        "renderer": {
+          "calls": 92,
+          "triangles": 315752,
+          "geometries": 92,
+          "textures": 7
+        },
+        "render": {
+          "calls": 92,
+          "triangles": 315752
+        },
+        "memory": {
+          "geometries": 92,
+          "textures": 7
+        },
+        "quality": {
+          "atmosphere": {
+            "side": "b",
+            "blend": 1,
+            "enhanced": false,
+            "mistDraws": 0
+          },
+          "graphics": "basic",
+          "dpr": 1,
+          "shadowMapSize": 1024,
+          "shadowLights": 1,
+          "postPasses": 0
+        },
+        "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+      },
+      "performance": {
+        "mode": "basic",
+        "method": "synchronous-render-completion-cpu-and-gpu",
+        "samples": 60,
+        "medianMs": 0.30000001192092896,
+        "p95Ms": 0.5,
+        "calls": 92,
+        "triangles": 315752,
+        "geometries": 92,
+        "textures": 7,
+        "extraPostPasses": 0
+      }
+    },
+    {
+      "name": "phone",
+      "side": "b",
+      "mode": "enhanced",
+      "diagnostic": {
+        "frame": 334,
+        "fps": 60,
+        "game": {
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1",
+          "turn": "b",
+          "moves": 0,
+          "selected": null,
+          "legal": [],
+          "fear": [],
+          "animating": false,
+          "actionProgress": 0,
+          "gameOver": false
+        },
+        "renderer": {
+          "calls": 94,
+          "triangles": 315820,
+          "geometries": 92,
+          "textures": 7
+        },
+        "render": {
+          "calls": 94,
+          "triangles": 315820
+        },
+        "memory": {
+          "geometries": 92,
+          "textures": 7
+        },
+        "quality": {
+          "atmosphere": {
+            "side": "b",
+            "blend": 1,
+            "enhanced": true,
+            "mistDraws": 1
+          },
+          "graphics": "enhanced",
+          "dpr": 1,
+          "shadowMapSize": 1024,
+          "shadowLights": 1,
+          "postPasses": 0
+        },
+        "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+      },
+      "performance": {
+        "mode": "enhanced",
+        "method": "synchronous-render-completion-cpu-and-gpu",
+        "samples": 60,
+        "medianMs": 0.3999999761581421,
+        "p95Ms": 0.40000003576278687,
+        "calls": 94,
+        "triangles": 315820,
+        "geometries": 92,
+        "textures": 7,
+        "extraPostPasses": 0
+      }
+    }
+  ],
+  "checks": [
+    "desktop: all 64 cells visible and unobstructed",
+    "ipad: all 64 cells visible and unobstructed",
+    "Real touch move retains white atmosphere throughout film, then changes to black on handoff",
+    "Black move gets blue night camera treatment; next white turn restores gold",
+    "Undo restores matching turn atmosphere; rotating board does not change active army",
+    "Basic mode removes mist without resetting game; Reduce Motion switches turn background immediately",
+    "phone: all 64 cells visible and unobstructed"
+  ],
+  "errors": []
+}

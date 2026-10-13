@@ -1,0 +1,41 @@
+{
+  "url": "http://127.0.0.1:5194",
+  "checks": [
+    "Every candidate shows a reason; illegal click preserves selection and explains restriction",
+    "Pinned knight identifies E8 attacker and explains zero legal moves",
+    "Promotion candidate explains all four choices; history records chosen knight; stale result is cancelled",
+    "50-move claim is optional; intended claim does not execute move; 75-move rule ends automatically",
+    "AI runs in a real Worker while rendering continues, returns legal move, logs reasons; Undo removes full pair",
+    "Undo during thinking terminates old Worker; no stale move appears",
+    "Opening mode dialog pauses AI; starting local game rejects old AI reply",
+    "Playing black rotates board and AI plays white opening; cannot Undo before human first move",
+    "All 12 local voice clips decode; actual gestures play announcements; mute and voice setting operate",
+    "Phone touch AI game, scrollable rule candidates and per-move history work with 4x CPU throttling",
+    "Production has no debug helpers; PGN/mode restored; AI-turn draw menu is read-only and resumes AI"
+  ],
+  "errors": [],
+  "workers": [
+    "http://127.0.0.1:5194/assets/ai.worker-VyyvQGlH.js",
+    "http://127.0.0.1:5194/assets/ai.worker-VyyvQGlH.js",
+    "http://127.0.0.1:5194/assets/ai.worker-VyyvQGlH.js",
+    "http://127.0.0.1:5194/assets/ai.worker-VyyvQGlH.js"
+  ],
+  "limitations": [
+    "Mobile emulation on desktop GPU; no physical phone or Safari claim."
+  ],
+  "ai": {
+    "stats": {
+      "depth": 3,
+      "nodes": 2065,
+      "elapsedMs": 1200.5
+    },
+    "framesDuring350ms": 21
+  },
+  "voices": {
+    "loaded": 12,
+    "played": 0,
+    "last": null,
+    "announcements": 6,
+    "active": 0
+  }
+}

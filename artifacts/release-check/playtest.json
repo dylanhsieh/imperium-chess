@@ -1,6 +1,6 @@
 {
   "passed": [
-    "Illegal destination rejected",
+    "Illegal destination rejected with reason; selection preserved",
     "Opening moves e4 e5 Nf3 through real pointer input",
     "Undo restores prior turn and pieces",
     "All 3 legal targets fear; cancellation triggers relief",
@@ -23,6 +23,22 @@
   "motion": [
     {
       "frame": 0,
+      "mode": "local",
+      "humanColor": "w",
+      "difficulty": "normal",
+      "thinking": false,
+      "aiError": "",
+      "aiStats": null,
+      "status": {
+        "repetitions": 1,
+        "halfmoveClock": 0,
+        "claimable": [],
+        "over": false,
+        "kind": "playing",
+        "title": "對局中",
+        "reason": "所有亮起的走法均符合棋種規則，而且走完後己王不會遭到將軍。"
+      },
+      "illegalMessage": "",
       "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
       "selected": null,
       "legal": [],
@@ -45,7 +61,7 @@
       "pieces": 6,
       "diagnostics": {
         "frame": 325,
-        "fps": 61,
+        "fps": 62,
         "game": {
           "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
           "turn": "b",
@@ -56,22 +72,22 @@
             "g4"
           ],
           "animating": true,
-          "actionProgress": 0.11824444444643126,
+          "actionProgress": 0.11813333332538607,
           "gameOver": false
         },
         "renderer": {
-          "calls": 210,
-          "triangles": 80736,
-          "geometries": 386,
-          "textures": 40
+          "calls": 203,
+          "triangles": 81478,
+          "geometries": 371,
+          "textures": 9
         },
         "render": {
-          "calls": 210,
-          "triangles": 80736
+          "calls": 203,
+          "triangles": 81478
         },
         "memory": {
-          "geometries": 386,
-          "textures": 40
+          "geometries": 371,
+          "textures": 9
         },
         "quality": {
           "atmosphere": {
@@ -91,6 +107,22 @@
     },
     {
       "frame": 1,
+      "mode": "local",
+      "humanColor": "w",
+      "difficulty": "normal",
+      "thinking": false,
+      "aiError": "",
+      "aiStats": null,
+      "status": {
+        "repetitions": 1,
+        "halfmoveClock": 0,
+        "claimable": [],
+        "over": false,
+        "kind": "playing",
+        "title": "對局中",
+        "reason": "所有亮起的走法均符合棋種規則，而且走完後己王不會遭到將軍。"
+      },
+      "illegalMessage": "",
       "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
       "selected": null,
       "legal": [],
@@ -124,22 +156,22 @@
             "g4"
           ],
           "animating": true,
-          "actionProgress": 0.21086666666799112,
+          "actionProgress": 0.2108666666613684,
           "gameOver": false
         },
         "renderer": {
-          "calls": 163,
-          "triangles": 72835,
-          "geometries": 387,
-          "textures": 40
+          "calls": 162,
+          "triangles": 73539,
+          "geometries": 372,
+          "textures": 9
         },
         "render": {
-          "calls": 163,
-          "triangles": 72835
+          "calls": 162,
+          "triangles": 73539
         },
         "memory": {
-          "geometries": 387,
-          "textures": 40
+          "geometries": 372,
+          "textures": 9
         },
         "quality": {
           "atmosphere": {
@@ -159,6 +191,22 @@
     },
     {
       "frame": 2,
+      "mode": "local",
+      "humanColor": "w",
+      "difficulty": "normal",
+      "thinking": false,
+      "aiError": "",
+      "aiStats": null,
+      "status": {
+        "repetitions": 1,
+        "halfmoveClock": 0,
+        "claimable": [],
+        "over": false,
+        "kind": "playing",
+        "title": "對局中",
+        "reason": "所有亮起的走法均符合棋種規則，而且走完後己王不會遭到將軍。"
+      },
+      "illegalMessage": "",
       "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
       "selected": null,
       "legal": [],
@@ -180,8 +228,8 @@
       "muted": false,
       "pieces": 6,
       "diagnostics": {
-        "frame": 376,
-        "fps": 64,
+        "frame": 374,
+        "fps": 60,
         "game": {
           "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
           "turn": "b",
@@ -192,22 +240,22 @@
             "g4"
           ],
           "animating": true,
-          "actionProgress": 0.30695555555489323,
+          "actionProgress": 0.2997555555502571,
           "gameOver": false
         },
         "renderer": {
-          "calls": 163,
-          "triangles": 72835,
-          "geometries": 387,
-          "textures": 40
+          "calls": 162,
+          "triangles": 73539,
+          "geometries": 372,
+          "textures": 9
         },
         "render": {
-          "calls": 163,
-          "triangles": 72835
+          "calls": 162,
+          "triangles": 73539
         },
         "memory": {
-          "geometries": 387,
-          "textures": 40
+          "geometries": 372,
+          "textures": 9
         },
         "quality": {
           "atmosphere": {
@@ -227,6 +275,22 @@
     },
     {
       "frame": 3,
+      "mode": "local",
+      "humanColor": "w",
+      "difficulty": "normal",
+      "thinking": false,
+      "aiError": "",
+      "aiStats": null,
+      "status": {
+        "repetitions": 1,
+        "halfmoveClock": 0,
+        "claimable": [],
+        "over": false,
+        "kind": "playing",
+        "title": "對局中",
+        "reason": "所有亮起的走法均符合棋種規則，而且走完後己王不會遭到將軍。"
+      },
+      "illegalMessage": "",
       "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
       "selected": null,
       "legal": [],
@@ -245,8 +309,8 @@
       "muted": false,
       "pieces": 6,
       "diagnostics": {
-        "frame": 402,
-        "fps": 60,
+        "frame": 398,
+        "fps": 62,
         "game": {
           "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
           "turn": "b",
@@ -257,22 +321,22 @@
             "g4"
           ],
           "animating": true,
-          "actionProgress": 0.40322222222222226,
+          "actionProgress": 0.3885999999973506,
           "gameOver": false
         },
         "renderer": {
-          "calls": 106,
-          "triangles": 79445,
-          "geometries": 387,
-          "textures": 40
+          "calls": 95,
+          "triangles": 78849,
+          "geometries": 372,
+          "textures": 9
         },
         "render": {
-          "calls": 106,
-          "triangles": 79445
+          "calls": 95,
+          "triangles": 78849
         },
         "memory": {
-          "geometries": 387,
-          "textures": 40
+          "geometries": 372,
+          "textures": 9
         },
         "quality": {
           "atmosphere": {
@@ -292,6 +356,22 @@
     },
     {
       "frame": 4,
+      "mode": "local",
+      "humanColor": "w",
+      "difficulty": "normal",
+      "thinking": false,
+      "aiError": "",
+      "aiStats": null,
+      "status": {
+        "repetitions": 1,
+        "halfmoveClock": 0,
+        "claimable": [],
+        "over": false,
+        "kind": "playing",
+        "title": "對局中",
+        "reason": "所有亮起的走法均符合棋種規則，而且走完後己王不會遭到將軍。"
+      },
+      "illegalMessage": "",
       "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
       "selected": null,
       "legal": [],
@@ -310,7 +390,7 @@
       "muted": false,
       "pieces": 6,
       "diagnostics": {
-        "frame": 427,
+        "frame": 423,
         "fps": 60,
         "game": {
           "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
@@ -322,22 +402,22 @@
             "g4"
           ],
           "animating": true,
-          "actionProgress": 0.49584444444378245,
+          "actionProgress": 0.4812222222222219,
           "gameOver": false
         },
         "renderer": {
-          "calls": 117,
-          "triangles": 80732,
-          "geometries": 387,
-          "textures": 40
+          "calls": 109,
+          "triangles": 71631,
+          "geometries": 372,
+          "textures": 9
         },
         "render": {
-          "calls": 117,
-          "triangles": 80732
+          "calls": 109,
+          "triangles": 71631
         },
         "memory": {
-          "geometries": 387,
-          "textures": 40
+          "geometries": 372,
+          "textures": 9
         },
         "quality": {
           "atmosphere": {
@@ -357,6 +437,22 @@
     },
     {
       "frame": 5,
+      "mode": "local",
+      "humanColor": "w",
+      "difficulty": "normal",
+      "thinking": false,
+      "aiError": "",
+      "aiStats": null,
+      "status": {
+        "repetitions": 1,
+        "halfmoveClock": 0,
+        "claimable": [],
+        "over": false,
+        "kind": "playing",
+        "title": "對局中",
+        "reason": "所有亮起的走法均符合棋種規則，而且走完後己王不會遭到將軍。"
+      },
+      "illegalMessage": "",
       "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
       "selected": null,
       "legal": [],
@@ -375,8 +471,8 @@
       "muted": false,
       "pieces": 6,
       "diagnostics": {
-        "frame": 453,
-        "fps": 60,
+        "frame": 448,
+        "fps": 62,
         "game": {
           "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
           "turn": "b",
@@ -387,22 +483,22 @@
             "g4"
           ],
           "animating": true,
-          "actionProgress": 0.5921111111111119,
+          "actionProgress": 0.5736888888809409,
           "gameOver": false
         },
         "renderer": {
-          "calls": 116,
-          "triangles": 80720,
-          "geometries": 387,
-          "textures": 40
+          "calls": 109,
+          "triangles": 71631,
+          "geometries": 372,
+          "textures": 9
         },
         "render": {
-          "calls": 116,
-          "triangles": 80720
+          "calls": 109,
+          "triangles": 71631
         },
         "memory": {
-          "geometries": 387,
-          "textures": 40
+          "geometries": 372,
+          "textures": 9
         },
         "quality": {
           "atmosphere": {
@@ -422,6 +518,22 @@
     },
     {
       "frame": 6,
+      "mode": "local",
+      "humanColor": "w",
+      "difficulty": "normal",
+      "thinking": false,
+      "aiError": "",
+      "aiStats": null,
+      "status": {
+        "repetitions": 1,
+        "halfmoveClock": 0,
+        "claimable": [],
+        "over": false,
+        "kind": "playing",
+        "title": "對局中",
+        "reason": "所有亮起的走法均符合棋種規則，而且走完後己王不會遭到將軍。"
+      },
+      "illegalMessage": "",
       "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
       "selected": null,
       "legal": [],
@@ -440,7 +552,7 @@
       "muted": false,
       "pieces": 6,
       "diagnostics": {
-        "frame": 479,
+        "frame": 473,
         "fps": 60,
         "game": {
           "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
@@ -452,22 +564,22 @@
             "g4"
           ],
           "animating": true,
-          "actionProgress": 0.6884222222235479,
+          "actionProgress": 0.666399999989403,
           "gameOver": false
         },
         "renderer": {
-          "calls": 116,
-          "triangles": 80720,
-          "geometries": 387,
-          "textures": 40
+          "calls": 109,
+          "triangles": 71631,
+          "geometries": 372,
+          "textures": 9
         },
         "render": {
-          "calls": 116,
-          "triangles": 80720
+          "calls": 109,
+          "triangles": 71631
         },
         "memory": {
-          "geometries": 387,
-          "textures": 40
+          "geometries": 372,
+          "textures": 9
         },
         "quality": {
           "atmosphere": {
@@ -487,6 +599,22 @@
     },
     {
       "frame": 7,
+      "mode": "local",
+      "humanColor": "w",
+      "difficulty": "normal",
+      "thinking": false,
+      "aiError": "",
+      "aiStats": null,
+      "status": {
+        "repetitions": 1,
+        "halfmoveClock": 0,
+        "claimable": [],
+        "over": false,
+        "kind": "playing",
+        "title": "對局中",
+        "reason": "所有亮起的走法均符合棋種規則，而且走完後己王不會遭到將軍。"
+      },
+      "illegalMessage": "",
       "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
       "selected": null,
       "legal": [],
@@ -503,7 +631,7 @@
       "muted": false,
       "pieces": 6,
       "diagnostics": {
-        "frame": 505,
+        "frame": 498,
         "fps": 60,
         "game": {
           "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
@@ -513,22 +641,22 @@
           "legal": [],
           "fear": [],
           "animating": true,
-          "actionProgress": 0.7366386666670768,
+          "actionProgress": 0.7190871111096276,
           "gameOver": false
         },
         "renderer": {
-          "calls": 78,
-          "triangles": 72900,
-          "geometries": 388,
-          "textures": 40
+          "calls": 93,
+          "triangles": 70125,
+          "geometries": 373,
+          "textures": 9
         },
         "render": {
-          "calls": 78,
-          "triangles": 72900
+          "calls": 93,
+          "triangles": 70125
         },
         "memory": {
-          "geometries": 388,
-          "textures": 40
+          "geometries": 373,
+          "textures": 9
         },
         "quality": {
           "atmosphere": {
@@ -548,6 +676,22 @@
     },
     {
       "frame": 8,
+      "mode": "local",
+      "humanColor": "w",
+      "difficulty": "normal",
+      "thinking": false,
+      "aiError": "",
+      "aiStats": null,
+      "status": {
+        "repetitions": 1,
+        "halfmoveClock": 0,
+        "claimable": [],
+        "over": false,
+        "kind": "playing",
+        "title": "對局中",
+        "reason": "所有亮起的走法均符合棋種規則，而且走完後己王不會遭到將軍。"
+      },
+      "illegalMessage": "",
       "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
       "selected": null,
       "legal": [],
@@ -564,8 +708,8 @@
       "muted": false,
       "pieces": 6,
       "diagnostics": {
-        "frame": 530,
-        "fps": 60,
+        "frame": 524,
+        "fps": 63,
         "game": {
           "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
           "turn": "b",
@@ -574,22 +718,22 @@
           "legal": [],
           "fear": [],
           "animating": true,
-          "actionProgress": 0.8292831111095349,
+          "actionProgress": 0.8068577777798969,
           "gameOver": false
         },
         "renderer": {
-          "calls": 79,
-          "triangles": 72848,
-          "geometries": 387,
-          "textures": 40
+          "calls": 68,
+          "triangles": 63692,
+          "geometries": 373,
+          "textures": 9
         },
         "render": {
-          "calls": 79,
-          "triangles": 72848
+          "calls": 68,
+          "triangles": 63692
         },
         "memory": {
-          "geometries": 387,
-          "textures": 40
+          "geometries": 373,
+          "textures": 9
         },
         "quality": {
           "atmosphere": {
@@ -609,6 +753,22 @@
     },
     {
       "frame": 9,
+      "mode": "local",
+      "humanColor": "w",
+      "difficulty": "normal",
+      "thinking": false,
+      "aiError": "",
+      "aiStats": null,
+      "status": {
+        "repetitions": 1,
+        "halfmoveClock": 0,
+        "claimable": [],
+        "over": false,
+        "kind": "playing",
+        "title": "對局中",
+        "reason": "所有亮起的走法均符合棋種規則，而且走完後己王不會遭到將軍。"
+      },
+      "illegalMessage": "",
       "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
       "selected": null,
       "legal": [],
@@ -625,7 +785,7 @@
       "muted": false,
       "pieces": 6,
       "diagnostics": {
-        "frame": 556,
+        "frame": 548,
         "fps": 60,
         "game": {
           "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
@@ -635,22 +795,22 @@
           "legal": [],
           "fear": [],
           "animating": true,
-          "actionProgress": 0.9255497777768638,
+          "actionProgress": 0.895902222221692,
           "gameOver": false
         },
         "renderer": {
-          "calls": 91,
-          "triangles": 73028,
-          "geometries": 387,
-          "textures": 40
+          "calls": 67,
+          "triangles": 63848,
+          "geometries": 373,
+          "textures": 9
         },
         "render": {
-          "calls": 91,
-          "triangles": 73028
+          "calls": 67,
+          "triangles": 63848
         },
         "memory": {
-          "geometries": 387,
-          "textures": 40
+          "geometries": 373,
+          "textures": 9
         },
         "quality": {
           "atmosphere": {
@@ -670,12 +830,28 @@
     },
     {
       "frame": 10,
+      "mode": "local",
+      "humanColor": "w",
+      "difficulty": "normal",
+      "thinking": false,
+      "aiError": "",
+      "aiStats": null,
+      "status": {
+        "repetitions": 1,
+        "halfmoveClock": 0,
+        "claimable": [],
+        "over": false,
+        "kind": "playing",
+        "title": "對局中",
+        "reason": "所有亮起的走法均符合棋種規則，而且走完後己王不會遭到將軍。"
+      },
+      "illegalMessage": "",
       "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
       "selected": null,
       "legal": [],
       "fears": [],
       "relief": [],
-      "animating": false,
+      "animating": true,
       "history": [
         "Rxg4"
       ],
@@ -684,9 +860,9 @@
       "cinematic": true,
       "reduced": false,
       "muted": false,
-      "pieces": 5,
+      "pieces": 6,
       "diagnostics": {
-        "frame": 581,
+        "frame": 575,
         "fps": 60,
         "game": {
           "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
@@ -695,28 +871,28 @@
           "selected": null,
           "legal": [],
           "fear": [],
-          "animating": false,
-          "actionProgress": 0,
+          "animating": true,
+          "actionProgress": 0.9959022222216919,
           "gameOver": false
         },
         "renderer": {
-          "calls": 85,
-          "triangles": 73672,
-          "geometries": 388,
-          "textures": 40
+          "calls": 75,
+          "triangles": 74064,
+          "geometries": 373,
+          "textures": 9
         },
         "render": {
-          "calls": 85,
-          "triangles": 73672
+          "calls": 75,
+          "triangles": 74064
         },
         "memory": {
-          "geometries": 388,
-          "textures": 40
+          "geometries": 373,
+          "textures": 9
         },
         "quality": {
           "atmosphere": {
-            "side": "b",
-            "blend": 0.32981400458004284,
+            "side": "w",
+            "blend": 0,
             "enhanced": true,
             "mistDraws": 1
           },
@@ -731,6 +907,22 @@
     },
     {
       "frame": 11,
+      "mode": "local",
+      "humanColor": "w",
+      "difficulty": "normal",
+      "thinking": false,
+      "aiError": "",
+      "aiStats": null,
+      "status": {
+        "repetitions": 1,
+        "halfmoveClock": 0,
+        "claimable": [],
+        "over": false,
+        "kind": "playing",
+        "title": "對局中",
+        "reason": "所有亮起的走法均符合棋種規則，而且走完後己王不會遭到將軍。"
+      },
+      "illegalMessage": "",
       "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
       "selected": null,
       "legal": [],
@@ -747,8 +939,8 @@
       "muted": false,
       "pieces": 5,
       "diagnostics": {
-        "frame": 609,
-        "fps": 60,
+        "frame": 604,
+        "fps": 62,
         "game": {
           "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
           "turn": "b",
@@ -761,23 +953,23 @@
           "gameOver": false
         },
         "renderer": {
-          "calls": 85,
-          "triangles": 73672,
-          "geometries": 388,
-          "textures": 40
+          "calls": 55,
+          "triangles": 74320,
+          "geometries": 374,
+          "textures": 9
         },
         "render": {
-          "calls": 85,
-          "triangles": 73672
+          "calls": 55,
+          "triangles": 74320
         },
         "memory": {
-          "geometries": 388,
-          "textures": 40
+          "geometries": 374,
+          "textures": 9
         },
         "quality": {
           "atmosphere": {
             "side": "b",
-            "blend": 0.9592540976441408,
+            "blend": 0.9322682345627606,
             "enhanced": true,
             "mistDraws": 1
           },
@@ -792,6 +984,22 @@
     },
     {
       "frame": 12,
+      "mode": "local",
+      "humanColor": "w",
+      "difficulty": "normal",
+      "thinking": false,
+      "aiError": "",
+      "aiStats": null,
+      "status": {
+        "repetitions": 1,
+        "halfmoveClock": 0,
+        "claimable": [],
+        "over": false,
+        "kind": "playing",
+        "title": "對局中",
+        "reason": "所有亮起的走法均符合棋種規則，而且走完後己王不會遭到將軍。"
+      },
+      "illegalMessage": "",
       "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
       "selected": null,
       "legal": [],
@@ -808,8 +1016,8 @@
       "muted": false,
       "pieces": 5,
       "diagnostics": {
-        "frame": 637,
-        "fps": 60,
+        "frame": 631,
+        "fps": 62,
         "game": {
           "fen": "4k3/8/3n4/8/1b4R1/8/8/7K b - - 0 1",
           "turn": "b",
@@ -822,23 +1030,23 @@
           "gameOver": false
         },
         "renderer": {
-          "calls": 85,
-          "triangles": 73672,
-          "geometries": 388,
-          "textures": 40
+          "calls": 55,
+          "triangles": 74320,
+          "geometries": 374,
+          "textures": 9
         },
         "render": {
-          "calls": 85,
-          "triangles": 73672
+          "calls": 55,
+          "triangles": 74320
         },
         "memory": {
-          "geometries": 388,
-          "textures": 40
+          "geometries": 374,
+          "textures": 9
         },
         "quality": {
           "atmosphere": {
             "side": "b",
-            "blend": 0.9975212478233336,
+            "blend": 0.9954453199860408,
             "enhanced": true,
             "mistDraws": 1
           },
@@ -853,8 +1061,8 @@
     }
   ],
   "diagnostics": {
-    "frame": 851,
-    "fps": 61,
+    "frame": 845,
+    "fps": 60,
     "game": {
       "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
       "turn": "b",
@@ -867,23 +1075,23 @@
       "gameOver": false
     },
     "renderer": {
-      "calls": 125,
-      "triangles": 322868,
-      "geometries": 491,
-      "textures": 40
+      "calls": 97,
+      "triangles": 316332,
+      "geometries": 483,
+      "textures": 9
     },
     "render": {
-      "calls": 125,
-      "triangles": 322868
+      "calls": 97,
+      "triangles": 316332
     },
     "memory": {
-      "geometries": 491,
-      "textures": 40
+      "geometries": 483,
+      "textures": 9
     },
     "quality": {
       "atmosphere": {
         "side": "b",
-        "blend": 0.45052939463035174,
+        "blend": 0.45118836390597317,
         "enhanced": true,
         "mistDraws": 1
       },

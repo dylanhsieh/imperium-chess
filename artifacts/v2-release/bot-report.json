@@ -1,0 +1,120 @@
+{
+  "seed": 20261013,
+  "humanTurns": 20,
+  "plies": 40,
+  "captures": 15,
+  "checks": 1,
+  "ai": [
+    {
+      "depth": 2,
+      "nodes": 315,
+      "elapsedMs": 150.5
+    },
+    {
+      "depth": 2,
+      "nodes": 260,
+      "elapsedMs": 150.19999998807907
+    },
+    {
+      "depth": 2,
+      "nodes": 268,
+      "elapsedMs": 150.60000002384186
+    },
+    {
+      "depth": 1,
+      "nodes": 319,
+      "elapsedMs": 150.10000002384186
+    },
+    {
+      "depth": 2,
+      "nodes": 313,
+      "elapsedMs": 150.19999998807907
+    },
+    {
+      "depth": 2,
+      "nodes": 309,
+      "elapsedMs": 150.0999999642372
+    },
+    {
+      "depth": 2,
+      "nodes": 390,
+      "elapsedMs": 150.10000002384186
+    },
+    {
+      "depth": 2,
+      "nodes": 296,
+      "elapsedMs": 150.0999999642372
+    },
+    {
+      "depth": 2,
+      "nodes": 275,
+      "elapsedMs": 150.39999997615814
+    },
+    {
+      "depth": 2,
+      "nodes": 375,
+      "elapsedMs": 150.30000001192093
+    },
+    {
+      "depth": 1,
+      "nodes": 445,
+      "elapsedMs": 150.10000002384186
+    },
+    {
+      "depth": 2,
+      "nodes": 573,
+      "elapsedMs": 150.10000002384186
+    },
+    {
+      "depth": 2,
+      "nodes": 475,
+      "elapsedMs": 150.0999999642372
+    },
+    {
+      "depth": 2,
+      "nodes": 522,
+      "elapsedMs": 150.0999999642372
+    },
+    {
+      "depth": 1,
+      "nodes": 340,
+      "elapsedMs": 150.0999999642372
+    },
+    {
+      "depth": 2,
+      "nodes": 477,
+      "elapsedMs": 150
+    },
+    {
+      "depth": 2,
+      "nodes": 456,
+      "elapsedMs": 150.20000004768372
+    },
+    {
+      "depth": 2,
+      "nodes": 422,
+      "elapsedMs": 150.5999999642372
+    },
+    {
+      "depth": 2,
+      "nodes": 376,
+      "elapsedMs": 150.0999999642372
+    },
+    {
+      "depth": 2,
+      "nodes": 397,
+      "elapsedMs": 150.19999998807907
+    }
+  ],
+  "errors": [],
+  "result": {
+    "repetitions": 1,
+    "halfmoveClock": 0,
+    "claimable": [],
+    "over": false,
+    "kind": "playing",
+    "title": "對局中",
+    "reason": "所有亮起的走法均符合棋種規則，而且走完後己王不會遭到將軍。"
+  },
+  "pgn": "[Event \"?\"]\n[Site \"?\"]\n[Date \"????.??.??\"]\n[Round \"?\"]\n[White \"?\"]\n[Black \"?\"]\n[Result \"*\"]\n\n1. Na3 Nc6 2. d3 Nf6 3. Rb1 Nb4 4. Nc4 Nxa2 5. Nb6 axb6 6. f4 Nxc1 7. Rxc1 Nd5 8. Qd2 Ra2 9. f5 Rxb2 10. Qe3 Nxe3 11. Rd1 Nxd1 12. Kxd1 Rb1+ 13. Kd2 Rxf1 14. c4 Rxf5 15. Nf3 c5 16. Ke1 e5 17. Nxe5 Rxe5 18. h4 Be7 19. Kd2 Bxh4 20. Rxh4 Qxh4 *"
+}

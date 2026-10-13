@@ -1,63 +1,99 @@
 {
   "queen": {
     "attack": {
-      "loaded": 6,
+      "loaded": 12,
       "played": 1,
-      "last": "attack:q:female-attack-ha"
+      "last": "attack:q:female-attack-ha",
+      "announcements": 1,
+      "active": 5
     },
     "defeat": {
-      "loaded": 6,
+      "loaded": 12,
       "played": 2,
-      "last": "defeat:p:male-defeat"
+      "last": "defeat:p:male-defeat",
+      "announcements": 1,
+      "active": 28
     }
   },
   "pawn": {
     "attack": {
-      "loaded": 6,
+      "loaded": 12,
       "played": 3,
-      "last": "attack:p:male-attack-he"
+      "last": "attack:p:male-attack-he",
+      "announcements": 2,
+      "active": 5
     },
     "defeat": {
-      "loaded": 6,
+      "loaded": 12,
       "played": 4,
-      "last": "defeat:p:male-defeat"
+      "last": "defeat:p:male-defeat",
+      "announcements": 2,
+      "active": 26
     }
   },
   "muted": {
     "attack": {
-      "loaded": 6,
+      "loaded": 12,
       "played": 4,
-      "last": "defeat:p:male-defeat"
+      "last": "defeat:p:male-defeat",
+      "announcements": 2,
+      "active": 0
     },
     "defeat": {
-      "loaded": 6,
+      "loaded": 12,
       "played": 4,
-      "last": "defeat:p:male-defeat"
+      "last": "defeat:p:male-defeat",
+      "announcements": 2,
+      "active": 0
     }
   },
   "files": [
     {
-      "url": "http://127.0.0.1:5188/audio/male-attack-ha.wav",
+      "url": "http://127.0.0.1:5194/audio/male-attack-ha.wav",
       "status": 200
     },
     {
-      "url": "http://127.0.0.1:5188/audio/male-attack-he.wav",
+      "url": "http://127.0.0.1:5194/audio/female-attack-ha.wav",
       "status": 200
     },
     {
-      "url": "http://127.0.0.1:5188/audio/female-attack-ha.wav",
+      "url": "http://127.0.0.1:5194/audio/male-attack-he.wav",
       "status": 200
     },
     {
-      "url": "http://127.0.0.1:5188/audio/female-attack-he.wav",
+      "url": "http://127.0.0.1:5194/audio/female-attack-he.wav",
       "status": 200
     },
     {
-      "url": "http://127.0.0.1:5188/audio/male-defeat.wav",
+      "url": "http://127.0.0.1:5194/audio/male-defeat.wav",
       "status": 200
     },
     {
-      "url": "http://127.0.0.1:5188/audio/female-defeat.wav",
+      "url": "http://127.0.0.1:5194/audio/female-defeat.wav",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5194/audio/commander-check.wav",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5194/audio/commander-begin.wav",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5194/audio/commander-checkmate.wav",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5194/audio/commander-draw.wav",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5194/audio/commander-fear.wav",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5194/audio/commander-relief.wav",
       "status": 200
     }
   ],

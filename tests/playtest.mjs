@@ -14,7 +14,7 @@ async function finish(){await page.keyboard.press('Space');await wait(90);}
 async function move(from,to,skip=true){await clickSquare(from,true);assert.equal((await state()).selected,from,`select ${from}`);assert.ok((await state()).legal.includes(to),`${from}-${to} legal`);await clickSquare(to,!!(await page.evaluate(s=>window.__CHESS_DEBUG__.pieceStats().some(p=>p.square===s),to)));if(skip)await finish();}
 try{
 await page.goto(`${process.env.TEST_URL||'http://127.0.0.1:5188'}/?debug=1`,{waitUntil:'networkidle0'});await page.waitForFunction(()=>window.__CHESS_DEBUG__);await wait(150);await shot('initial-desktop');
-await clickSquare('e2',true);assert.deepEqual((await state()).legal.sort(),['e3','e4']);await clickSquare('e5');assert.equal((await state()).history.length,0);results.push('Illegal destination rejected');
+await clickSquare('e2',true);assert.deepEqual((await state()).legal.sort(),['e3','e4']);await clickSquare('e5');assert.equal((await state()).history.length,0);assert.equal((await state()).selected,'e2');assert((await state()).illegalMessage);await page.keyboard.press('Escape');results.push('Illegal destination rejected with reason; selection preserved');
 await move('e2','e4');await move('e7','e5');await move('g1','f3');assert.equal((await state()).turn,'b');results.push('Opening moves e4 e5 Nf3 through real pointer input');
 await page.click('#undo');assert.equal((await state()).history.length,2);results.push('Undo restores prior turn and pieces');
 await page.evaluate(()=>window.__THREE_GAME_TEST_HOOKS__.setState('threat-preview'));assert.deepEqual((await state()).fears.sort(),['b4','d6','g4']);await wait(250);await shot('all-three-afraid');

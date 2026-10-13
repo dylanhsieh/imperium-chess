@@ -22,10 +22,13 @@ function marble(dark: boolean) {
   const ctx = canvas.getContext('2d')!;
   const img = ctx.createImageData(512, 512);
   for (let y = 0; y < 512; y++) for (let x = 0; x < 512; x++) {
-    const wobble = Math.sin(y * .016) * 27 + Math.sin(x * .025 + y * .013) * 18;
-    const vein = Math.pow(Math.max(0, Math.sin((x + y * .61 + wobble) * .049)), 30);
-    const grain = random() * 9;
-    const v = dark ? 45 + grain + vein * 35 : 172 + grain - vein * 27;
+    const wobble=Math.sin(y*.011)*22+Math.sin(x*.018+y*.009)*15+Math.sin(y*.047)*3;
+    const streak=Math.sin((x+y*.59+wobble)*.024);
+    const vein=Math.pow(Math.max(0,streak),48);
+    const hairline=Math.pow(Math.max(0,Math.sin((x+y*.58+wobble*.92)*.024+.11)),140);
+    const cloud=Math.sin(x*.009+y*.004)*Math.sin(y*.014)*3;
+    const grain=random()*4;
+    const v=dark?40+grain+cloud+vein*16+hairline*13:174+grain+cloud-vein*13-hairline*8;
     const i = (y * 512 + x) * 4;
     img.data[i] = v * (dark ? .74 : 1.08); img.data[i+1] = v * (dark ? .92 : 1.02); img.data[i+2] = v * (dark ? .89 : .88); img.data[i+3] = 255;
   }
@@ -39,10 +42,12 @@ function marble(dark: boolean) {
   return texture;
 }
 
-function labelTexture(text: string, size = 128) {
-  const c = document.createElement('canvas'); c.width = c.height = size;
-  const g = c.getContext('2d')!; g.fillStyle = '#c7b188'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.font = `500 ${size*.56}px Georgia`; g.fillText(text, size/2, size/2);
-  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; return tex;
+/** Sixteen locally drawn glyphs share one atlas and a single board-label draw. */
+function labelAtlas(){
+  const c=document.createElement('canvas');c.width=1024;c.height=64;
+  const g=c.getContext('2d')!;g.fillStyle='#c7b188';g.textAlign='center';g.textBaseline='middle';g.font='500 36px Georgia';
+  for(let i=0;i<16;i++)g.fillText(i<8?String.fromCharCode(65+i):`${i-7}`,i*64+32,32);
+  const texture=new THREE.CanvasTexture(c);texture.colorSpace=THREE.SRGBColorSpace;return texture;
 }
 
 export function createWorld(scene: THREE.Scene, renderer: THREE.WebGLRenderer) {
@@ -54,6 +59,7 @@ export function createWorld(scene: THREE.Scene, renderer: THREE.WebGLRenderer) {
   const stone = new THREE.MeshStandardMaterial({ color:'#35413b', roughness:.86, metalness:.06 });
   const edge = new THREE.MeshStandardMaterial({ color:'#626657', roughness:.57, metalness:.2 });
   const black = new THREE.MeshStandardMaterial({ color:'#0e1412', roughness:.8 });
+  const patina = new THREE.MeshStandardMaterial({color:'#587267',roughness:.78,metalness:.21});
   const batches = new Map<THREE.Material, THREE.BufferGeometry[]>();
   function add(geometry: THREE.BufferGeometry, material: THREE.Material, x=0,y=0,z=0, rx=0,ry=0,rz=0) {
     geometry.rotateX(rx); geometry.rotateY(ry); geometry.rotateZ(rz); geometry.translate(x,y,z);
@@ -81,22 +87,43 @@ export function createWorld(scene: THREE.Scene, renderer: THREE.WebGLRenderer) {
       box(.028,.028,.18,bronze,sign*6.54,-.55,p-.06);
     }
   }
+  // Carved corner rosettes and shallow tablet grooves are all material-batched.
+  // Their relief catches grazing cinematic light without covering playable squares.
+  for(const sx of [-1,1])for(const sz of [-1,1]){
+    const x=sx*6.02,z=sz*6.02;
+    box(.22,.014,.22,black,x,.165,z);
+    box(.15,.018,.034,bronze,x,.177,z);box(.034,.018,.15,bronze,x,.177,z);
+    for(const sign of [-1,1]){
+      box(.027,.015,.06,patina,x+sign*.075,.177,z+sign*.075);
+      box(.025,.013,.068,bronze,x+sign*.19,.17,z);
+      box(.068,.013,.025,bronze,x,.17,z+sign*.19);
+    }
+  }
+  for(let inset=0;inset<32;inset++)for(const sign of [-1,1]){
+    const t=(inset-15.5)*.37;
+    box(.17,.019,.08,patina,t,-.13,sign*6.407);
+    box(.08,.019,.17,patina,sign*6.407,-.13,t);
+  }
   const tileGeometry = new THREE.BoxGeometry(CELL-.027,.16,CELL-.027);
   for(let parity=0;parity<2;parity++) {
-    const material=new THREE.MeshStandardMaterial({map:marble(parity===0),roughness:parity===0?.3:.48,metalness:parity===0?.18:.06});
+    const material=new THREE.MeshStandardMaterial({map:marble(parity===0),roughness:parity===0?.36:.49,metalness:parity===0?.16:.04});
     const tiles=new THREE.InstancedMesh(tileGeometry,material,32); let index=0;
     for(let f=0;f<8;f++)for(let r=0;r<8;r++)if((f+r)%2===parity) {
       const m=new THREE.Matrix4().makeTranslation((f-3.5)*CELL,.075,(3.5-r)*CELL); tiles.setMatrixAt(index++,m);
     }
     tiles.receiveShadow=true; scene.add(tiles);
   }
-  // Rank and file inlays remain legible after orbiting.
-  for(let i=0;i<8;i++) for(const s of [-1,1]) {
-    const mat = new THREE.MeshBasicMaterial({map:labelTexture(String.fromCharCode(65+i)),transparent:true,depthWrite:false});
-    const m=new THREE.Mesh(new THREE.PlaneGeometry(.24,.24),mat); m.rotation.x=-Math.PI/2; m.rotation.z=s===1?0:Math.PI; m.position.set((i-3.5)*CELL,.166,s*5.96); scene.add(m);
-    const rmat = new THREE.MeshBasicMaterial({map:labelTexture(`${i+1}`),transparent:true,depthWrite:false});
-    const n=new THREE.Mesh(new THREE.PlaneGeometry(.24,.24),rmat); n.rotation.x=-Math.PI/2; n.position.set(s*5.96,.166,(3.5-i)*CELL); scene.add(n);
+  // Rank and file inlays remain legible after orbiting, batched into one draw.
+  const labelGeometries:THREE.BufferGeometry[]=[];
+  for(let i=0;i<8;i++)for(const sign of [-1,1])for(const isRank of [false,true]){
+    const geo=new THREE.PlaneGeometry(.24,.24),uv=geo.getAttribute('uv'),glyph=isRank?i+8:i;
+    for(let vertex=0;vertex<uv.count;vertex++)uv.setX(vertex,(uv.getX(vertex)+glyph)/16);
+    if(!isRank&&sign<0)geo.rotateZ(Math.PI);
+    geo.rotateX(-Math.PI/2);
+    geo.translate(isRank?sign*5.96:(i-3.5)*CELL,.166,isRank?(3.5-i)*CELL:sign*5.96);
+    labelGeometries.push(geo);
   }
+  const labels=new THREE.Mesh(mergeGeometries(labelGeometries,false)!,new THREE.MeshBasicMaterial({map:labelAtlas(),transparent:true,depthWrite:false}));labels.name='board-coordinate-inlays';scene.add(labels);labelGeometries.forEach(geo=>geo.dispose());
   for(const x of [-6.3,6.3])for(const z of [-6.3,6.3]) {
     add(new THREE.CylinderGeometry(.2,.23,.07,8),bronze,x,.15,z);
     add(new THREE.OctahedronGeometry(.1),edge,x,.22,z);
@@ -106,6 +133,11 @@ export function createWorld(scene: THREE.Scene, renderer: THREE.WebGLRenderer) {
   for(const radius of [9.15,9.24,12.2,12.25,17.2]) add(new THREE.TorusGeometry(radius,.016,4,160),bronze,0,-1.273,0,Math.PI/2);
   for(let i=0;i<32;i++) {
     const a=i*Math.PI/16; const m=new THREE.BoxGeometry(.025,.01,11); m.rotateY(a); m.translate(Math.sin(a)*17,-1.273,Math.cos(a)*17); add(m,edge);
+  }
+  // Existing floor gets radially laid paving joints; no new shadow casters.
+  for(let ring=0;ring<3;ring++)for(let slab=0;slab<32;slab++){
+    const a=(slab+(ring%2)*.5)*Math.PI/16,r=11.25+ring*3.15;
+    const seam=new THREE.BoxGeometry(.017,.009,2.9);seam.rotateY(a);seam.translate(Math.sin(a)*r,-1.279,Math.cos(a)*r);add(seam,black);
   }
   const flameObjects: THREE.Mesh[]=[],braziers:THREE.PointLight[]=[];
   const flames = new THREE.MeshBasicMaterial({color:'#ffbb58',transparent:true,opacity:.9,blending:THREE.AdditiveBlending,depthWrite:false});
@@ -128,6 +160,13 @@ export function createWorld(scene: THREE.Scene, renderer: THREE.WebGLRenderer) {
     for(const y of [-.55,8.1,8.4]) add(new THREE.CylinderGeometry(.82,.82,.18,12),bronze,x,y,z);
     box(1.65,.38,1.65,edge,x,8.55,z);
   }
+  // A coffered lintel and inset metopes add scale behind the close combat view.
+  for(let i=0;i<30;i++){
+    const x=(i-14.5)*1.055;
+    box(.69,.29,.09,darkMetal,x,9.055,-16.015);
+    box(.043,.31,.024,bronze,x-.365,9.055,-15.96);
+    box(.043,.31,.024,bronze,x+.365,9.055,-15.96);
+  }
   box(33,.6,1.9,stone,0,9.05,-17); box(33,.12,2.0,bronze,0,9.42,-17);
   for(const s of [-1,1]) {
     const bannerMat=new THREE.MeshStandardMaterial({color:s===1?'#50231e':'#667062',side:THREE.DoubleSide,roughness:.96});
@@ -140,9 +179,9 @@ export function createWorld(scene: THREE.Scene, renderer: THREE.WebGLRenderer) {
     const geo=mergeGeometries(geos,false)!; const mesh=new THREE.Mesh(geo,mat); mesh.receiveShadow=true; mesh.castShadow=false; scene.add(mesh); for(const g of geos) g.dispose();
   }
   const hemi=new THREE.HemisphereLight('#d3e3d9','#313127',2.0); scene.add(hemi);
-  const sun=new THREE.DirectionalLight('#ffe5bb',3.3); sun.position.set(-5,14,8); sun.castShadow=true; sun.shadow.mapSize.set(2048,2048); sun.shadow.camera.left=-9;sun.shadow.camera.right=9;sun.shadow.camera.top=9;sun.shadow.camera.bottom=-9;sun.shadow.camera.near=.5;sun.shadow.camera.far=35;sun.shadow.bias=-.00035;sun.shadow.normalBias=.025;scene.add(sun);
+  const sun=new THREE.DirectionalLight('#ffe5bb',3.3); sun.position.set(-5,14,8); sun.castShadow=true; const shadowSize=matchMedia('(pointer: coarse)').matches?1024:2048;sun.shadow.mapSize.set(shadowSize,shadowSize); sun.shadow.camera.left=-9;sun.shadow.camera.right=9;sun.shadow.camera.top=9;sun.shadow.camera.bottom=-9;sun.shadow.camera.near=.5;sun.shadow.camera.far=35;sun.shadow.bias=-.00035;sun.shadow.normalBias=.025;scene.add(sun);
   const rim=new THREE.DirectionalLight('#aacbd4',2.4);rim.position.set(8,10,-10);scene.add(rim);
-  scene.traverse(node=>{if(node instanceof THREE.Mesh){for(const m of Array.isArray(node.material)?node.material:[node.material])if(m instanceof THREE.MeshStandardMaterial)finishMaterial(m,{scale:1.4,grain:.09,roughness:.18,shade:.27});}});
+  scene.traverse(node=>{if(node instanceof THREE.Mesh){for(const m of Array.isArray(node.material)?node.material:[node.material])if(m instanceof THREE.MeshStandardMaterial)finishMaterial(m,{scale:1.4,grain:.09,roughness:.18,shade:.27,edge:m===bronze?.025:0});}});
   const dustGeo = new THREE.BufferGeometry(), positions=new Float32Array(220*3);
   for(let i=0;i<220;i++){positions[i*3]=(random()-.5)*35;positions[i*3+1]=random()*12;positions[i*3+2]=(random()-.5)*35;}
   dustGeo.setAttribute('position',new THREE.BufferAttribute(positions,3));

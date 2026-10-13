@@ -1,0 +1,43 @@
+{
+  "frame": 71,
+  "fps": 61,
+  "game": {
+    "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "turn": "w",
+    "moves": 0,
+    "selected": null,
+    "legal": [],
+    "fear": [],
+    "animating": false,
+    "actionProgress": 0,
+    "gameOver": false
+  },
+  "renderer": {
+    "calls": 122,
+    "triangles": 322356,
+    "geometries": 120,
+    "textures": 38
+  },
+  "render": {
+    "calls": 122,
+    "triangles": 322356
+  },
+  "memory": {
+    "geometries": 120,
+    "textures": 38
+  },
+  "quality": {
+    "atmosphere": {
+      "side": "w",
+      "blend": 0,
+      "enhanced": true,
+      "mistDraws": 1
+    },
+    "graphics": "enhanced",
+    "dpr": 1,
+    "shadowMapSize": 2048,
+    "shadowLights": 1,
+    "postPasses": 0
+  },
+  "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+}
