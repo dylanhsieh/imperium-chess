@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer-core';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-const out='artifacts/v3-release/motion'; await fs.mkdir(out,{recursive:true});
+const out=process.env.TEST_OUT||'artifacts/v3-release/motion'; await fs.mkdir(out,{recursive:true});
 const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true,args:['--no-sandbox','--use-gl=angle','--use-angle=metal']});
 const report={unpaused:true,shots:[],errors:[]};
 const wait=ms=>new Promise(r=>setTimeout(r,ms));

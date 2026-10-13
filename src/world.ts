@@ -1,8 +1,7 @@
 import * as THREE from 'three';
-import {finishMaterial,getSurfaceGrain,onGraphicsChange} from './surface-shading';
+import {finishMaterial,getSurfaceGrain,getGraphicsMode,onGraphicsChange} from './surface-shading';
 import {TurnAtmosphere} from './atmosphere';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 export const CELL = 1.42;
 export const BOARD_Y = 0.16;
@@ -30,7 +29,7 @@ function marble(dark: boolean) {
     const grain=random()*4;
     const v=dark?40+grain+cloud+vein*16+hairline*13:174+grain+cloud-vein*13-hairline*8;
     const i = (y * 512 + x) * 4;
-    img.data[i] = v * (dark ? .74 : 1.08); img.data[i+1] = v * (dark ? .92 : 1.02); img.data[i+2] = v * (dark ? .89 : .88); img.data[i+3] = 255;
+    img.data[i] = v * (dark ? .78 : 1.02); img.data[i+1] = v * (dark ? .89 : 1.01); img.data[i+2] = v * (dark ? .93 : .97); img.data[i+3] = 255;
   }
   ctx.putImageData(img, 0, 0);
   ctx.strokeStyle = dark ? 'rgba(190,174,117,.28)' : 'rgba(61,59,43,.22)'; ctx.lineWidth = 2;
@@ -40,6 +39,48 @@ function marble(dark: boolean) {
   }
   const texture = new THREE.CanvasTexture(canvas); texture.colorSpace = THREE.SRGBColorSpace; texture.anisotropy = 4;
   return texture;
+}
+
+/** One startup-only reflection bake: long windows produce readable metal highlights.
+ * These cards never enter the playable scene or add a recurring render pass. */
+function hallReflection(renderer:THREE.WebGLRenderer){
+  const room=new THREE.Scene();room.background=new THREE.Color('#17242c');
+  const geometry=new THREE.BoxGeometry(1,1,1),materials:THREE.MeshBasicMaterial[]=[];
+  const enclosure=new THREE.MeshBasicMaterial({color:'#3c4548',side:THREE.BackSide});materials.push(enclosure);
+  const shell=new THREE.Mesh(geometry,enclosure);shell.scale.set(38,26,38);shell.position.y=9;room.add(shell);
+  function panel(color:string,power:number,x:number,y:number,z:number,w:number,h:number,d:number){
+    const material=new THREE.MeshBasicMaterial({color:new THREE.Color(color).multiplyScalar(power),toneMapped:false});materials.push(material);
+    const mesh=new THREE.Mesh(geometry,material);mesh.position.set(x,y,z);mesh.scale.set(w,h,d);room.add(mesh);
+  }
+  // Warm narrow colonnade windows against a broad cool sky opening. Alternating
+  // gaps keep specular response shaped instead of washing the whole armor white.
+  for(const z of[-9,-3,3,9])panel('#ffd6a0',12,-18,7,z,.15,9,1.2);
+  panel('#b1d7f1',9.5,18,9,-5,.15,11,6);
+  panel('#c6dce9',6.5,2,21,-3,9,.15,11);
+  panel('#e7dfca',2.2,2,4,18,8,5,.15);
+  for(const x of[-8,8])panel('#ffb46b',6,x,.6,-9,1.2,2,.15);
+  const generator=new THREE.PMREMGenerator(renderer),target=generator.fromScene(room,.045,.1,80);
+  target.texture.name='local-colonnade-reflection';geometry.dispose();materials.forEach(material=>material.dispose());generator.dispose();
+  return target.texture;
+}
+
+/** A shared local limestone paint: mineral clouds, pores and scratched edges. */
+function limestoneTexture(){
+  const size=512,canvas=document.createElement('canvas');canvas.width=canvas.height=size;
+  const context=canvas.getContext('2d')!,pixels=context.createImageData(size,size);
+  for(let y=0;y<size;y++)for(let x=0;x<size;x++){
+    const cloud=Math.sin(x*.023+Math.sin(y*.014)*3)*Math.sin(y*.019)*5+Math.sin((x+y)*.061)*1.6;
+    const pore=random()>.985?-17:0,value=181+cloud+(random()-.5)*10+pore,i=(y*size+x)*4;
+    pixels.data.set([value*1.005,value,value*.978,255],i);
+  }
+  context.putImageData(pixels,0,0);
+  for(let i=0;i<52;i++){
+    const x=random()*size,y=random()*size;
+    context.strokeStyle=`rgba(69,74,74,${.025+random()*.045})`;context.lineWidth=.4+random()*.6;
+    context.beginPath();context.moveTo(x,y);context.lineTo(x+8+random()*18,y-1+random()*3);context.stroke();
+  }
+  const texture=new THREE.CanvasTexture(canvas);texture.name='local-worn-limestone';texture.colorSpace=THREE.SRGBColorSpace;
+  texture.wrapS=texture.wrapT=THREE.RepeatWrapping;texture.anisotropy=4;return texture;
 }
 
 /** Sixteen locally drawn glyphs share one atlas and a single board-label draw. */
@@ -98,15 +139,15 @@ function armorChipGeometry(){
 
 export function createWorld(scene: THREE.Scene, renderer: THREE.WebGLRenderer) {
   scene.background = new THREE.Color('#101815'); scene.fog = new THREE.FogExp2('#101815', .019);
-  const pmrem = new THREE.PMREMGenerator(renderer); const envScene = new RoomEnvironment();
-  const envMap = pmrem.fromScene(envScene, .04); scene.environment = envMap.texture; scene.environmentIntensity = .65; envScene.dispose(); pmrem.dispose();
-  const bronze = new THREE.MeshStandardMaterial({ color: '#b69961', metalness:.78, roughness:.32 });
+  scene.environment=hallReflection(renderer);scene.environmentIntensity=.64;
+  const bronze = new THREE.MeshStandardMaterial({ name:'antique-bronze-trim',color: '#a68c65', metalness:.76, roughness:.36 });
   const darkMetal = new THREE.MeshStandardMaterial({ color:'#242e29', metalness:.55, roughness:.4 });
   const stone = new THREE.MeshStandardMaterial({ color:'#35413b', roughness:.86, metalness:.06 });
   const edge = new THREE.MeshStandardMaterial({ color:'#626657', roughness:.57, metalness:.2 });
   const black = new THREE.MeshStandardMaterial({ color:'#0e1412', roughness:.8 });
   const patina = new THREE.MeshStandardMaterial({color:'#587267',roughness:.78,metalness:.21});
-  const ashlar=new THREE.MeshStandardMaterial({color:'#a29b87',map:ashlarTexture(),roughness:.93,metalness:0});
+  const ashlar=new THREE.MeshStandardMaterial({name:'fortification-limestone',color:'#b6b7ae',map:ashlarTexture(),roughness:.93,metalness:0});
+  const floor=new THREE.MeshStandardMaterial({name:'arena-worn-limestone',color:'#787d7b',map:limestoneTexture(),roughness:.91,metalness:0});
   const batches = new Map<THREE.Material, THREE.BufferGeometry[]>();
   function add(geometry: THREE.BufferGeometry, material: THREE.Material, x=0,y=0,z=0, rx=0,ry=0,rz=0) {
     geometry.rotateX(rx); geometry.rotateY(ry); geometry.rotateZ(rz); geometry.translate(x,y,z);
@@ -152,11 +193,13 @@ export function createWorld(scene: THREE.Scene, renderer: THREE.WebGLRenderer) {
     box(.08,.019,.17,patina,sign*6.407,-.13,t);
   }
   const tileGeometry = new THREE.BoxGeometry(CELL-.027,.16,CELL-.027);
+  const tileMaterials:THREE.MeshStandardMaterial[]=[];
   for(let parity=0;parity<2;parity++) {
-    const material=new THREE.MeshStandardMaterial({map:marble(parity===0),roughness:parity===0?.36:.49,metalness:parity===0?.16:.04});
+    const material=new THREE.MeshStandardMaterial({name:parity===0?'board-blue-slate':'board-ivory-marble',map:marble(parity===0),roughness:parity===0?.33:.39,metalness:parity===0?.10:.02});tileMaterials.push(material);
     const tiles=new THREE.InstancedMesh(tileGeometry,material,32); let index=0;
     for(let f=0;f<8;f++)for(let r=0;r<8;r++)if((f+r)%2===parity) {
-      const m=new THREE.Matrix4().makeTranslation((f-3.5)*CELL,.075,(3.5-r)*CELL); tiles.setMatrixAt(index++,m);
+      const m=new THREE.Matrix4().makeRotationY(((f*5+r*3)%4)*Math.PI/2);m.setPosition((f-3.5)*CELL,.075,(3.5-r)*CELL);
+      tiles.setMatrixAt(index,m);tiles.setColorAt(index++,new THREE.Color().setScalar(.95+((f*7+r*11)%9)*.00625));
     }
     tiles.receiveShadow=true; scene.add(tiles);
   }
@@ -176,7 +219,10 @@ export function createWorld(scene: THREE.Scene, renderer: THREE.WebGLRenderer) {
     add(new THREE.OctahedronGeometry(.1),edge,x,.22,z);
   }
   // Hall floor, radial inlay and shallow steps frame the board without cluttering it.
-  add(new THREE.CylinderGeometry(24,24,.22,96),stone,0,-1.4);
+  const floorGeometry=new THREE.CylinderGeometry(24,24,.22,96),floorPositions=floorGeometry.getAttribute('position'),floorUv=floorGeometry.getAttribute('uv');
+  // World-sized slabs keep pores and wear at a credible scale in low camera shots.
+  for(let i=0;i<floorUv.count;i++)floorUv.setXY(i,floorPositions.getX(i)/6,floorPositions.getZ(i)/6);
+  add(floorGeometry,floor,0,-1.4);
   for(const radius of [9.15,9.24,12.2,12.25,17.2]) add(new THREE.TorusGeometry(radius,.016,4,160),bronze,0,-1.273,0,Math.PI/2);
   for(let i=0;i<32;i++) {
     const a=i*Math.PI/16; const m=new THREE.BoxGeometry(.025,.01,11); m.rotateY(a); m.translate(Math.sin(a)*17,-1.273,Math.cos(a)*17); add(m,edge);
@@ -266,24 +312,51 @@ export function createWorld(scene: THREE.Scene, renderer: THREE.WebGLRenderer) {
   dustGeo.setAttribute('position',new THREE.BufferAttribute(positions,3));
   const dust=new THREE.Points(dustGeo,new THREE.PointsMaterial({color:'#d9c498',size:.028,transparent:true,opacity:.45,depthWrite:false}));scene.add(dust);
   const atmosphere=new TurnAtmosphere({scene,renderer,stone,edge,darkMetal,hemi,sun,rim,flames,braziers,dust:dust.material});
+  const groundHaze=(scene.getObjectByName('hall-mist') as THREE.Mesh<THREE.BufferGeometry,THREE.ShaderMaterial>).material;
+  const palette={
+    day:{sky:new THREE.Color('#27343a'),stone:new THREE.Color('#777b75'),floor:new THREE.Color('#7a807e'),edge:new THREE.Color('#979c94'),metal:new THREE.Color('#343c3c'),hemi:new THREE.Color('#c4d7e3'),ground:new THREE.Color('#3a3932'),key:new THREE.Color('#ffe0b9'),rim:new THREE.Color('#a1c9df'),dust:new THREE.Color('#d7c5a5')},
+    night:{sky:new THREE.Color('#0b1220'),stone:new THREE.Color('#4a5963'),floor:new THREE.Color('#505e67'),edge:new THREE.Color('#7b8d97'),metal:new THREE.Color('#283741'),hemi:new THREE.Color('#afcbe2'),ground:new THREE.Color('#242a31'),key:new THREE.Color('#ffd0a0'),rim:new THREE.Color('#92b9e4'),dust:new THREE.Color('#a8c2d5')}
+  };
+  let enhanced=getGraphicsMode()==='enhanced',lightingTime=0;
+  function lightHall(time:number,reduced=false){
+    const t=atmosphere.state().blend,a=palette.day,b=palette.night;
+    const mix=(target:THREE.Color,key:keyof typeof a)=>target.copy(a[key]).lerp(b[key],t);
+    mix(scene.background as THREE.Color,'sky');const fog=scene.fog as THREE.FogExp2;fog.color.copy(scene.background as THREE.Color);fog.density=enhanced?.014:.012;
+    mix(stone.color,'stone');mix(floor.color,'floor');mix(edge.color,'edge');mix(darkMetal.color,'metal');
+    mix(hemi.color,'hemi');mix(hemi.groundColor,'ground');mix(sun.color,'key');mix(rim.color,'rim');
+    // Basic retains an inexpensive readable fill. Enhanced sculpts forms with
+    // one warmer side key, cooler rim and lower broad fill, not extra lights.
+    hemi.intensity=enhanced?.47-t*.10:1.25-t*.28;
+    sun.intensity=enhanced?3.9-t*1.0:3.0-t*.65;
+    rim.intensity=enhanced?2.65+t*.65:1.7+t*.25;
+    sun.position.set(-8,enhanced?10-t*1.7:13,7);rim.position.set(8,9,-11);
+    scene.environmentIntensity=enhanced?.64-t*.13:.75-t*.13;
+    renderer.toneMappingExposure=enhanced?1.00+t*.025:1.01;
+    stone.roughness=enhanced?.80:.89;edge.roughness=enhanced?.54:.64;darkMetal.roughness=enhanced?.34:.44;
+    floor.roughness=enhanced?.83:.94;
+    groundHaze.uniforms.uOpacity.value=.085+t*.035;
+    tileMaterials[0].roughness=enhanced?.30:.40;tileMaterials[1].roughness=enhanced?.37:.48;
+    flames.color.set('#fff0d8');
+    const flicker=enhanced&&!reduced?1+Math.sin(time*1.8)*.04+Math.sin(time*3.1)*.025:1;
+    braziers.forEach(light=>{light.color.set('#ffb274');light.intensity=(enhanced?20+t*5:14+t*3)*flicker;});
+    mix(dust.material.color,'dust');dust.material.opacity=enhanced?.30:.23;
+  }
   const shaftMaterial=new THREE.ShaderMaterial({name:'side-lit-hall-dust',transparent:true,depthWrite:false,side:THREE.DoubleSide,
     uniforms:{uGrain:{value:getSurfaceGrain()},uTime:{value:0},uNight:{value:0}},
     vertexShader:`varying vec2 vShaft;varying vec3 vWorld;void main(){vShaft=uv;vec4 world=modelMatrix*instanceMatrix*vec4(position,1.0);vWorld=world.xyz;gl_Position=projectionMatrix*viewMatrix*world;}`,
     fragmentShader:`uniform sampler2D uGrain;uniform float uTime;uniform float uNight;varying vec2 vShaft;varying vec3 vWorld;
-      void main(){float edge=pow(max(0.0,1.0-abs(vShaft.x*2.0-1.0)),2.5);float lengthFade=pow(sin(vShaft.y*3.14159),.7);
+      void main(){float edge=pow(max(0.0,1.0-abs(vShaft.x*2.0-1.0)),2.5);float lengthFade=pow(max(0.0,sin(vShaft.y*3.14159)),.7);
         float dust=texture2D(uGrain,vWorld.xy*.011+vec2(uTime*.0008,0.0)).r;
-        vec3 tint=mix(vec3(.86,.65,.35),vec3(.33,.45,.69),uNight);
-        gl_FragColor=vec4(tint,edge*lengthFade*(.055+dust*.055)*(1.0-uNight*.3));
+        vec3 tint=mix(vec3(.78,.73,.61),vec3(.39,.51,.66),uNight);
+        gl_FragColor=vec4(tint,edge*lengthFade*(.040+dust*.045)*(1.0-uNight*.3));
         #include <tonemapping_fragment>
         #include <colorspace_fragment>
       }`});shaftMaterial.forceSinglePass=true;
   const shafts=new THREE.InstancedMesh(new THREE.PlaneGeometry(2.1,14),shaftMaterial,3);shafts.name='architectural-sunshafts';
   const shaftMatrix=new THREE.Object3D();for(let i=0;i<3;i++){shaftMatrix.position.set(-11.5+i*10.6,4.8,-10.8-i*1.7);shaftMatrix.rotation.set(0,-.37,-.52);shaftMatrix.scale.set(.8+i*.12,1,1);shaftMatrix.updateMatrix();shafts.setMatrixAt(i,shaftMatrix.matrix);}scene.add(shafts);
-  onGraphicsChange(mode=>{shafts.visible=mode==='enhanced';});
-  return {setTurn:(side:'w'|'b',instant=false)=>atmosphere.setTurn(side,instant),theme:()=>({...atmosphere.state(),shafts:shafts.visible?1:0,localArchitecture:true}),update(time:number,reduced=false){
-    atmosphere.update(time,reduced);bannerTime.value=reduced?0:time;shaftMaterial.uniforms.uTime.value=reduced?0:time;shaftMaterial.uniforms.uNight.value=atmosphere.state().blend;
-    // Warm combustion light remains warm at night; the moon changes the hall.
-    flames.color.set('#fff2db');braziers.forEach(light=>light.color.set('#ffad5b'));
+  onGraphicsChange(mode=>{enhanced=mode==='enhanced';shafts.visible=enhanced;lightHall(lightingTime);});
+  return {setTurn:(side:'w'|'b',instant=false)=>{atmosphere.setTurn(side,instant);lightHall(lightingTime);},theme:()=>({...atmosphere.state(),shafts:shafts.visible?1:0,localArchitecture:true,reflection:'local-colonnade',key:sun.intensity,fill:hemi.intensity,rim:rim.intensity,environment:scene.environmentIntensity}),update(time:number,reduced=false){
+    atmosphere.update(time,reduced);lightingTime=time;lightHall(time,reduced);bannerTime.value=reduced?0:time;shaftMaterial.uniforms.uTime.value=reduced?0:time;shaftMaterial.uniforms.uNight.value=atmosphere.state().blend;
     dust.rotation.y=reduced?0:time*.009;flameObjects.forEach((f,i)=>{f.scale.y=1+(reduced?0:Math.sin(time*7+i*2)*.10);f.scale.x=.9+(reduced?0:Math.sin(time*5.6+i)*.07);f.scale.z=f.scale.x;f.rotation.y=reduced?0:Math.sin(time*.6+i)*.15;f.updateMatrix();firePool.setMatrixAt(i,f.matrix);});firePool.instanceMatrix.needsUpdate=true;
   }, shadowLight:sun};
 }

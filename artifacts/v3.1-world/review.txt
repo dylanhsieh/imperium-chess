@@ -1,0 +1,18 @@
+V3.1 world lighting/material pass — 2026-10-13
+Edited production file: src/world.ts only. No commit or push.
+
+Changes
+- Replaced generic RoomEnvironment with a one-time local PMREM bake of warm colonnade windows, cool sky opening and low torch reflection cards. Cards are absent from the playable scene. No recurring reflection pass.
+- Kept the existing day/night transition and basic/enhanced modes. A neutral cool hemisphere, warm side key and cool rim now distinguish shape/material from the previous yellow-brown wash. Night keeps warm practical fire and cooler surroundings. Still one shadow-casting directional light, desktop 2048 / touch 1024.
+- Added one shared 512px local limestone texture and one floor batch; neutral slate/ivory board tiles use subtle per-instance variation and four vein orientations. Bronze trim is less yellow. Reduced night floor haze to retain material contrast.
+- Fixed an existing fractional pow(sin(...), .7) sunlight shader edge case exposed by HDR bloom. Clamp its base nonnegative so NaNs cannot bloom into black blocks.
+
+Verification
+- TypeScript passes. Production snapshot builds successfully (artifacts/v3.1-world/build, index-CIGBXkb_.js).
+- Real Chrome/ANGLE Metal: desktop 1440×900 and touch-emulated 390×844; basic/enhanced × day/night, plus a paused cinematic close view. Final integrated root AgX/HDR/bloom and generated material maps were included. All nine captures have no page or console errors.
+- Final screenshots: desktop-basic/enhanced-day/night.png, mobile-basic/enhanced-day/night.png, cinematic-day.png. Visual inspection confirms no sunlight black blocks, readable white/black armies, warm practical fire and cooler environment. before-day/night.png preserve prior lighting.
+- metrics.json contains final full-frame accumulated diagnostics. Desktop basic171 / enhanced177 calls; mobile basic169 / enhanced174. These include shadow rendering under the new autoReset=false accounting. Before-post metrics used the previous scene-pass-only counter: 95/98 desktop, 93/96 mobile, so those numbers must not be compared as if they had identical scope.
+- Final enhanced desktop: 97 geometries / 17 textures; touch: 95 / 14. World added no triangles or shadow passes and only one recurring floor draw / one 512px map. Parent post pipeline adds its bounded glow/output passes separately.
+- The touch viewport check is desktop Metal GPU emulation, not a physical phone performance measurement. The full-frame phone triangle count including shadows is about 584k; primary scene count before post accounting is about 304k, slightly above the initial 300k scene guideline and mostly army geometry.
+
+No remaining observed world shader errors. Root owns final combined gameplay/motion validation and deployment.

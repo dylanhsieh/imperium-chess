@@ -1,0 +1,256 @@
+{
+  "url": "http://127.0.0.1:5195",
+  "unpaused": true,
+  "realInput": true,
+  "shots": [
+    {
+      "device": "desktop",
+      "type": "pawn",
+      "shots": [
+        {
+          "phase": "advance",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-pawn-advance.png",
+          "progress": 0.3218888888888886
+        },
+        {
+          "phase": "raise",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-pawn-raise.png",
+          "progress": 0.521844444447093
+        },
+        {
+          "phase": "ready",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-pawn-ready.png",
+          "progress": 0.6366222222248705
+        },
+        {
+          "phase": "contact",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-pawn-contact.png",
+          "progress": 0.69
+        },
+        {
+          "phase": "recoil",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-pawn-recoil.png",
+          "progress": 0.7731351111178927
+        }
+      ]
+    },
+    {
+      "device": "desktop",
+      "type": "rook",
+      "shots": [
+        {
+          "phase": "advance",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-rook-advance.png",
+          "progress": 0.32211111111111107
+        },
+        {
+          "phase": "raise",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-rook-raise.png",
+          "progress": 0.5220666666693152
+        },
+        {
+          "phase": "ready",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-rook-ready.png",
+          "progress": 0.6368666666613678
+        },
+        {
+          "phase": "contact",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-rook-contact.png",
+          "progress": 0.69
+        },
+        {
+          "phase": "recoil",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-rook-recoil.png",
+          "progress": 0.7721520000007415
+        }
+      ]
+    },
+    {
+      "device": "desktop",
+      "type": "knight",
+      "shots": [
+        {
+          "phase": "advance",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-knight-advance.png",
+          "progress": 0.3220666666693156
+        },
+        {
+          "phase": "raise",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-knight-raise.png",
+          "progress": 0.5221999999947012
+        },
+        {
+          "phase": "ready",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-knight-ready.png",
+          "progress": 0.6517555555502567
+        },
+        {
+          "phase": "contact",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-knight-contact.png",
+          "progress": 0.69
+        },
+        {
+          "phase": "recoil",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-knight-recoil.png",
+          "progress": 0.7730897777758703
+        }
+      ]
+    },
+    {
+      "device": "desktop",
+      "type": "bishop",
+      "shots": [
+        {
+          "phase": "advance",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-bishop-advance.png",
+          "progress": 0.3220666666560701
+        },
+        {
+          "phase": "raise",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-bishop-raise.png",
+          "progress": 0.5220888888835904
+        },
+        {
+          "phase": "ready",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-bishop-ready.png",
+          "progress": 0.6407333333227365
+        },
+        {
+          "phase": "contact",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-bishop-contact.png",
+          "progress": 0.69
+        },
+        {
+          "phase": "recoil",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-bishop-recoil.png",
+          "progress": 0.7735191111167271
+        }
+      ]
+    },
+    {
+      "device": "desktop",
+      "type": "queen",
+      "shots": [
+        {
+          "phase": "advance",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-queen-advance.png",
+          "progress": 0.3221999999947016
+        },
+        {
+          "phase": "raise",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-queen-raise.png",
+          "progress": 0.5224222222169236
+        },
+        {
+          "phase": "ready",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-queen-ready.png",
+          "progress": 0.6445777777698298
+        },
+        {
+          "phase": "contact",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-queen-contact.png",
+          "progress": 0.69
+        },
+        {
+          "phase": "recoil",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-queen-recoil.png",
+          "progress": 0.7733502222331365
+        }
+      ]
+    },
+    {
+      "device": "desktop",
+      "type": "king",
+      "shots": [
+        {
+          "phase": "advance",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-king-advance.png",
+          "progress": 0.3222666666640173
+        },
+        {
+          "phase": "raise",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-king-raise.png",
+          "progress": 0.5221777777671809
+        },
+        {
+          "phase": "ready",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-king-ready.png",
+          "progress": 0.6481111111111102
+        },
+        {
+          "phase": "contact",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-king-contact.png",
+          "progress": 0.69
+        },
+        {
+          "phase": "recoil",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/desktop-king-recoil.png",
+          "progress": 0.7725155555529061
+        }
+      ]
+    },
+    {
+      "device": "phone",
+      "type": "pawn",
+      "shots": [
+        {
+          "phase": "advance",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/phone-pawn-advance.png",
+          "progress": 0.3222666666640173
+        },
+        {
+          "phase": "raise",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/phone-pawn-raise.png",
+          "progress": 0.5222222222222217
+        },
+        {
+          "phase": "ready",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/phone-pawn-ready.png",
+          "progress": 0.6370444444417946
+        },
+        {
+          "phase": "contact",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/phone-pawn-contact.png",
+          "progress": 0.69
+        },
+        {
+          "phase": "recoil",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/phone-pawn-recoil.png",
+          "progress": 0.7734613333405388
+        }
+      ]
+    },
+    {
+      "device": "phone",
+      "type": "knight",
+      "shots": [
+        {
+          "phase": "advance",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/phone-knight-advance.png",
+          "progress": 0.3221999999947015
+        },
+        {
+          "phase": "raise",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/phone-knight-raise.png",
+          "progress": 0.5222666666640173
+        },
+        {
+          "phase": "ready",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/phone-knight-ready.png",
+          "progress": 0.6518888888888885
+        },
+        {
+          "phase": "contact",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/phone-knight-contact.png",
+          "progress": 0.69
+        },
+        {
+          "phase": "recoil",
+          "path": "outputs/imperium-chess/artifacts/v3.1-motion/phone-knight-recoil.png",
+          "progress": 0.7730613333378896
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,60 @@
+{
+  "checks": [
+    {
+      "test": "legacy-delegates-full-pipeline",
+      "forwardedCount": 24,
+      "calls": 177,
+      "triangles": 584341,
+      "samples": 24,
+      "postPasses": 2,
+      "includesShadowPasses": true,
+      "pass": true,
+      "scripts": [
+        "http://127.0.0.1:5195/assets/index-DyfAhYLB.js"
+      ]
+    },
+    {
+      "test": "mobile-bloom-texel-spacing",
+      "viewport": [
+        390,
+        844
+      ],
+      "glow": {
+        "width": 98,
+        "height": 152
+      },
+      "uniform": {
+        "step": [
+          0.012755102040816327,
+          0
+        ],
+        "vertical": 0.008223684210526315
+      },
+      "xRadiusUnit": 1.25,
+      "yRadiusUnit": 1.25,
+      "pass": true
+    },
+    {
+      "test": "mobile-bloom-texel-spacing",
+      "viewport": [
+        844,
+        390
+      ],
+      "glow": {
+        "width": 159,
+        "height": 85
+      },
+      "uniform": {
+        "step": [
+          0.007861635220125786,
+          0
+        ],
+        "vertical": 0.014705882352941176
+      },
+      "xRadiusUnit": 1.25,
+      "yRadiusUnit": 1.25,
+      "pass": true
+    }
+  ],
+  "errors": []
+}

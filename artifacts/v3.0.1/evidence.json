@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "runId": "no-discs-v3.0.1",
+  "captures": [
+    {
+      "mode": "desktop",
+      "state": "active-play",
+      "report": "artifacts/v3.0.1/desktop-active-play.json"
+    },
+    {
+      "mode": "mobile",
+      "state": "active-play",
+      "report": "artifacts/v3.0.1/mobile-active-play.json"
+    }
+  ],
+  "artifacts": [
+    "artifacts/v3.0.1/grounding.json",
+    "artifacts/v3.0.1/motion/report.json"
+  ]
+}

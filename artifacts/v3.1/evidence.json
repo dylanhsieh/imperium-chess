@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "runId": "imperium-v3.1",
+  "captures": [
+    {
+      "mode": "desktop",
+      "state": "active-play",
+      "report": "artifacts/v3.1/inspector/desktop-active-play.json"
+    },
+    {
+      "mode": "desktop",
+      "state": "threat-preview",
+      "report": "artifacts/v3.1/inspector/desktop-threat-preview.json"
+    },
+    {
+      "mode": "mobile",
+      "state": "active-play",
+      "report": "artifacts/v3.1/inspector/mobile-active-play.json"
+    },
+    {
+      "mode": "mobile",
+      "state": "threat-preview",
+      "report": "artifacts/v3.1/inspector/mobile-threat-preview.json"
+    }
+  ],
+  "artifacts": [
+    "artifacts/v3.1/render-metrics.json",
+    "artifacts/v3.1-motion/report.json",
+    "artifacts/v3.1-motion/watch-bubbles.json",
+    "artifacts/v3.1-world/review.txt",
+    "artifacts/v3.0.1/grounding.json",
+    "artifacts/v3.1/imagegen-materials.md"
+  ]
+}

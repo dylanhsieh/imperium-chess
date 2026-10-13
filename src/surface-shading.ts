@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {getMaterialMaps,getMaterialDetail} from './material-atlas';
 
 export type GraphicsMode = 'basic' | 'enhanced';
 const preferenceKey = 'voxel-games-graphics-v1';
@@ -35,6 +36,7 @@ export function getSurfaceGrain(){
 export function finishMaterial<T extends THREE.MeshStandardMaterial>(material:T,options:{scale?:number;grain?:number;roughness?:number;shade?:number;edge?:number}={}):T{
  if(materials.has(material))return material;materials.add(material);
  const previous=material.onBeforeCompile,cacheKey=material.customProgramCacheKey();
+ const detail=getMaterialDetail(material.name);
  const config=new THREE.Vector4(options.scale??1.8,options.grain??.045,options.roughness??.12,options.shade??.24);
  material.onBeforeCompile=(shader,renderer)=>{
   previous.call(material,shader,renderer);if(mode==='basic')return;
@@ -63,8 +65,31 @@ export function finishMaterial<T extends THREE.MeshStandardMaterial>(material:T,
     float edgeLight=pow(1.0-clamp(dot(normal,normalize(vViewPosition)),0.0,1.0),3.0);
     outgoingLight+=mix(vec3(.20,.16,.10),vec3(.10,.13,.19),uSurfaceMood)*edgeLight*metalnessFactor*.28;
     #include <opaque_fragment>`);
+ if(detail){
+   const maps=getMaterialMaps();
+   shader.uniforms.uMaterialColor={value:maps.color};shader.uniforms.uMaterialNormal={value:maps.normal};
+   shader.uniforms.uMaterialRect={value:detail.rect};shader.uniforms.uMaterialFinish={value:detail.finish};
+   shader.fragmentShader=shader.fragmentShader.replace('#include <common>',`#include <common>
+    uniform sampler2D uMaterialColor;uniform sampler2D uMaterialNormal;uniform vec4 uMaterialRect;uniform vec4 uMaterialFinish;
+    mat3 antiqueFrame(vec3 eye,vec3 n,vec2 uv){
+     vec3 dp1=dFdx(eye),dp2=dFdy(eye);vec2 duv1=dFdx(uv),duv2=dFdy(uv);
+     vec3 p2=cross(dp2,n),p1=cross(n,dp1);
+     vec3 t=p2*duv1.x+p1*duv2.x,b=p2*duv1.y+p1*duv2.y;
+     float inv=inversesqrt(max(max(dot(t,t),dot(b,b)),1e-8));return mat3(t*inv,b*inv,n);
+    }`)
+    .replace('#include <color_fragment>',`#include <color_fragment>
+     vec2 antiqueUv=uMaterialRect.xy+fract(vFinishUv*2.0)*uMaterialRect.zw;
+     float antiqueDetail=dot(texture2D(uMaterialColor,antiqueUv).rgb,vec3(.2126,.7152,.0722))/uMaterialFinish.x-1.0;
+     diffuseColor.rgb*=clamp(1.0+antiqueDetail*uMaterialFinish.z,.82,1.18);`)
+    .replace('#include <roughnessmap_fragment>',`#include <roughnessmap_fragment>
+     roughnessFactor=clamp(roughnessFactor+antiqueDetail*uMaterialFinish.w,.08,1.0);`)
+    .replace('#include <normal_fragment_maps>',`#include <normal_fragment_maps>
+     vec3 antiqueNormal=texture2D(uMaterialNormal,antiqueUv).xyz*2.0-1.0;
+     antiqueNormal.xy*=uMaterialFinish.y;
+     normal=normalize(antiqueFrame(-vViewPosition,normal,vFinishUv)*antiqueNormal);`);
+ }
  };
- material.customProgramCacheKey=()=>cacheKey+(mode==='enhanced'?'|forged-finish-v4':'|basic');
+ material.customProgramCacheKey=()=>cacheKey+(mode==='enhanced'?'|forged-finish-v5|'+(detail?detail.rect.toArray().join(','):'plain'):'|basic');
  return material;
 }
 export interface ContactSpot{x:number;y:number;z:number;rx:number;rz:number;yaw?:number;height?:number;}
@@ -86,15 +111,13 @@ export class ContactShadows {
   this.strength.needsUpdate=true;this.mesh.instanceMatrix.needsUpdate=true;
  }
 }
-/** Debug-only paired render benchmark. gl.finish measures CPU+GPU completion, not RAF pacing. */
+/** Debug-only full-pipeline benchmark; includes shadows, scene and film output. */
 export function installGraphicsDiagnostics(renderer:THREE.WebGLRenderer,debug:boolean){
  if(!debug)return;
- let scene:THREE.Object3D|undefined,camera:THREE.Camera|undefined;
- const render=renderer.render.bind(renderer);
- renderer.render=(nextScene,nextCamera)=>{scene=nextScene;camera=nextCamera;render(nextScene,nextCamera);};
  (window as any).__GRAPHICS__={mode:getGraphicsMode,setMode:setGraphicsMode,benchmark:async(count=80)=>{
-  if(!scene||!camera)throw new Error('No rendered scene');count=Math.min(240,Math.max(20,count));const gl=renderer.getContext(),samples:number[]=[];
-  for(let i=0;i<count+15;i++){if(i%8===0)await new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()));const t=performance.now();render(scene,camera);gl.finish();if(i>=15)samples.push(performance.now()-t);}
-  samples.sort((a,b)=>a-b);return{mode,method:'synchronous-render-completion-cpu-and-gpu',samples:count,medianMs:samples[Math.floor(count*.5)],p95Ms:samples[Math.floor(count*.95)],calls:renderer.info.render.calls,triangles:renderer.info.render.triangles,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures,extraPostPasses:0};
+  const benchmark=(window as any).__CHESS_DEBUG__?.benchmarkRender;
+  if(!benchmark)throw new Error('The game render benchmark is not ready');
+  const result=benchmark(Math.min(240,Math.max(20,count)));
+  return{mode,method:'synchronous-render-completion-cpu-and-gpu',samples:result.samples,medianMs:result.medianMs,p95Ms:result.p95Ms,calls:result.renderer.calls,triangles:result.renderer.triangles,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures,extraPostPasses:result.pipeline.postPasses,includesShadowPasses:true};
  }};
 }

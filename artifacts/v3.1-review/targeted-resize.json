@@ -1,0 +1,333 @@
+{
+  "observations": [
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "scripts": [
+        "http://127.0.0.1:5195/assets/index-CUolzNAP.js"
+      ],
+      "stage": {
+        "x": 0,
+        "y": 84,
+        "width": 1110,
+        "height": 781,
+        "top": 84,
+        "right": 1110,
+        "bottom": 865,
+        "left": 0
+      },
+      "diagnostics": {
+        "frame": 56,
+        "fps": 60,
+        "game": {
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+          "turn": "w",
+          "moves": 0,
+          "selected": null,
+          "legal": [],
+          "fear": [],
+          "animating": false,
+          "actionProgress": 0,
+          "gameOver": false
+        },
+        "renderer": {
+          "calls": 177,
+          "triangles": 584341,
+          "geometries": 97,
+          "textures": 17
+        },
+        "render": {
+          "calls": 177,
+          "triangles": 584341
+        },
+        "memory": {
+          "geometries": 97,
+          "textures": 17
+        },
+        "quality": {
+          "atmosphere": {
+            "side": "w",
+            "blend": 0,
+            "enhanced": true,
+            "mistDraws": 1,
+            "shafts": 1,
+            "localArchitecture": true,
+            "reflection": "local-colonnade",
+            "key": 3.9,
+            "fill": 0.47,
+            "rim": 2.65,
+            "environment": 0.64
+          },
+          "graphics": "enhanced",
+          "dpr": 1.5,
+          "shadowMapSize": 1024,
+          "shadowLights": 1,
+          "enabled": true,
+          "toneMapping": "AgX",
+          "sceneRenders": 1,
+          "postPasses": 2,
+          "screenPasses": 3,
+          "hdr": {
+            "width": 1665,
+            "height": 1172,
+            "samples": 4
+          },
+          "bloom": {
+            "width": 416,
+            "height": 293
+          }
+        },
+        "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+      }
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "scripts": [
+        "http://127.0.0.1:5195/assets/index-CUolzNAP.js"
+      ],
+      "stage": {
+        "x": 0,
+        "y": 62,
+        "width": 390,
+        "height": 606,
+        "top": 62,
+        "right": 390,
+        "bottom": 668,
+        "left": 0
+      },
+      "diagnostics": {
+        "frame": 70,
+        "fps": 60,
+        "game": {
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+          "turn": "w",
+          "moves": 0,
+          "selected": null,
+          "legal": [],
+          "fear": [],
+          "animating": false,
+          "actionProgress": 0,
+          "gameOver": false
+        },
+        "renderer": {
+          "calls": 174,
+          "triangles": 583620,
+          "geometries": 97,
+          "textures": 16
+        },
+        "render": {
+          "calls": 174,
+          "triangles": 583620
+        },
+        "memory": {
+          "geometries": 97,
+          "textures": 16
+        },
+        "quality": {
+          "atmosphere": {
+            "side": "w",
+            "blend": 0,
+            "enhanced": true,
+            "mistDraws": 1,
+            "shafts": 1,
+            "localArchitecture": true,
+            "reflection": "local-colonnade",
+            "key": 3.9,
+            "fill": 0.47,
+            "rim": 2.65,
+            "environment": 0.64
+          },
+          "graphics": "enhanced",
+          "dpr": 1.5,
+          "shadowMapSize": 1024,
+          "shadowLights": 1,
+          "enabled": true,
+          "toneMapping": "AgX",
+          "sceneRenders": 1,
+          "postPasses": 1,
+          "screenPasses": 2,
+          "hdr": {
+            "width": 488,
+            "height": 758,
+            "samples": 2
+          },
+          "bloom": {
+            "width": 98,
+            "height": 152
+          }
+        },
+        "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+      }
+    },
+    {
+      "viewport": [
+        844,
+        390
+      ],
+      "scripts": [
+        "http://127.0.0.1:5195/assets/index-CUolzNAP.js"
+      ],
+      "stage": {
+        "x": 0,
+        "y": 52,
+        "width": 636,
+        "height": 338,
+        "top": 52,
+        "right": 636,
+        "bottom": 390,
+        "left": 0
+      },
+      "diagnostics": {
+        "frame": 83,
+        "fps": 60,
+        "game": {
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+          "turn": "w",
+          "moves": 0,
+          "selected": null,
+          "legal": [],
+          "fear": [],
+          "animating": false,
+          "actionProgress": 0,
+          "gameOver": false
+        },
+        "renderer": {
+          "calls": 174,
+          "triangles": 583620,
+          "geometries": 97,
+          "textures": 16
+        },
+        "render": {
+          "calls": 174,
+          "triangles": 583620
+        },
+        "memory": {
+          "geometries": 97,
+          "textures": 16
+        },
+        "quality": {
+          "atmosphere": {
+            "side": "w",
+            "blend": 0,
+            "enhanced": true,
+            "mistDraws": 1,
+            "shafts": 1,
+            "localArchitecture": true,
+            "reflection": "local-colonnade",
+            "key": 3.9,
+            "fill": 0.47,
+            "rim": 2.65,
+            "environment": 0.64
+          },
+          "graphics": "enhanced",
+          "dpr": 1.5,
+          "shadowMapSize": 1024,
+          "shadowLights": 1,
+          "enabled": true,
+          "toneMapping": "AgX",
+          "sceneRenders": 1,
+          "postPasses": 1,
+          "screenPasses": 2,
+          "hdr": {
+            "width": 795,
+            "height": 423,
+            "samples": 2
+          },
+          "bloom": {
+            "width": 159,
+            "height": 85
+          }
+        },
+        "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+      }
+    },
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "scripts": [
+        "http://127.0.0.1:5195/assets/index-CUolzNAP.js"
+      ],
+      "stage": {
+        "x": 0,
+        "y": 84,
+        "width": 1110,
+        "height": 781,
+        "top": 84,
+        "right": 1110,
+        "bottom": 865,
+        "left": 0
+      },
+      "diagnostics": {
+        "frame": 97,
+        "fps": 60,
+        "game": {
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+          "turn": "w",
+          "moves": 0,
+          "selected": null,
+          "legal": [],
+          "fear": [],
+          "animating": false,
+          "actionProgress": 0,
+          "gameOver": false
+        },
+        "renderer": {
+          "calls": 177,
+          "triangles": 584341,
+          "geometries": 97,
+          "textures": 17
+        },
+        "render": {
+          "calls": 177,
+          "triangles": 584341
+        },
+        "memory": {
+          "geometries": 97,
+          "textures": 17
+        },
+        "quality": {
+          "atmosphere": {
+            "side": "w",
+            "blend": 0,
+            "enhanced": true,
+            "mistDraws": 1,
+            "shafts": 1,
+            "localArchitecture": true,
+            "reflection": "local-colonnade",
+            "key": 3.9,
+            "fill": 0.47,
+            "rim": 2.65,
+            "environment": 0.64
+          },
+          "graphics": "enhanced",
+          "dpr": 1.5,
+          "shadowMapSize": 1024,
+          "shadowLights": 1,
+          "enabled": true,
+          "toneMapping": "AgX",
+          "sceneRenders": 1,
+          "postPasses": 2,
+          "screenPasses": 3,
+          "hdr": {
+            "width": 1665,
+            "height": 1172,
+            "samples": 4
+          },
+          "bloom": {
+            "width": 416,
+            "height": 293
+          }
+        },
+        "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+      }
+    }
+  ],
+  "errors": []
+}

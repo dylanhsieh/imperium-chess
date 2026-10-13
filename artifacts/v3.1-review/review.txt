@@ -1,0 +1,22 @@
+Focused independent renderer review — 2026-10-13
+Read-only scope: cinema-renderer.ts, surface-shading.ts, material-atlas.ts, main integration/resize; raw final screenshots. No production source or build edits, no GPU benchmarks.
+Reviewed production bundle: index-CUolzNAP.js.
+
+Closed finding 1 — P3: mobile glow vertical tap spacing uses the horizontal texel size.
+cinema-renderer.ts line18 rotates uStep into the vertical axis, but line88 initializes uStep.x from 1.25/a.width. The mobile one-pass kernel therefore has vertical radius proportional to bloom height/width instead of matching the horizontal radius in pixels. Measured final targets: portrait98×152 -> 1.55× vertical radius; landscape159×85 -> 0.53×. Glow shape changes with device orientation. Use a separate vertical texel step based on a.height for mobile vertical taps. Desktop's second pass already uses height correctly.
+Evidence: targeted-resize.json, shader lines18/88.
+
+Closed finding 2 — P3: legacy graphics benchmark now measures only the final quad in enhanced mode.
+surface-shading.ts lines117–123 stores the last renderer.render scene/camera; CinemaRenderer's last render is its output FullScreenQuad. __GRAPHICS__.benchmark then replays only that quad while tests/turn-atmosphere.mjs line17 still invokes it for quality comparisons. extraPostPasses is also hard-coded to0. The new __CHESS_DEBUG__.benchmarkRender hook measures the complete pipeline and was used by root for the current performance report, so the current report is unaffected. Route the legacy entry point to the full-pipeline benchmark or migrate the remaining test.
+Evidence: source call chain; no benchmark was run by this reviewer.
+
+Narrow checks supporting the review (not broad release approval)
+- Real Chrome breakpoint transition desktop1440×900 -> portrait390×844 -> landscape844×390 -> desktop1440×900, DPR1.5 and touch enabled. HDR targets change size/sample count and return correctly; texture counts17 ->16 ->16 ->17. No page or console errors. Chrome closed after capture.
+- Three.js r180 source disables tone mapping for ordinary offscreen targets and uses linear-sRGB there; final output performs AgX + output color conversion once. No double-tone-mapping defect identified.
+- Atlas NoColorSpace is intentional for relative luminance/detail and normal data in this shader. Quadrant Y orientation follows TextureLoader flipY and the declared top/bottom swatches. No concrete UV/palette issue established in examined raw screenshots.
+
+Targeted fix verification — final bundle index-DyfAhYLB.js
+Both findings are closed after independent checks against production5195.
+1. Intercepted actual WebGL uniform uploads for the blur program on390×844 and844×390. Horizontal step×bloomWidth and vertical step×bloomHeight both equal1.25 in both orientations, confirming equal pixel spacing after the uVerticalStep fix.
+2. Wrapped the full-pipeline debug hook only to record forwarding and invoked the legacy benchmark for the requested24 samples. It forwarded24 to benchmarkRender and reported177 calls /584341 triangles /2 glow passes /includesShadowPasses=true. This verifies full-pipeline delegation; timings were intentionally not recorded as a new performance measurement.
+No page or console errors. Browser closed. Evidence: fixes-closed.json. No source/build edits by reviewer and no further broad tests.

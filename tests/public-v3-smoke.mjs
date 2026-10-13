@@ -2,7 +2,7 @@ import puppeteer from 'puppeteer-core';
 import { Chess } from 'chess.js';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-const url=process.env.PUBLIC_URL||'https://dylanhsieh.github.io/imperium-chess/',out=process.env.RELEASE_OUT||'../public-release/imperium-v3';await fs.mkdir(out,{recursive:true});
+const url=process.env.PUBLIC_URL||'https://dylanhsieh.github.io/imperium-chess/',out=process.env.RELEASE_OUT||'../public-release/imperium-v3.1';await fs.mkdir(out,{recursive:true});
 const browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true,args:['--no-sandbox','--use-gl=angle','--use-angle=metal']});
 const report={url,checks:[],errors:[],workers:[],audio:[],resources:[]};
 const wait=ms=>new Promise(r=>setTimeout(r,ms));let page;
@@ -15,7 +15,7 @@ try{
  await page.close();page=await browser.newPage();await page.setViewport({width:390,height:844,deviceScaleFactor:1.5,isMobile:true,hasTouch:true});
  page.on('pageerror',e=>report.errors.push(String(e)));page.on('console',m=>{if(m.type()==='error')report.errors.push(m.text());});page.on('workercreated',w=>report.workers.push(w.url()));
  page.on('response',r=>{if(r.url().startsWith(url)){const entry={url:r.url(),status:r.status()};report.resources.push(entry);if(r.url().endsWith('.wav'))report.audio.push(entry);}});
- const response=await page.goto(`${url}?v=3.0.0`,{waitUntil:'networkidle0'});assert.equal(response.status(),200);
+ const response=await page.goto(`${url}?v=${process.env.RELEASE_VERSION||'3.1.0'}`,{waitUntil:'networkidle0'});assert.equal(response.status(),200);
  assert.equal(await page.evaluate(()=>!!window.__CHESS_DEBUG__||!!window.__THREE_GAME_TEST_HOOKS__),false);
  const tap=async selector=>{await page.$eval(selector,e=>e.scrollIntoView({block:'center'}));const p=await page.$eval(selector,e=>{const r=e.getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height/2};});await page.touchscreen.tap(p.x,p.y);};
  await tap('#match-config');await page.select('#match-mode','ai');await page.select('#ai-difficulty','easy');await tap('#confirm-new');await wait(900);
@@ -34,6 +34,6 @@ try{
  await page.screenshot({path:`${out}/public-watch-phone.png`});
  const beforeTakeover=await page.evaluate(()=>localStorage.getItem('imperium-pgn'));await tap('#watch-takeover');await tap('[data-takeover="local"]');assert.equal(await page.evaluate(()=>localStorage.getItem('imperium-pgn')),beforeTakeover);await wait(1200);assert.equal(await page.evaluate(()=>localStorage.getItem('imperium-pgn')),beforeTakeover);
  report.checks.push('Public touch spectator pause, AI resume and local takeover preserve the campaign');
- assert.equal(report.audio.length,0);assert(report.workers.some(u=>u.startsWith(`${url}assets/ai.worker-`)));assert.deepEqual(report.errors,[]);assert(report.resources.every(r=>r.status<400));
+ assert.equal(report.audio.length,0);assert(report.resources.some(r=>r.url.includes('ancient-color-atlas-')));assert(report.resources.some(r=>r.url.includes('ancient-normal-atlas-')));assert(report.workers.some(u=>u.startsWith(`${url}assets/ai.worker-`)));assert.deepEqual(report.errors,[]);assert(report.resources.every(r=>r.status<400));
  report.checks.push('Relative Pages subpath serves AI worker, bundled Three.js with zero speech asset requests');
 }catch(e){report.failure=String(e);process.exitCode=1;if(page)await page.screenshot({path:`${out}/failure.png`});}finally{await browser.close();await fs.writeFile(`${out}/public-smoke.json`,JSON.stringify(report,null,2));console.log(JSON.stringify({checks:report.checks,errors:report.errors,failure:report.failure,workers:report.workers},null,2));}

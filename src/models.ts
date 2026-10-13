@@ -554,16 +554,16 @@ export function createPiece(type: string, color: Faction): THREE.Group {
   if (!prototypes.has(key)) {
     const root = new THREE.Group(); root.name = `legion-${key}`; root.userData = { type, color };
     const p = palette(color), rig = new THREE.Group(); rig.name = 'articulated';
-    if (type === 'r') { const vehicle = chariot(rig, p); vehicle.scale.setScalar(.98); vehicle.position.y = .006; }
-    else if (type === 'n') warhorse(rig, p).scale.setScalar(.95);
-    else soldier(rig, type, p, [0, 0, 0], type === 'p' ? .9 : type === 'k' ? 1.04 : type === 'q' ? 1.015 : 1);
-    // All archetypes have a tiny shared sculptural footplate, helping clicks and grounding.
-    const base = new Sculpt(rig, p);
-    base.cone(.43, .45, .048, [0, .026, 0], p.dark, 32);
-    base.cone(.435, .435, .013, [0, .049, 0], p.gold, 32);
-    base.finish();
+    const grounded = joint(rig, 'grounded-sculpture', ZERO);
+    if (type === 'r') { const vehicle = chariot(grounded, p); vehicle.scale.setScalar(.98); vehicle.position.y = .006; }
+    else if (type === 'n') warhorse(grounded, p).scale.setScalar(.95);
+    else soldier(grounded, type, p, [0, 0, 0], type === 'p' ? .9 : type === 'k' ? 1.04 : type === 'q' ? 1.015 : 1);
+    // Boots, hooves and wheels rest directly on the board. Keep this offset in a
+    // separate group so the animated rig's bobbing cannot overwrite grounding.
+    const bounds = new THREE.Box3().setFromObject(grounded);
+    grounded.position.y = -bounds.min.y;
+    root.userData.height = bounds.max.y - bounds.min.y;
     const rest = bakeRest(rig, p); root.add(rest, rig); rig.visible = false;
-    root.userData.height = type === 'n' ? 1.84 : type === 'r' ? 1.57 : type === 'p' ? 1.46 : type === 'b' ? 1.64 : type === 'q' ? 1.55 : 1.67;
     prototypes.set(key, root);
   }
   const root = prototypes.get(key)!.clone(true);
@@ -634,11 +634,13 @@ function animateStrike(state: RigState, type: string, progress: number, time: nu
   const p = THREE.MathUtils.clamp(progress, 0, 1);
   if (p === 0 || p === 1) return;
   if (type === 'r') {
-    // The carriage attacks with its plated prow; its driver braces on the rail.
-    const brace = Math.sin(Math.PI * p);
-    if (state.chariot) state.chariot.rotation.x = -.06 * brace;
-    if (state.head) state.head.rotation.x = .1 * brace;
-    state.wheels.forEach(wheel => { wheel.rotation.x = p * Math.PI * 3; });
+    // A ram stores weight over the axle, then rocks backward on contact.
+    const load = Math.sin(Math.PI * p);
+    const recoil = p < .5 ? 0 : Math.sin(Math.PI * Math.min(1, (p - .5) / .25)) * (1 - p);
+    if (state.chariot) { state.chariot.rotation.x = -.09 * load + .26 * recoil; state.chariot.rotation.z = -.035 * recoil; }
+    if (state.torso) state.torso.rotation.x = .10 * load - .24 * recoil;
+    if (state.head) state.head.rotation.x = .12 * load - .13 * recoil;
+    if (state.cape) state.cape.rotation.x = .26 * load + .25 * recoil;
     return;
   }
   const queen = type === 'q', king = type === 'k', knight = type === 'n', bishop = type === 'b';
@@ -669,21 +671,32 @@ function animateStrike(state: RigState, type: string, progress: number, time: nu
     follow = { hand: [-.075, .80, .20], blade: [.71, -.47, .53], elbow: [-.34, .85, .035], torso: [.095, .43, -.055], roll: .59 };
   }
   const smooth = (t: number) => t * t * (3 - 2 * t);
+  // Contact is always exactly .5: game-level stance calibration uses this pose.
+  // Almost the entire first half is a deliberate lift; the last 4.5–7% is a
+  // fast committed blow. Model progress is a timeline, never uniform swing speed.
+  const release = knight ? .455 : king ? .45 : queen ? .445 : bishop ? .44 : .43;
+  const raised = release - .025;
+  const recoil = blendPose(restStrike, windup, .13);
+  recoil.torso = [-.035, -.075, .025];
   let pose: StrikePose;
-  if (p < .32) pose = blendPose(restStrike, windup, smooth(p / .32));
-  else if (p < .5) pose = blendPose(windup, contact, ((p - .32) / .18) ** 2);
-  else if (p < .72) pose = blendPose(contact, follow, 1 - (1 - (p - .5) / .22) ** 2);
-  else pose = blendPose(follow, restStrike, smooth((p - .72) / .28));
+  if (p < raised) pose = blendPose(restStrike, windup, smooth(p / raised));
+  else if (p < release) pose = windup;
+  else if (p < .5) pose = blendPose(windup, contact, ((p - release) / (.5 - release)) ** 1.65);
+  else if (p < .59) pose = blendPose(contact, follow, 1 - (1 - (p - .5) / .09) ** 3);
+  else if (p < .74) pose = blendPose(follow, recoil, smooth((p - .59) / .15));
+  else pose = blendPose(recoil, restStrike, smooth((p - .74) / .26));
   if (state.torso) state.torso.rotation.set(...pose.torso);
   poseWeaponArm(state, pose);
-  const brace = Math.sin(Math.PI * p);
-  if (state.shield) { state.shield.rotation.x = -.23 * brace; state.shield.rotation.z = .055 * brace; }
-  if (state.shieldElbow) state.shieldElbow.rotation.x = -.43 * brace;
+  const brace = Math.sin(Math.PI * p), impact = p <= .5 ? 0 : Math.sin(Math.PI * Math.min(1, (p - .5) / .24));
+  if (state.shield) { state.shield.rotation.x = -.29 * brace + .08 * impact; state.shield.rotation.z = .075 * brace; }
+  if (state.shieldElbow) state.shieldElbow.rotation.x = -.48 * brace;
   if (state.shieldWrist) state.shieldWrist.rotation.y = -.13 * brace;
-  if (state.head) { state.head.rotation.y = -pose.torso[1] * .55; state.head.rotation.x = -pose.torso[0] * .35; }
-  if (state.cape) { state.cape.rotation.x = .12 * brace; state.cape.rotation.z = -.08 * Math.sin(p * Math.PI * 2) + Math.sin(time * 8) * .013 * brace; }
-  // Feet and horse legs remain planted throughout the strike. Torso rotation
-  // transfers the swing while the root is reserved for game-level approach.
+  if (state.head) { state.head.rotation.y = -pose.torso[1] * .55; state.head.rotation.x = -pose.torso[0] * .35 - impact * .055; }
+  if (state.cape) { state.cape.rotation.x = .12 * brace + .23 * impact; state.cape.rotation.z = -.08 * Math.sin(p * Math.PI * 2) + Math.sin(time * 8) * .013 * brace + impact * .10; }
+  if (state.horse) state.horse.rotation.x = -.06 * impact;
+  // Feet stay planted. Only joints articulate; the held blade stays rigidly
+  // aligned with its hand, and root position belongs to game-level approach.
+
 }
 
 export function animatePiece(root: THREE.Group, mode: Mode, progress: number, time: number): void {
@@ -760,29 +773,40 @@ export function animatePiece(root: THREE.Group, mode: Mode, progress: number, ti
     if (state.chariot) { state.chariot.rotation.z = shake * .04; state.chariot.rotation.x = .025 * gesture; }
     return;
   }
-  const p = Math.max(0, Math.min(1, progress)), envelope = Math.sin(Math.PI * p);
-  const run = Math.sin(p * Math.PI * (root.userData.type === 'p' ? 9 : 7));
-  state.rig.position.y = Math.abs(run) * .028 * envelope;
-  state.rig.rotation.x = .075 * envelope;
-  state.rig.rotation.z = run * .023 * envelope;
-  if (state.left) state.left.rotation.x = root.userData.type === 'n' ? -.26 : run * .66 * envelope;
-  if (state.right) state.right.rotation.x = root.userData.type === 'n' ? -.26 : -run * .66 * envelope;
-  if (state.weapon) {
-    state.weapon.rotation.x = -.2 * envelope - run * .2 * envelope;
-    state.weapon.rotation.z = -.06 * envelope;
-  }
-  if (state.elbow) state.elbow.rotation.x = -.38 * envelope + run * .11 * envelope;
-  if (state.wrist) state.wrist.rotation.x = .24 * envelope;
-  if (state.shield) state.shield.rotation.x = run * .16 * envelope;
-  if (state.cape) { state.cape.rotation.x = .35 * envelope + Math.sin(time * 9) * .06 * envelope; state.cape.rotation.z = run * .08 * envelope; }
+  const p = Math.max(0, Math.min(1, progress));
+  const type = root.userData.type, mounted = type === 'n';
+  const envelope = Math.sin(Math.PI * p), cadence = p * Math.PI * (type === 'p' ? 10 : 8);
+  const stride = Math.sin(cadence), footfall = Math.abs(Math.sin(cadence));
+  // Distance-driven gait: the game eases travel, so feet and wheels accelerate
+  // with the body rather than running in place during the launch anticipation.
+  state.rig.position.y = footfall * .026 * envelope;
+  state.rig.rotation.x = .11 * envelope;
+  state.rig.rotation.z = stride * .018 * envelope;
+  if (state.left) state.left.rotation.x = mounted ? -.28 : stride * .72 * envelope;
+  if (state.right) state.right.rotation.x = mounted ? -.28 : -stride * .72 * envelope;
+  if (state.torso) state.torso.rotation.y = mounted ? stride * .012 * envelope : -stride * .075 * envelope;
+  if (state.weapon) { state.weapon.rotation.x = -.25 * envelope - stride * .24 * envelope; state.weapon.rotation.z = -.07 * envelope; }
+  if (state.elbow) state.elbow.rotation.x = -.48 * envelope + stride * .12 * envelope;
+  if (state.wrist) state.wrist.rotation.x = .28 * envelope;
+  if (state.shield) state.shield.rotation.x = stride * .20 * envelope;
+  if (state.head) state.head.rotation.x = -.035 * envelope;
+  if (state.cape) { state.cape.rotation.x = .43 * envelope + Math.sin(cadence - .7) * .07 * envelope; state.cape.rotation.z = -stride * .09 * envelope; }
   if (state.horse) {
-    state.horse.position.y = Math.abs(run) * .045 * envelope;
-    state.horse.rotation.x = run * .065 * envelope;
-    state.horseLegs.forEach((leg,i)=>{const stride=Math.sin(p*Math.PI*9+(i===0||i===3?0:Math.PI));leg.rotation.x=stride*.56*envelope;if(state.horseKnees[i])state.horseKnees[i].rotation.x=-Math.max(0,-stride)*.8*envelope;});
+    const gallop = p * Math.PI * 8;
+    state.horse.position.y += Math.max(0, Math.sin(gallop)) * .048 * envelope;
+    state.horse.rotation.x = Math.sin(gallop - .45) * .085 * envelope;
+    // Forelegs gather together, then the hind pair drive the next bound.
+    state.horseLegs.forEach((leg, i) => {
+      const phase = gallop + (i % 2 ? .75 : Math.PI) + (i < 2 ? .15 : -.15);
+      const beat = Math.sin(phase);
+      leg.rotation.x = beat * .63 * envelope;
+      if (state.horseKnees[i]) state.horseKnees[i].rotation.x = -Math.max(0, -beat) * 1.0 * envelope;
+    });
   }
   if (state.chariot) {
-    state.chariot.rotation.z = Math.sin(p * 45) * .018 * envelope;
-    state.chariot.rotation.x = -Math.sin(p * Math.PI) * .06;
+    state.chariot.rotation.z = Math.sin(p * Math.PI * 20) * .013 * envelope;
+    state.chariot.rotation.x = -.085 * envelope + Math.sin(p * Math.PI * 10) * .018 * envelope;
     state.wheels.forEach(wheel => { wheel.rotation.x = p * Math.PI * 11; });
+    if (state.torso) state.torso.rotation.x = .09 * envelope;
   }
 }

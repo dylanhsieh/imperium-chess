@@ -1,0 +1,98 @@
+[
+  {
+    "color": "w",
+    "type": "p",
+    "restMinY": 0,
+    "rigMinY": 0,
+    "height": 1.405802409052849,
+    "groundingOffset": -0.049499976396560674
+  },
+  {
+    "color": "w",
+    "type": "r",
+    "restMinY": 0,
+    "rigMinY": 0,
+    "height": 1.5450238561391831,
+    "groundingOffset": -0.019819882893562346
+  },
+  {
+    "color": "w",
+    "type": "n",
+    "restMinY": 0,
+    "rigMinY": 0,
+    "height": 1.7631805174059867,
+    "groundingOffset": -0.057950001358985814
+  },
+  {
+    "color": "w",
+    "type": "b",
+    "restMinY": 0,
+    "rigMinY": 0,
+    "height": 1.5666471302509306,
+    "groundingOffset": -0.05499997377395627
+  },
+  {
+    "color": "w",
+    "type": "q",
+    "restMinY": 0,
+    "rigMinY": 0,
+    "height": 1.4797770813554525,
+    "groundingOffset": -0.05582497338056558
+  },
+  {
+    "color": "w",
+    "type": "k",
+    "restMinY": 0,
+    "rigMinY": 0,
+    "height": 1.6045536227226256,
+    "groundingOffset": -0.057199972724914616
+  },
+  {
+    "color": "b",
+    "type": "p",
+    "restMinY": 0,
+    "rigMinY": 0,
+    "height": 1.405802409052849,
+    "groundingOffset": -0.049499976396560674
+  },
+  {
+    "color": "b",
+    "type": "r",
+    "restMinY": 0,
+    "rigMinY": 0,
+    "height": 1.5450238561391831,
+    "groundingOffset": -0.019819882893562346
+  },
+  {
+    "color": "b",
+    "type": "n",
+    "restMinY": 0,
+    "rigMinY": 0,
+    "height": 1.7631805174059867,
+    "groundingOffset": -0.057950001358985814
+  },
+  {
+    "color": "b",
+    "type": "b",
+    "restMinY": 0,
+    "rigMinY": 0,
+    "height": 1.5666471302509306,
+    "groundingOffset": -0.05499997377395627
+  },
+  {
+    "color": "b",
+    "type": "q",
+    "restMinY": 0,
+    "rigMinY": 0,
+    "height": 1.4797770813554525,
+    "groundingOffset": -0.05582497338056558
+  },
+  {
+    "color": "b",
+    "type": "k",
+    "restMinY": 0,
+    "rigMinY": 0,
+    "height": 1.6045536227226256,
+    "groundingOffset": -0.057199972724914616
+  }
+]

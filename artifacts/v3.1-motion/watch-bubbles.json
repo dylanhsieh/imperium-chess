@@ -1,0 +1,204 @@
+{
+  "before": {
+    "state": {
+      "mode": "local",
+      "watchPaused": false,
+      "watchFrozen": false,
+      "humanColor": "w",
+      "difficulty": "normal",
+      "thinking": false,
+      "aiError": "",
+      "aiStats": null,
+      "status": {
+        "repetitions": 1,
+        "halfmoveClock": 0,
+        "claimable": [],
+        "over": false,
+        "kind": "playing",
+        "title": "對局中",
+        "reason": "所有亮起的走法均符合棋種規則，而且走完後己王不會遭到將軍。"
+      },
+      "illegalMessage": "",
+      "fen": "4k3/8/3n4/8/1b1R2p1/8/8/7K w - - 0 1",
+      "selected": "d4",
+      "legal": [
+        "d5",
+        "d6",
+        "e4",
+        "f4",
+        "g4",
+        "d3",
+        "d2",
+        "d1",
+        "c4",
+        "b4"
+      ],
+      "fears": [
+        "d6",
+        "g4",
+        "b4"
+      ],
+      "relief": [],
+      "animating": false,
+      "history": [],
+      "turn": "w",
+      "gameOver": false,
+      "cinematic": true,
+      "reduced": false,
+      "muted": false,
+      "pieces": 6
+    },
+    "sprites": [
+      {
+        "name": "",
+        "visible": true,
+        "position": [
+          -0.71,
+          2.3800000000000003,
+          -2.13
+        ]
+      },
+      {
+        "name": "",
+        "visible": true,
+        "position": [
+          3.55,
+          2.3800000000000003,
+          0.71
+        ]
+      },
+      {
+        "name": "",
+        "visible": true,
+        "position": [
+          -3.55,
+          2.3800000000000003,
+          0.71
+        ]
+      }
+    ]
+  },
+  "paused": {
+    "state": {
+      "mode": "watch",
+      "watchPaused": true,
+      "watchFrozen": true,
+      "humanColor": "w",
+      "difficulty": "normal",
+      "thinking": false,
+      "aiError": "",
+      "aiStats": null,
+      "status": {
+        "repetitions": 1,
+        "halfmoveClock": 0,
+        "claimable": [],
+        "over": false,
+        "kind": "playing",
+        "title": "對局中",
+        "reason": "所有亮起的走法均符合棋種規則，而且走完後己王不會遭到將軍。"
+      },
+      "illegalMessage": "",
+      "fen": "4k3/8/3n4/8/1b1R2p1/8/8/7K w - - 0 1",
+      "selected": null,
+      "legal": [],
+      "fears": [],
+      "relief": [
+        "d6",
+        "g4",
+        "b4"
+      ],
+      "animating": false,
+      "history": [],
+      "turn": "w",
+      "gameOver": false,
+      "cinematic": true,
+      "reduced": false,
+      "muted": false,
+      "pieces": 6
+    },
+    "sprites": [
+      {
+        "name": "",
+        "visible": false,
+        "position": [
+          -0.71,
+          2.2281619999957085,
+          -2.13
+        ]
+      },
+      {
+        "name": "",
+        "visible": false,
+        "position": [
+          3.55,
+          2.2281619999957085,
+          0.71
+        ]
+      },
+      {
+        "name": "",
+        "visible": false,
+        "position": [
+          -3.55,
+          2.2281619999957085,
+          0.71
+        ]
+      }
+    ]
+  },
+  "action": {
+    "state": {
+      "mode": "watch",
+      "watchPaused": true,
+      "watchFrozen": true,
+      "humanColor": "w",
+      "difficulty": "normal",
+      "thinking": false,
+      "aiError": "",
+      "aiStats": {
+        "depth": 3,
+        "nodes": 1095,
+        "elapsedMs": 500.4000000357628
+      },
+      "status": {
+        "repetitions": 1,
+        "halfmoveClock": 0,
+        "claimable": [],
+        "over": false,
+        "kind": "playing",
+        "title": "對局中",
+        "reason": "所有亮起的走法均符合棋種規則，而且走完後己王不會遭到將軍。"
+      },
+      "illegalMessage": "",
+      "fen": "4k3/8/3n4/8/1R4p1/8/8/7K b - - 0 1",
+      "selected": null,
+      "legal": [],
+      "fears": [
+        "b4"
+      ],
+      "relief": [],
+      "animating": true,
+      "history": [
+        "Rxb4"
+      ],
+      "turn": "b",
+      "gameOver": false,
+      "cinematic": true,
+      "reduced": false,
+      "muted": false,
+      "pieces": 6
+    },
+    "sprites": [
+      {
+        "name": "",
+        "visible": false,
+        "position": [
+          -3.5653562532465557,
+          2.3735665026207737,
+          0.71
+        ]
+      }
+    ]
+  },
+  "passed": true
+}

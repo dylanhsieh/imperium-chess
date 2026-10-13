@@ -1,0 +1,488 @@
+[
+  {
+    "name": "desktop-basic-day",
+    "diagnostics": {
+      "frame": 114,
+      "fps": 60,
+      "game": {
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "turn": "w",
+        "moves": 0,
+        "selected": null,
+        "legal": [],
+        "fear": [],
+        "animating": false,
+        "actionProgress": 0,
+        "gameOver": false
+      },
+      "renderer": {
+        "calls": 95,
+        "triangles": 304988,
+        "geometries": 96,
+        "textures": 14
+      },
+      "render": {
+        "calls": 95,
+        "triangles": 304988
+      },
+      "memory": {
+        "geometries": 96,
+        "textures": 14
+      },
+      "quality": {
+        "atmosphere": {
+          "side": "w",
+          "blend": 0,
+          "enhanced": false,
+          "mistDraws": 0,
+          "shafts": 0,
+          "localArchitecture": true,
+          "reflection": "local-colonnade",
+          "key": 3,
+          "fill": 1.25,
+          "rim": 1.7,
+          "environment": 0.75
+        },
+        "graphics": "basic",
+        "dpr": 1,
+        "shadowMapSize": 2048,
+        "shadowLights": 1,
+        "postPasses": 0
+      },
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+    },
+    "errors": []
+  },
+  {
+    "name": "desktop-basic-night",
+    "diagnostics": {
+      "frame": 188,
+      "fps": 60,
+      "game": {
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1",
+        "turn": "b",
+        "moves": 0,
+        "selected": null,
+        "legal": [],
+        "fear": [],
+        "animating": false,
+        "actionProgress": 0,
+        "gameOver": false
+      },
+      "renderer": {
+        "calls": 95,
+        "triangles": 304988,
+        "geometries": 96,
+        "textures": 14
+      },
+      "render": {
+        "calls": 95,
+        "triangles": 304988
+      },
+      "memory": {
+        "geometries": 96,
+        "textures": 14
+      },
+      "quality": {
+        "atmosphere": {
+          "side": "b",
+          "blend": 1,
+          "enhanced": false,
+          "mistDraws": 0,
+          "shafts": 0,
+          "localArchitecture": true,
+          "reflection": "local-colonnade",
+          "key": 2.35,
+          "fill": 0.97,
+          "rim": 1.95,
+          "environment": 0.62
+        },
+        "graphics": "basic",
+        "dpr": 1,
+        "shadowMapSize": 2048,
+        "shadowLights": 1,
+        "postPasses": 0
+      },
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+    },
+    "errors": []
+  },
+  {
+    "name": "desktop-enhanced-day",
+    "diagnostics": {
+      "frame": 263,
+      "fps": 60,
+      "game": {
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "turn": "w",
+        "moves": 0,
+        "selected": null,
+        "legal": [],
+        "fear": [],
+        "animating": false,
+        "actionProgress": 0,
+        "gameOver": false
+      },
+      "renderer": {
+        "calls": 98,
+        "triangles": 305062,
+        "geometries": 96,
+        "textures": 14
+      },
+      "render": {
+        "calls": 98,
+        "triangles": 305062
+      },
+      "memory": {
+        "geometries": 96,
+        "textures": 14
+      },
+      "quality": {
+        "atmosphere": {
+          "side": "w",
+          "blend": 0,
+          "enhanced": true,
+          "mistDraws": 1,
+          "shafts": 1,
+          "localArchitecture": true,
+          "reflection": "local-colonnade",
+          "key": 3.9,
+          "fill": 0.47,
+          "rim": 2.65,
+          "environment": 0.64
+        },
+        "graphics": "enhanced",
+        "dpr": 1,
+        "shadowMapSize": 2048,
+        "shadowLights": 1,
+        "postPasses": 0
+      },
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+    },
+    "errors": []
+  },
+  {
+    "name": "desktop-enhanced-night",
+    "diagnostics": {
+      "frame": 339,
+      "fps": 60,
+      "game": {
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1",
+        "turn": "b",
+        "moves": 0,
+        "selected": null,
+        "legal": [],
+        "fear": [],
+        "animating": false,
+        "actionProgress": 0,
+        "gameOver": false
+      },
+      "renderer": {
+        "calls": 98,
+        "triangles": 305062,
+        "geometries": 96,
+        "textures": 14
+      },
+      "render": {
+        "calls": 98,
+        "triangles": 305062
+      },
+      "memory": {
+        "geometries": 96,
+        "textures": 14
+      },
+      "quality": {
+        "atmosphere": {
+          "side": "b",
+          "blend": 1,
+          "enhanced": true,
+          "mistDraws": 1,
+          "shafts": 1,
+          "localArchitecture": true,
+          "reflection": "local-colonnade",
+          "key": 2.9,
+          "fill": 0.37,
+          "rim": 3.3,
+          "environment": 0.51
+        },
+        "graphics": "enhanced",
+        "dpr": 1,
+        "shadowMapSize": 2048,
+        "shadowLights": 1,
+        "postPasses": 0
+      },
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+    },
+    "errors": []
+  },
+  {
+    "name": "cinematic-day",
+    "diagnostics": {
+      "frame": 535,
+      "fps": 60,
+      "game": {
+        "fen": "rnbqkbnr/pppppppp/8/8/8/2N5/PPPPPPPP/R1BQKBNR b KQkq - 1 1",
+        "turn": "b",
+        "moves": 1,
+        "selected": null,
+        "legal": [],
+        "fear": [],
+        "animating": true,
+        "actionProgress": 0.4558529411869889,
+        "gameOver": false
+      },
+      "renderer": {
+        "calls": 165,
+        "triangles": 304342,
+        "geometries": 165,
+        "textures": 14
+      },
+      "render": {
+        "calls": 165,
+        "triangles": 304342
+      },
+      "memory": {
+        "geometries": 165,
+        "textures": 14
+      },
+      "quality": {
+        "atmosphere": {
+          "side": "w",
+          "blend": 0,
+          "enhanced": true,
+          "mistDraws": 1,
+          "shafts": 1,
+          "localArchitecture": true,
+          "reflection": "local-colonnade",
+          "key": 3.9,
+          "fill": 0.47,
+          "rim": 2.65,
+          "environment": 0.64
+        },
+        "graphics": "enhanced",
+        "dpr": 1,
+        "shadowMapSize": 2048,
+        "shadowLights": 1,
+        "postPasses": 0
+      },
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+    },
+    "errors": []
+  },
+  {
+    "name": "mobile-basic-day",
+    "diagnostics": {
+      "frame": 106,
+      "fps": 60,
+      "game": {
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "turn": "w",
+        "moves": 0,
+        "selected": null,
+        "legal": [],
+        "fear": [],
+        "animating": false,
+        "actionProgress": 0,
+        "gameOver": false
+      },
+      "renderer": {
+        "calls": 93,
+        "triangles": 304268,
+        "geometries": 94,
+        "textures": 12
+      },
+      "render": {
+        "calls": 93,
+        "triangles": 304268
+      },
+      "memory": {
+        "geometries": 94,
+        "textures": 12
+      },
+      "quality": {
+        "atmosphere": {
+          "side": "w",
+          "blend": 0,
+          "enhanced": false,
+          "mistDraws": 0,
+          "shafts": 0,
+          "localArchitecture": true,
+          "reflection": "local-colonnade",
+          "key": 3,
+          "fill": 1.25,
+          "rim": 1.7,
+          "environment": 0.75
+        },
+        "graphics": "basic",
+        "dpr": 1,
+        "shadowMapSize": 1024,
+        "shadowLights": 1,
+        "postPasses": 0
+      },
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+    },
+    "errors": []
+  },
+  {
+    "name": "mobile-basic-night",
+    "diagnostics": {
+      "frame": 173,
+      "fps": 57,
+      "game": {
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1",
+        "turn": "b",
+        "moves": 0,
+        "selected": null,
+        "legal": [],
+        "fear": [],
+        "animating": false,
+        "actionProgress": 0,
+        "gameOver": false
+      },
+      "renderer": {
+        "calls": 93,
+        "triangles": 304268,
+        "geometries": 94,
+        "textures": 12
+      },
+      "render": {
+        "calls": 93,
+        "triangles": 304268
+      },
+      "memory": {
+        "geometries": 94,
+        "textures": 12
+      },
+      "quality": {
+        "atmosphere": {
+          "side": "b",
+          "blend": 0.9987685956342555,
+          "enhanced": false,
+          "mistDraws": 0,
+          "shafts": 0,
+          "localArchitecture": true,
+          "reflection": "local-colonnade",
+          "key": 2.3508004128377338,
+          "fill": 0.9703447932224085,
+          "rim": 1.949692148908564,
+          "environment": 0.6201600825675468
+        },
+        "graphics": "basic",
+        "dpr": 1,
+        "shadowMapSize": 1024,
+        "shadowLights": 1,
+        "postPasses": 0
+      },
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+    },
+    "errors": []
+  },
+  {
+    "name": "mobile-enhanced-day",
+    "diagnostics": {
+      "frame": 239,
+      "fps": 62,
+      "game": {
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "turn": "w",
+        "moves": 0,
+        "selected": null,
+        "legal": [],
+        "fear": [],
+        "animating": false,
+        "actionProgress": 0,
+        "gameOver": false
+      },
+      "renderer": {
+        "calls": 96,
+        "triangles": 304342,
+        "geometries": 94,
+        "textures": 12
+      },
+      "render": {
+        "calls": 96,
+        "triangles": 304342
+      },
+      "memory": {
+        "geometries": 94,
+        "textures": 12
+      },
+      "quality": {
+        "atmosphere": {
+          "side": "w",
+          "blend": 0.0013619576532789706,
+          "enhanced": true,
+          "mistDraws": 1,
+          "shafts": 1,
+          "localArchitecture": true,
+          "reflection": "local-colonnade",
+          "key": 3.898638042346721,
+          "fill": 0.46986380423467206,
+          "rim": 2.6508852724746315,
+          "environment": 0.6398229455050738
+        },
+        "graphics": "enhanced",
+        "dpr": 1,
+        "shadowMapSize": 1024,
+        "shadowLights": 1,
+        "postPasses": 0
+      },
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+    },
+    "errors": []
+  },
+  {
+    "name": "mobile-enhanced-night",
+    "diagnostics": {
+      "frame": 307,
+      "fps": 60,
+      "game": {
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1",
+        "turn": "b",
+        "moves": 0,
+        "selected": null,
+        "legal": [],
+        "fear": [],
+        "animating": false,
+        "actionProgress": 0,
+        "gameOver": false
+      },
+      "renderer": {
+        "calls": 96,
+        "triangles": 304342,
+        "geometries": 94,
+        "textures": 12
+      },
+      "render": {
+        "calls": 96,
+        "triangles": 304342
+      },
+      "memory": {
+        "geometries": 94,
+        "textures": 12
+      },
+      "quality": {
+        "atmosphere": {
+          "side": "b",
+          "blend": 0.9988895199567451,
+          "enhanced": true,
+          "mistDraws": 1,
+          "shafts": 1,
+          "localArchitecture": true,
+          "reflection": "local-colonnade",
+          "key": 2.901110480043255,
+          "fill": 0.3701110480043255,
+          "rim": 3.2992781879718844,
+          "environment": 0.5101443624056231
+        },
+        "graphics": "enhanced",
+        "dpr": 1,
+        "shadowMapSize": 1024,
+        "shadowLights": 1,
+        "postPasses": 0
+      },
+      "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+    },
+    "errors": []
+  }
+]

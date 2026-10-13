@@ -1,0 +1,433 @@
+{
+  "unpaused": true,
+  "url": "http://127.0.0.1:5197",
+  "shots": [
+    {
+      "device": "desktop",
+      "type": "pawn",
+      "reduced": false,
+      "captures": [
+        {
+          "phase": "advance",
+          "progress": 0.3221111111111108
+        },
+        {
+          "phase": "raise",
+          "progress": 0.5332222222222218
+        },
+        {
+          "phase": "ready",
+          "progress": 0.6408000000052975
+        },
+        {
+          "phase": "contact",
+          "progress": 0.69
+        },
+        {
+          "phase": "recoil",
+          "progress": 0.7733635555601119
+        }
+      ],
+      "frames": 277,
+      "contactError": 2.2644195468014707e-15,
+      "anticipationMs": 1150.4000000357628,
+      "strikeMs": 216.39999997615814,
+      "freezeMs": 82.69999998807907,
+      "tipDrop": 0.6965498478291797,
+      "liftPeak": 1.113594766956281,
+      "strikePeak": 17.91406143937087,
+      "speedRatio": 16.086696858619636
+    },
+    {
+      "device": "desktop",
+      "type": "rook",
+      "reduced": false,
+      "captures": [
+        {
+          "phase": "advance",
+          "progress": 0.3222888888915378
+        },
+        {
+          "phase": "raise",
+          "progress": 0.5333555555608535
+        },
+        {
+          "phase": "ready",
+          "progress": 0.6407777777777776
+        },
+        {
+          "phase": "contact",
+          "progress": 0.69
+        },
+        {
+          "phase": "recoil",
+          "progress": 0.772248888894187
+        }
+      ],
+      "frames": 279,
+      "contactError": null,
+      "anticipationMs": 1149.6000000238419,
+      "strikeMs": 207.89999997615814,
+      "freezeMs": 108.80000001192093,
+      "tipDrop": null
+    },
+    {
+      "device": "desktop",
+      "type": "knight",
+      "reduced": false,
+      "captures": [
+        {
+          "phase": "advance",
+          "progress": 0.32220000000794713
+        },
+        {
+          "phase": "raise",
+          "progress": 0.5332888888915376
+        },
+        {
+          "phase": "ready",
+          "progress": 0.6554222222301689
+        },
+        {
+          "phase": "contact",
+          "progress": 0.69
+        },
+        {
+          "phase": "recoil",
+          "progress": 0.7727697777695125
+        }
+      ],
+      "frames": 278,
+      "contactError": 2.1556631856153973e-15,
+      "anticipationMs": 1235,
+      "strikeMs": 124,
+      "freezeMs": 73.90000003576279,
+      "tipDrop": 0.5407038837272995,
+      "liftPeak": 1.6045981707424868,
+      "strikePeak": 9.474944782221705,
+      "speedRatio": 5.904870736476919
+    },
+    {
+      "device": "desktop",
+      "type": "bishop",
+      "reduced": false,
+      "captures": [
+        {
+          "phase": "advance",
+          "progress": 0.322200000007947
+        },
+        {
+          "phase": "raise",
+          "progress": 0.5333111111190579
+        },
+        {
+          "phase": "ready",
+          "progress": 0.6442444444497423
+        },
+        {
+          "phase": "contact",
+          "progress": 0.69
+        },
+        {
+          "phase": "recoil",
+          "progress": 0.7733599999999999
+        }
+      ],
+      "frames": 279,
+      "contactError": 3.794299872214038e-15,
+      "anticipationMs": 1180.7999999523163,
+      "strikeMs": 172.4000000357628,
+      "freezeMs": 94.69999998807907,
+      "tipDrop": 0.9405723493412168,
+      "liftPeak": 1.56744278273045,
+      "strikePeak": 31.538225309600577,
+      "speedRatio": 20.120814397232223
+    },
+    {
+      "device": "desktop",
+      "type": "queen",
+      "reduced": false,
+      "captures": [
+        {
+          "phase": "advance",
+          "progress": 0.32135555556085355
+        },
+        {
+          "phase": "raise",
+          "progress": 0.5324666666719646
+        },
+        {
+          "phase": "ready",
+          "progress": 0.6473111111058126
+        },
+        {
+          "phase": "contact",
+          "progress": 0.69
+        },
+        {
+          "phase": "recoil",
+          "progress": 0.7736577777883737
+        }
+      ],
+      "frames": 279,
+      "contactError": 3.4702240210488583e-15,
+      "anticipationMs": 1201.1000000238419,
+      "strikeMs": 157.30000001192093,
+      "freezeMs": 90.59999996423721,
+      "tipDrop": 0.885121460953794,
+      "liftPeak": 1.432075251410806,
+      "strikePeak": 32.96394266744383,
+      "speedRatio": 23.018303427120518
+    },
+    {
+      "device": "desktop",
+      "type": "king",
+      "reduced": false,
+      "captures": [
+        {
+          "phase": "advance",
+          "progress": 0.3222000000079471
+        },
+        {
+          "phase": "raise",
+          "progress": 0.5331555555661516
+        },
+        {
+          "phase": "ready",
+          "progress": 0.6518000000052978
+        },
+        {
+          "phase": "contact",
+          "progress": 0.69
+        },
+        {
+          "phase": "recoil",
+          "progress": 0.7727537777656978
+        }
+      ],
+      "frames": 280,
+      "contactError": 2.7577367830154345e-15,
+      "anticipationMs": 1218.1000000238419,
+      "strikeMs": 139.60000002384186,
+      "freezeMs": 107.69999998807907,
+      "tipDrop": 1.2501772246982017,
+      "liftPeak": 1.65394027296893,
+      "strikePeak": 36.57838050037792,
+      "speedRatio": 22.115901703461972
+    },
+    {
+      "device": "desktop",
+      "type": "black-queen",
+      "reduced": false,
+      "captures": [
+        {
+          "phase": "advance",
+          "progress": 0.3222222222222221
+        },
+        {
+          "phase": "raise",
+          "progress": 0.5331333333253856
+        },
+        {
+          "phase": "ready",
+          "progress": 0.6481111111111106
+        },
+        {
+          "phase": "contact",
+          "progress": 0.69
+        },
+        {
+          "phase": "recoil",
+          "progress": 0.7732231111107931
+        }
+      ],
+      "frames": 279,
+      "contactError": 3.580361673049448e-15,
+      "anticipationMs": 1201.5999999642372,
+      "strikeMs": 157.80000001192093,
+      "freezeMs": 91,
+      "tipDrop": 0.8862754770486071,
+      "liftPeak": 1.5253317625410803,
+      "strikePeak": 29.354714594806435,
+      "speedRatio": 19.24480648452756
+    },
+    {
+      "device": "desktop",
+      "type": "en-passant",
+      "reduced": false,
+      "captures": [
+        {
+          "phase": "advance",
+          "progress": 0.32224444444974243
+        },
+        {
+          "phase": "raise",
+          "progress": 0.5333555555608533
+        },
+        {
+          "phase": "ready",
+          "progress": 0.6407111111217074
+        },
+        {
+          "phase": "contact",
+          "progress": 0.69
+        },
+        {
+          "phase": "recoil",
+          "progress": 0.7733760000075232
+        }
+      ],
+      "frames": 279,
+      "contactError": 2.3420180361420893e-15,
+      "anticipationMs": 1151.9000000357628,
+      "strikeMs": 209.39999997615814,
+      "freezeMs": 87.10000002384186,
+      "tipDrop": 0.6965533040218356,
+      "liftPeak": 1.324897576678141,
+      "strikePeak": 18.42984765358558,
+      "speedRatio": 13.910394265943143
+    },
+    {
+      "device": "phone",
+      "type": "pawn",
+      "reduced": false,
+      "captures": [
+        {
+          "phase": "advance",
+          "progress": 0.3222000000079472
+        },
+        {
+          "phase": "raise",
+          "progress": 0.5333111111190578
+        },
+        {
+          "phase": "ready",
+          "progress": 0.6407555555635022
+        },
+        {
+          "phase": "contact",
+          "progress": 0.69
+        },
+        {
+          "phase": "recoil",
+          "progress": 0.7734835555548139
+        }
+      ],
+      "frames": 279,
+      "contactError": 2.2644195468014707e-15,
+      "anticipationMs": 1150.300000011921,
+      "strikeMs": 213.60000002384186,
+      "freezeMs": 86.09999996423721,
+      "tipDrop": 0.6965467476223489,
+      "liftPeak": 1.1060360258221096,
+      "strikePeak": 17.664496202885243,
+      "speedRatio": 15.970995329700346
+    },
+    {
+      "device": "phone",
+      "type": "knight",
+      "reduced": false,
+      "captures": [
+        {
+          "phase": "advance",
+          "progress": 0.3221999999947017
+        },
+        {
+          "phase": "raise",
+          "progress": 0.5333333333333329
+        },
+        {
+          "phase": "ready",
+          "progress": 0.6555555555555552
+        },
+        {
+          "phase": "contact",
+          "progress": 0.69
+        },
+        {
+          "phase": "recoil",
+          "progress": 0.7730640000014835
+        }
+      ],
+      "frames": 278,
+      "contactError": 2.1556631856153973e-15,
+      "anticipationMs": 1237.4000000357628,
+      "strikeMs": 121.19999998807907,
+      "freezeMs": 74.80000001192093,
+      "tipDrop": 0.5415142921925866,
+      "liftPeak": 1.4266692671393435,
+      "strikePeak": 11.4035578827559,
+      "speedRatio": 7.993133479086929
+    },
+    {
+      "device": "phone-reduced",
+      "type": "pawn",
+      "reduced": true,
+      "captures": [],
+      "frames": 36,
+      "contactError": 2.2644195468014707e-15,
+      "anticipationMs": null,
+      "strikeMs": null,
+      "freezeMs": 14.299999952316284,
+      "tipDrop": null
+    }
+  ],
+  "errors": [],
+  "external": [],
+  "diagnostics": {
+    "frame": 653,
+    "fps": 58,
+    "game": {
+      "fen": "k7/7p/8/3P4/8/8/8/7K b - - 0 1",
+      "turn": "b",
+      "moves": 1,
+      "selected": null,
+      "legal": [],
+      "fear": [],
+      "animating": false,
+      "actionProgress": 0,
+      "gameOver": false
+    },
+    "renderer": {
+      "calls": 68,
+      "triangles": 96688,
+      "geometries": 246,
+      "textures": 11
+    },
+    "render": {
+      "calls": 68,
+      "triangles": 96688
+    },
+    "memory": {
+      "geometries": 246,
+      "textures": 11
+    },
+    "quality": {
+      "atmosphere": {
+        "side": "b",
+        "blend": 1,
+        "enhanced": false,
+        "mistDraws": 0,
+        "shafts": 0,
+        "localArchitecture": true,
+        "reflection": "local-colonnade",
+        "key": 2.35,
+        "fill": 0.97,
+        "rim": 1.95,
+        "environment": 0.62
+      },
+      "graphics": "basic",
+      "dpr": 1.5,
+      "shadowMapSize": 1024,
+      "shadowLights": 1,
+      "enabled": false,
+      "toneMapping": "ACES",
+      "sceneRenders": 1,
+      "postPasses": 0,
+      "screenPasses": 0,
+      "hdr": null,
+      "bloom": null
+    },
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)"
+  }
+}

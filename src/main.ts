@@ -10,6 +10,7 @@ function animatePiece(root:THREE.Group,mode:Parameters<typeof animateSculpt>[1],
 import { BattleAudio } from './audio';
 import { BOARD_Y, CELL, createWorld, BattleEffects, squarePosition, pointSquare } from './world';
 import { createUI, pieceNames, svg } from './ui';
+import {CinemaRenderer} from './cinema-renderer';
 import './style.css';
 
 createUI();
@@ -30,6 +31,7 @@ renderer.domElement.setAttribute('aria-label','3D 西洋棋戰場，點選棋子
 stage.prepend(renderer.domElement);
 const camera=new THREE.PerspectiveCamera(39,stage.clientWidth/stage.clientHeight,.1,120);
 const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.075;controls.enablePan=false;controls.minDistance=4;controls.maxDistance=52;controls.minPolarAngle=.14;controls.maxPolarAngle=Math.PI*.445;controls.rotateSpeed=.55;controls.zoomSpeed=.75;
+const filmRenderer=new CinemaRenderer(renderer);
 const world=createWorld(scene,renderer);const effects=new BattleEffects(scene);const contacts=new ContactShadows(scene,32);installGraphicsDiagnostics(renderer,debug);
 const pieces=new Map<string,THREE.Group>();
 const cameraCutaways=new Set<THREE.Group>();
@@ -185,7 +187,7 @@ function guideHtml(){const status=ruleStatus(),source=`<p class="rule-source">�
 function updateJournal(){const guide=$('rule-guide'),history=$('history');guide.innerHTML=guideHtml();history.innerHTML=historyHtml();guide.hidden=journalTab!=='moves';history.hidden=journalTab!=='history';document.querySelectorAll<HTMLElement>('[data-journal-tab]').forEach(button=>button.setAttribute('aria-selected',String(button.dataset.journalTab===journalTab)));if(journalTab==='history')history.scrollTop=history.scrollHeight;}
 function openJournal(){openModal(`<div class="eyebrow">THE COMMANDER’S JOURNAL</div><h2>走得明白，才是戰術。</h2><div class="journal-tabs" role="tablist"><button data-journal-tab="moves" role="tab" aria-selected="${journalTab==='moves'}">走法與限制</button><button data-journal-tab="history" role="tab" aria-selected="${journalTab==='history'}">每步棋譜</button></div><div id="modal-guide" class="rule-guide" ${journalTab==='history'?'hidden':''}>${guideHtml()}</div><div id="modal-history" class="history-list" ${journalTab==='moves'?'hidden':''}>${historyHtml()}</div><button data-open-draw class="secondary" style="margin-top:15px">和棋選項</button><div class="modal-actions"><button class="primary" data-close>返回棋盤</button></div>`,'走法與棋譜');modal.querySelector('.modal')!.classList.add('journal-modal');}
 function updateUI(){const turn=game.turn(),history=game.history({verbose:true}),status=ruleStatus(),shownTurn=action?.move.color||turn;
- document.documentElement.classList.toggle('watching',matchMode==='watch');$('watch-deck').hidden=matchMode!=='watch';updateWatchHud();
+ document.documentElement.classList.toggle('watching',matchMode==='watch');$('watch-deck').hidden=matchMode!=='watch';for(const sprite of fearSprites.values())sprite.visible=matchMode!=='watch';for(const relief of reliefs.values())relief.sprite.visible=matchMode!=='watch';updateWatchHud();
  world.setTurn(shownTurn,reduced||frame===0);document.documentElement.dataset.turn=shownTurn;
  $('turn-banner').textContent=`${turn==='w'?'☀ 白方':'☾ 黑方'}${thinking?' · AI 思考中':'行動'}`;
  document.querySelector('.scene-tag')!.textContent=turn==='w'?'白方回合 · 曜金神殿':'黑方回合 · 黑曜長夜';
@@ -241,69 +243,83 @@ const clamp=THREE.MathUtils.clamp;
 const smooth=(t:number)=>{t=clamp(t,0,1);return t*t*(3-2*t);};
 function animateAction(dt:number){
   const a=action;if(!a)return;audio.setBattlePosition(a.root.position.clone().project(camera).x);
-  const impactTime=.69,attackStart=.5,attackSpan=.38;
-  const slow=a.target&&a.film&&a.elapsed/a.duration>impactTime&&a.elapsed/a.duration<.735?.68:1;
-  if(a.hitstop>0){a.hitstop-=dt;a.elapsed+=dt*.06;}else a.elapsed+=dt*slow;
+  // The calibrated cutting edge meets the victim at action .69 / strike .5.
+  // Move -> 1.1 s deliberate lift -> 120–190 ms committed blow -> true hitstop.
+  const impactTime=.69,attackStart=.39,attackSpan=.60,launch=.12;
+  const frozen=Math.min(dt,a.hitstop);a.hitstop=Math.max(0,a.hitstop-dt);
+  const slow=a.target&&a.film&&a.elapsed/a.duration>impactTime&&a.elapsed/a.duration<.72?.72:1;
+  a.elapsed+=(dt-frozen)*slow;
   // Present the exact contact pose even when a slow frame crosses the hit time.
   if(a.target&&!a.hit&&a.elapsed>=a.duration*impactTime)a.elapsed=a.duration*impactTime;
   const t=Math.min(a.elapsed/a.duration,1),type=a.move.piece,color=a.move.color==='w'?gold:red;
-  const armed=!!a.target&&type!=='r',runEnd=a.target?(armed?.5:impactTime):.66;
-  const run=clamp((t-.17)/(runEnd-.17),0,1),attackProgress=clamp((t-attackStart)/attackSpan,0,1);
-  if(t>=.17&&!a.started){a.started=true;audio.play(type==='r'?'charge':'move',type);}
-  if(t>=attackStart+attackSpan*.34&&a.target&&!a.swung){a.swung=true;if(type!=='r'){audio.play('charge',type);}}
-  a.root.position.lerpVectors(a.from,a.stance,smooth(run));
-  a.root.rotation.z=0;
-  if(a.target&&t>.81)a.root.position.lerpVectors(a.stance,a.to,smooth((t-.81)/.16));
-  if(t<.17){
-    a.root.position.addScaledVector(a.dir,-Math.sin(t/.17*Math.PI)*.1);
-    animatePiece(a.root,'move',0,elapsed);
+  const armed=!!a.target&&type!=='r',runEnd=armed?attackStart:impactTime;
+  const run=clamp((t-launch)/(runEnd-launch),0,1),ram=type==='r'&&!!a.target;
+  const travel=ram?run**2.2:smooth(run**1.35);
+  const attackProgress=clamp((t-attackStart)/attackSpan,0,1);
+  // Match the role-specific release markers in animateStrike; no early whoosh.
+  const release=type==='n'?.455:type==='k'?.45:type==='q'?.445:type==='b'?.44:.43;
+  const releaseTime=attackStart+attackSpan*release;
+  if(t>=launch&&!a.started){a.started=true;audio.play(type==='r'?'charge':'move',type);}
+  if(t>=releaseTime&&a.target&&!a.swung){a.swung=true;if(type!=='r')audio.play('charge',type);}
+  a.root.position.lerpVectors(a.from,a.stance,travel);a.root.rotation.z=0;
+  if(a.target&&t>.85)a.root.position.lerpVectors(a.stance,a.to,smooth((t-.85)/.14));
+  if(t<launch){
+    a.root.position.addScaledVector(a.dir,-Math.sin(t/launch*Math.PI)*.045);
+    animatePiece(a.root,'move',smooth(t/launch)*.065,a.elapsed);
   }else if(t<runEnd){
-    if(type==='n')a.root.position.y+=Math.sin(run*Math.PI)*1.55;
-    else if(type!=='r')a.root.position.y+=Math.abs(Math.sin(run*Math.PI*(type==='p'?6:4)))*.07;
-    animatePiece(a.root,'move',run,elapsed);
-    if(type==='r')a.root.rotation.z=Math.sin(run*Math.PI)*.065;
-    const step=Math.floor(run*(type==='n'?4:6));if(step>a.step){a.step=step;audio.play('step',type);}
-    if(!reduced&&frame%2===0)effects.emit(a.root.position,type==='r'?6:2,color,type==='r'?1.4:.7);
-  }else animatePiece(a.root,a.target?'attack':'idle',attackProgress,elapsed);
-  if(a.castle){a.castle.root.position.lerpVectors(a.castle.from,a.castle.to,smooth(run));animatePiece(a.castle.root,'move',run,elapsed);}
+    if(type==='n')a.root.position.y+=Math.sin(run*Math.PI)**2*.46;
+    animatePiece(a.root,'move',.065+travel*.935,a.elapsed);
+    if(type==='r')a.root.rotation.z=Math.sin(run*Math.PI)*.035;
+    const step=Math.floor(travel*(type==='n'?4:6));if(step>a.step){a.step=step;audio.play('step',type);}
+    if(!reduced&&run>.12&&frame%2===0)effects.emit(a.root.position,type==='r'?6:2,color,type==='r'?1.4:.7);
+  }else animatePiece(a.root,a.target?'attack':'idle',attackProgress,a.elapsed);
+  if(a.castle){a.castle.root.position.lerpVectors(a.castle.from,a.castle.to,travel);animatePiece(a.castle.root,'move',travel,a.elapsed);}
   const weapon=armed?getWeaponPose(a.root):null;
-  if(weapon&&!reduced&&attackProgress>.33&&attackProgress<.72)effects.weaponTrail(weapon.base,weapon.tip,color);
+  if(weapon&&!reduced&&attackProgress>release&&attackProgress<.60)effects.weaponTrail(weapon.base,weapon.tip,color);
   if(t>=impactTime&&!a.hit){
-    a.hit=true;a.hitstop=a.target&&!reduced?.11:0;clearFear(false);
+    a.hit=true;a.hitstop=a.target&&!reduced?(type==='k'?.11:type==='r'?.10:type==='n'?.075:.09):0;clearFear(false);
     audio.play(a.target?'impact':'land',type);
     const hitPoint=weapon?weapon.base.clone().lerp(weapon.tip,.84):a.impact.clone();
     if(a.target&&type==='r')hitPoint.y+=.55;
     effects.impact(hitPoint,color);effects.ring(a.impact,color,.62);
-    if(a.target){audio.play('capture',type);if(!reduced)$('flash').animate([{opacity:.17},{opacity:0}],{duration:170});}
+    if(a.target){audio.play('capture',type);if(!reduced)$('flash').animate([{opacity:.17},{opacity:0}],{duration:120});}
   }
   if(a.target){
-    if(t<impactTime){animatePiece(a.target,'fear',1,reduced?0:elapsed);a.target.position.copy(squarePosition(a.target.userData.square));if(!reduced){a.target.position.x+=Math.sin(elapsed*48)*.025;a.target.rotation.z=Math.sin(elapsed*39)*.045;}}
+    if(t<impactTime){animatePiece(a.target,'fear',1,reduced?0:a.elapsed);a.target.position.copy(squarePosition(a.target.userData.square));if(!reduced){a.target.position.x+=Math.sin(a.elapsed*48)*.025;a.target.rotation.z=Math.sin(a.elapsed*39)*.045;}}
     else if(reduced)a.target.visible=false;
-    else{const q=clamp((t-impactTime)/.25,0,1),fly=a.dir.clone();fly.x+=.3*(a.move.color==='w'?1:-1);fly.normalize();a.target.position.copy(squarePosition(a.target.userData.square)).addScaledVector(fly,q*12);a.target.position.y+=Math.sin(q*Math.PI)*4.8-q*2;a.target.rotation.x=q*9;a.target.rotation.z=q*6;a.target.rotation.y+=dt*9;if(frame%3===0)effects.emit(a.target.position,4,red,2.5);if(q>=1)a.target.visible=false;}
+    else{
+      const q=clamp((t-impactTime)/.24,0,1),fly=a.dir.clone();fly.x+=.3*(a.move.color==='w'?1:-1);fly.normalize();
+      a.target.position.copy(squarePosition(a.target.userData.square)).addScaledVector(fly,q*12);
+      a.target.position.y+=Math.sin(q*Math.PI)*4.8-q*2;a.target.rotation.x=q*9;a.target.rotation.z=q*6;
+      a.target.rotation.y=(a.target.userData.color==='w'?Math.PI:0)+q*9;
+      if(frame%3===0&&q>0)effects.emit(a.target.position,4,red,2.5);if(q>=1)a.target.visible=false;
+    }
   }
   if(a.film){
-    // A shot sequence per archetype: establish, track, wind-up, contact, exit.
-    // Keep to the weapon side and widen portrait shots so both combatants fit.
+    // Slow side dolly reveals the raised weapon. The short push follows the
+    // committed strike, then freezes its framing while the live impact FX burst.
     const side=new THREE.Vector3(-a.dir.z,0,a.dir.x),portrait=camera.aspect<1;
     const profiles={p:{height:1.3,distance:5.0,arc:.18},r:{height:.64,distance:5.7,arc:.35},n:{height:1.65,distance:6.2,arc:.35},b:{height:2.1,distance:5.3,arc:.28},q:{height:1.45,distance:5.0,arc:.40},k:{height:.93,distance:5.3,arc:.20}};
-    const profile=profiles[type],duel=a.target?smooth((t-.46)/.11)*(1-smooth((t-.78)/.08)):0;
-    const focus=a.root.position.clone().add(new THREE.Vector3(0,type==='n'?1.1:.98,0));
+    const profile=profiles[type],duel=a.target?smooth((t-.33)/.12)*(1-smooth((t-.83)/.05)):0;
+    const tension=a.target?smooth((t-attackStart)/(releaseTime-attackStart)):0;
+    const strike=a.target?smooth((t-releaseTime)/(impactTime-releaseTime)):0;
+    const focus=a.root.position.clone().add(new THREE.Vector3(0,(type==='n'?1.1:.98)+tension*.09*(1-strike),0));
     if(a.target)focus.lerp(a.impact.clone().add(new THREE.Vector3(0,.96,0)),duel*.43);
-    const distance=(portrait?profile.distance*1.32:profile.distance)-duel*(portrait?.30:.65);
-    const angle=.24+profile.arc*Math.sin(Math.PI*clamp((t-.12)/.75,0,1));
+    const distance=(portrait?profile.distance*1.32:profile.distance)-duel*(portrait?.28:.48)-tension*.18-strike*(portrait?.12:.23);
+    const angle=.24+profile.arc*(a.target?(.35*smooth(run)+.65*tension):Math.sin(Math.PI*run));
     const shot=focus.clone().addScaledVector(side,distance*Math.cos(angle)).addScaledVector(a.dir,distance*Math.sin(angle));
-    shot.y=focus.y+profile.height-duel*.22;
+    shot.y=focus.y+profile.height-duel*.16-strike*.10;
     if(type==='r'){shot.y-=Math.sin(run*Math.PI)*.2;shot.addScaledVector(a.dir,-Math.sin(run*Math.PI)*.8);}
-    if(type==='n'){shot.y+=Math.sin(run*Math.PI)*.6;shot.addScaledVector(side,Math.sin(run*Math.PI)*.55);}
-    if(type==='b')shot.y+=(1-smooth((t-.40)/.18))*.6;
-    const aftermath=a.target?smooth((t-.735)/.10)*(1-smooth((t-.84)/.03)):0;
-    if(a.target&&aftermath>0){focus.lerp(a.target.position.clone().add(new THREE.Vector3(0,.6,0)),aftermath*.2);shot.y+=aftermath*.65;shot.addScaledVector(side,aftermath*.9);}
+    if(type==='n'){shot.y+=Math.sin(run*Math.PI)*.32;shot.addScaledVector(side,Math.sin(run*Math.PI)*.35);}
+    if(type==='b')shot.y+=(1-smooth((t-.35)/.23))*.6;
+    const aftermath=a.target?smooth((t-.725)/.09)*(1-smooth((t-.85)/.025)):0;
+    if(a.target&&aftermath>0){focus.lerp(a.target.position.clone().add(new THREE.Vector3(0,.6,0)),aftermath*.17);shot.y+=aftermath*.55;shot.addScaledVector(side,aftermath*.7);}
     shot.y=Math.max(BOARD_Y+.62,shot.y);
     if(t<.20){const k=smooth(t/.20);camera.position.lerpVectors(a.camPos,shot,k);controls.target.lerpVectors(a.camTarget,focus,k);}
-    else if(t<.86){camera.position.copy(shot);controls.target.copy(focus);a.returnPos.copy(camera.position);a.returnTarget.copy(controls.target);}
-    else{const k=smooth((t-.86)/.14);camera.position.lerpVectors(a.returnPos,a.camPos,k);controls.target.lerpVectors(a.returnTarget,a.camTarget,k);}
-    if(a.target&&t>=impactTime&&t<.735&&!reduced){const strength=(1-(t-impactTime)/.045)*.065;camera.position.x+=Math.sin(elapsed*113)*strength;camera.position.y+=Math.cos(elapsed*91)*strength;}
-    camera.lookAt(controls.target);const impactPunch=a.target&&t>=impactTime?Math.exp(-(t-impactTime)*85)*4.2:0;
+    else if(t<.87){camera.position.copy(shot);controls.target.copy(focus);a.returnPos.copy(camera.position);a.returnTarget.copy(controls.target);}
+    else{const k=smooth((t-.87)/.13);camera.position.lerpVectors(a.returnPos,a.camPos,k);controls.target.lerpVectors(a.returnTarget,a.camTarget,k);}
+    if(a.target&&t>=impactTime&&t<.725&&!reduced){const strength=(1-(t-impactTime)/.035)*(portrait?.038:.055);camera.position.x+=Math.sin(elapsed*113)*strength;camera.position.y+=Math.cos(elapsed*91)*strength;}
+    camera.lookAt(controls.target);const impactPunch=a.target&&t>=impactTime?Math.exp(-(t-impactTime)*105)*3.4:0;
     // Cut away foreground bystanders that the tracking camera would intersect.
     // Combatants stay visible; syncPieces restores the full army after the shot.
     if(t>.08&&t<.90){
@@ -316,7 +332,7 @@ function animateAction(dt:number){
         if(center.distanceTo(camera.position)<2.0||(along>0&&along<length-.65&&offAxis<1.05)){root.visible=false;cameraCutaways.add(root);}
       }
     }else if(t>=.94){for(const root of cameraCutaways)root.visible=true;cameraCutaways.clear();}
-    camera.fov=39+Math.sin(run*Math.PI)*(type==='r'?6:type==='n'?3.5:2)-duel*1.5+impactPunch;camera.updateProjectionMatrix();
+    camera.fov=39+Math.sin(run*Math.PI)*(type==='r'?5:type==='n'?3:2)-duel*1.0-tension*.65+impactPunch;camera.updateProjectionMatrix();
   }
   if(t>=1)finishAction();
 }
@@ -378,7 +394,7 @@ function offerTakeover(){
 
 function syncGraphicsButtons(){document.querySelectorAll<HTMLButtonElement>('[data-graphics]').forEach(button=>{button.setAttribute('aria-pressed',String(button.dataset.graphics===getGraphicsMode()));button.onclick=()=>setGraphicsMode(button.dataset.graphics as 'basic'|'enhanced');});}
 onGraphicsChange(syncGraphicsButtons);
-function settings(){if(action&&matchMode!=='watch')return;openModal(`<div class="eyebrow">MAKE THE BATTLE YOURS</div><h2>戰場設定</h2><div class="setting-row graphics-row"><span>光影品質<small>隨時切換，棋局繼續</small></span><div class="graphics-choices" role="group" aria-label="光影品質"><button id="graphics-basic" data-graphics="basic" class="secondary" aria-pressed="false">基本光影</button><button id="graphics-enhanced" data-graphics="enhanced" class="secondary" aria-pressed="false">加強光影</button></div></div><label class="setting-row"><span>電影運鏡<small id="cinema-status"></small></span><input class="switch" id="setting-cinema" type="checkbox" ${cinemaEnabled()?'checked':''}></label><label class="setting-row"><span>減少動態<small>固定視角、加速行動、停用震動</small></span><input class="switch" id="setting-motion" type="checkbox" ${reduced?'checked':''}></label><label class="setting-row"><span>戰場音量<small>所有聲音在本機合成</small></span><input id="setting-volume" type="range" min="0" max="1" step=".05" value="${volume}" aria-label="戰場音量"></label><div class="demo-choices"><button class="secondary" id="demo">戰車演示</button><button class="secondary" id="sword-demo">揮劍演示</button></div><div class="modal-actions"><button class="primary" data-close>返回戰場</button></div><button id="settings-new" style="margin-top:20px;border:0;background:none;color:#a9b49d;font-size:11px">開始新的標準對局</button><p style="font-size:9px;margin-bottom:0">演示會開啟獨立戰局，取代目前棋局。</p>`,'設定');
+function settings(){if(action&&matchMode!=='watch')return;openModal(`<div class="eyebrow">MAKE THE BATTLE YOURS</div><h2>戰場設定</h2><div class="setting-row graphics-row"><span>光影品質<small>加強：電影光影與材質 · 基本：較省效能</small></span><div class="graphics-choices" role="group" aria-label="光影品質"><button id="graphics-basic" data-graphics="basic" class="secondary" aria-pressed="false">基本光影</button><button id="graphics-enhanced" data-graphics="enhanced" class="secondary" aria-pressed="false">加強光影</button></div></div><label class="setting-row"><span>電影運鏡<small id="cinema-status"></small></span><input class="switch" id="setting-cinema" type="checkbox" ${cinemaEnabled()?'checked':''}></label><label class="setting-row"><span>減少動態<small>固定視角、加速行動、停用震動</small></span><input class="switch" id="setting-motion" type="checkbox" ${reduced?'checked':''}></label><label class="setting-row"><span>戰場音量<small>所有聲音在本機合成</small></span><input id="setting-volume" type="range" min="0" max="1" step=".05" value="${volume}" aria-label="戰場音量"></label><div class="demo-choices"><button class="secondary" id="demo">戰車演示</button><button class="secondary" id="sword-demo">揮劍演示</button></div><div class="modal-actions"><button class="primary" data-close>返回戰場</button></div><button id="settings-new" style="margin-top:20px;border:0;background:none;color:#a9b49d;font-size:11px">開始新的標準對局</button><p style="font-size:9px;margin-bottom:0">演示會開啟獨立戰局，取代目前棋局。</p>`,'設定');
   syncGraphicsButtons();syncSettings();
   $<HTMLInputElement>('setting-cinema').onchange=e=>setCinematic((e.target as HTMLInputElement).checked);
   $<HTMLInputElement>('setting-motion').onchange=e=>{reduced=(e.target as HTMLInputElement).checked;syncSettings();};
@@ -414,7 +430,7 @@ renderer.domElement.addEventListener('pointerleave',()=>previewRoute(null));
 renderer.domElement.addEventListener('pointercancel',resetPointers);renderer.domElement.addEventListener('lostpointercapture',e=>{if(activePointers.has(e.pointerId))resetPointers();});
 window.addEventListener('blur',resetPointers);document.addEventListener('visibilitychange',()=>{if(document.hidden){resetPointers();cancelAI();}syncPlayback();if(!document.hidden)scheduleAI();});
 document.addEventListener('keydown',e=>{if(e.key==='Tab'&&!modal.hidden){const focusables=[...modal.querySelectorAll<HTMLElement>('button:not(:disabled),input:not(:disabled),select:not(:disabled),[tabindex="0"]')];if(focusables.length){const first=focusables[0],last=focusables[focusables.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}return;}if(e.key==='Escape'){if(!modal.hidden)closeModal();else if(action)finishAction();else clearSelection();return;}if(!modal.hidden)return;unlock();if(e.code==='Space'){e.preventDefault();if(matchMode==='watch')toggleWatchPause();else finishAction();}if(e.key.toLowerCase()==='u')undo();if(e.key.toLowerCase()==='f')$('flip').click();if(e.key.toLowerCase()==='r')$('reset-camera').click();});
-const resizeObserver=new ResizeObserver(()=>{const w=stage.clientWidth,h=stage.clientHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h);renderer.setPixelRatio(Math.min(devicePixelRatio,w<760?1.5:1.6));transition=null;if(action){action.camPos.copy(overviewPosition());action.camTarget.set(0,0,0);}else resetCamera(true);});resizeObserver.observe(stage);
+const resizeObserver=new ResizeObserver(()=>{const w=stage.clientWidth,h=stage.clientHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h);renderer.setPixelRatio(Math.min(devicePixelRatio,w<760?1.5:1.6));filmRenderer.setSize(w,h,phoneLayout());transition=null;if(action){action.camPos.copy(overviewPosition());action.camTarget.set(0,0,0);}else resetCamera(true);});resizeObserver.observe(stage);
 
 syncPieces();syncSettings();$('loading').remove();if(matchViewSide()===-1){viewSide=-1;resetCamera(true);}scheduleAI();
 const clock=new THREE.Clock();
@@ -428,11 +444,11 @@ function render(){requestAnimationFrame(render);const dt=Math.min(clock.getDelta
   if(!paused&&watchFrozen()&&modal.hidden)controls.update();
   batchRestingArmy();
   contacts.update([...pieces.values()].filter(root=>root.visible).map(root=>({x:root.position.x,y:BOARD_Y+.004,z:root.position.z,rx:root.userData.type==='r'?.69:.48,rz:root.userData.type==='n'?.70:.47,yaw:root.rotation.y,height:Math.max(0,root.position.y-BOARD_Y)})));
-  renderer.render(scene,camera);
-  if(debug){const gl=renderer.getContext();const info=gl.getExtension('WEBGL_debug_renderer_info');(window as any).__THREE_GAME_DIAGNOSTICS__={frame,fps:Math.round(1/Math.max(dt,.001)),game:{fen:game.fen(),turn:game.turn(),moves:game.history().length,selected,legal:legal.map(m=>m.to),fear:[...fears],animating:!!action,actionProgress:action?action.elapsed/action.duration:0,gameOver:ruleStatus().over},renderer:{calls:renderer.info.render.calls,triangles:renderer.info.render.triangles,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures},render:{calls:renderer.info.render.calls,triangles:renderer.info.render.triangles},memory:renderer.info.memory,quality:{atmosphere:world.theme(),graphics:getGraphicsMode(),dpr:renderer.getPixelRatio(),shadowMapSize:world.shadowLight.shadow.mapSize.x,shadowLights:1,postPasses:0},gpu:info?gl.getParameter(info.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER)};}
+  filmRenderer.render(scene,camera,elapsed,world.theme().blend);
+  if(debug){const gl=renderer.getContext();const info=gl.getExtension('WEBGL_debug_renderer_info');(window as any).__THREE_GAME_DIAGNOSTICS__={frame,fps:Math.round(1/Math.max(dt,.001)),game:{fen:game.fen(),turn:game.turn(),moves:game.history().length,selected,legal:legal.map(m=>m.to),fear:[...fears],animating:!!action,actionProgress:action?action.elapsed/action.duration:0,gameOver:ruleStatus().over},renderer:{calls:renderer.info.render.calls,triangles:renderer.info.render.triangles,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures},render:{calls:renderer.info.render.calls,triangles:renderer.info.render.triangles},memory:renderer.info.memory,quality:{atmosphere:world.theme(),graphics:getGraphicsMode(),dpr:renderer.getPixelRatio(),shadowMapSize:world.shadowLight.shadow.mapSize.x,shadowLights:1,...filmRenderer.diagnostics()},gpu:info?gl.getParameter(info.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER)};}
 }
 render();
 if(debug){
-  (window as any).__CHESS_DEBUG__={voiceStatus:()=>audio.voiceStatus(),camera:()=>({position:camera.position.toArray(),target:controls.target.toArray(),distance:camera.position.distanceTo(controls.target)}),state:()=>({mode:matchMode,watchPaused,watchFrozen:watchFrozen(),humanColor,difficulty,thinking,aiError,aiStats,status:ruleStatus(),illegalMessage,fen:game.fen(),selected,legal:legal.map(m=>m.to),fears:[...fears],relief:[...reliefs.keys()],animating:!!action,history:game.history(),turn:game.turn(),gameOver:ruleStatus().over,cinematic,reduced,muted,pieces:pieces.size}),load:(fen:string)=>{cancelAI();watchPaused=false;adjudication=null;matchMode='local';if(action)finishAction();gameId++;cancelAI();game.load(fen);invalidateRules();syncPieces();closeModal();},project:(square:string,height=.1)=>{const v=squarePosition(square);v.y+=height;v.project(camera);const r=renderer.domElement.getBoundingClientRect();return{x:r.left+(v.x+1)/2*r.width,y:r.top+(1-v.y)/2*r.height};},combat:()=>{if(!action)return null;const weapon=getWeaponPose(action.root);const joints=['torso','weapon-arm','weapon-elbow','weapon-wrist'].map(name=>{const o=action!.root.getObjectByName(name);return{name,rotation:o?.rotation.toArray()};});return{progress:action.elapsed/action.duration,hit:action.hit,root:action.root.position.toArray(),target:action.target?.position.toArray(),impact:action.impact.toArray(),weapon:weapon?{base:weapon.base.toArray(),tip:weapon.tip.toArray()}:null,joints};},ranges:()=>({selected,hovered,moves:[...new Set(legal.filter(m=>!m.isCapture()&&!m.isEnPassant()).map(m=>m.to))],attacks:[...new Set(legal.filter(m=>m.isCapture()||m.isEnPassant()).map(m=>m.to))],routeColor:routeGroup.children.length?(routeGroup.children[0] as THREE.Mesh).material instanceof THREE.MeshBasicMaterial?((routeGroup.children[0] as THREE.Mesh).material as THREE.MeshBasicMaterial).color.getHexString():null:null}),pieceStats:()=>[...pieces.entries()].map(([s,g])=>{const box=new THREE.Box3().setFromObject(g);return{square:s,type:g.userData.type,size:box.getSize(new THREE.Vector3()).toArray()};})};
+  (window as any).__CHESS_DEBUG__={benchmarkRender:(samples=30)=>{const times:number[]=[],gl=renderer.getContext();for(let i=0;i<samples+5;i++){const start=performance.now();filmRenderer.render(scene,camera,elapsed,world.theme().blend);gl.finish();if(i>=5)times.push(performance.now()-start);}times.sort((a,b)=>a-b);return{method:'synchronous CPU + GPU render completion',samples,medianMs:times[Math.floor(times.length*.5)],p95Ms:times[Math.floor(times.length*.95)],renderer:{...renderer.info.render},pipeline:filmRenderer.diagnostics()};},voiceStatus:()=>audio.voiceStatus(),camera:()=>({position:camera.position.toArray(),target:controls.target.toArray(),distance:camera.position.distanceTo(controls.target)}),state:()=>({mode:matchMode,watchPaused,watchFrozen:watchFrozen(),humanColor,difficulty,thinking,aiError,aiStats,status:ruleStatus(),illegalMessage,fen:game.fen(),selected,legal:legal.map(m=>m.to),fears:[...fears],relief:[...reliefs.keys()],animating:!!action,history:game.history(),turn:game.turn(),gameOver:ruleStatus().over,cinematic,reduced,muted,pieces:pieces.size}),load:(fen:string)=>{cancelAI();watchPaused=false;adjudication=null;matchMode='local';if(action)finishAction();gameId++;cancelAI();game.load(fen);invalidateRules();syncPieces();closeModal();},project:(square:string,height=.1)=>{const v=squarePosition(square);v.y+=height;v.project(camera);const r=renderer.domElement.getBoundingClientRect();return{x:r.left+(v.x+1)/2*r.width,y:r.top+(1-v.y)/2*r.height};},combat:()=>{if(!action)return null;const weapon=getWeaponPose(action.root);const joints=['torso','weapon-arm','weapon-elbow','weapon-wrist'].map(name=>{const o=action!.root.getObjectByName(name);return{name,rotation:o?.rotation.toArray()};});return{progress:action.elapsed/action.duration,hit:action.hit,root:action.root.position.toArray(),target:action.target?.position.toArray(),impact:action.impact.toArray(),weapon:weapon?{base:weapon.base.toArray(),tip:weapon.tip.toArray()}:null,joints};},ranges:()=>({selected,hovered,moves:[...new Set(legal.filter(m=>!m.isCapture()&&!m.isEnPassant()).map(m=>m.to))],attacks:[...new Set(legal.filter(m=>m.isCapture()||m.isEnPassant()).map(m=>m.to))],routeColor:routeGroup.children.length?(routeGroup.children[0] as THREE.Mesh).material instanceof THREE.MeshBasicMaterial?((routeGroup.children[0] as THREE.Mesh).material as THREE.MeshBasicMaterial).color.getHexString():null:null}),pieceStats:()=>[...pieces.entries()].map(([s,g])=>{const box=new THREE.Box3().setFromObject(g);return{square:s,type:g.userData.type,size:box.getSize(new THREE.Vector3()).toArray()};})};
   (window as any).__THREE_GAME_TEST_HOOKS__={seed:()=>{elapsed=0;},setState:async(name:string)=>{cancelAI();matchMode='local';watchPaused=false;gameId++;adjudication=null;invalidateRules();if(action)finishAction();closeModal();paused=false;elapsed=0;cinematic=true;reduced=false;transition=null;viewSide=1;if(name==='active-play'){game.reset();game.move('e4');game.move('e5');syncPieces();selectSquare('g1');}else if(name==='spectator-play'){game.reset();for(const move of ['e4','e5','Nf3','Nc6'])game.move(move);matchMode='watch';watchPaused=true;syncPieces();syncPlayback();}else if(name==='threat-preview'){game.load(demoFen);syncPieces();selectSquare('d4');}else if(name==='checkmate'){game.reset();for(const m of ['f3','e5','g4','Qh4#'])game.move(m);syncPieces();showResult();}else throw new Error(`Unknown state ${name}`);resetCamera(true);world.setTurn(game.turn(),true);return{state:name};},setPausedForScreenshot:(value:boolean)=>{paused=value;},setReducedMotion:(value:boolean)=>{reduced=value;},hideDebugUi:()=>{}};
 }
